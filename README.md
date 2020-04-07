@@ -1,2 +1,2 @@
-Cool project
-Yes, very cool
+## Cool project
+### Yes, very cool
