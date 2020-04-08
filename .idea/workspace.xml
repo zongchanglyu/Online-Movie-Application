@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="cs122b-spring20-team-114:war" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae2be56-5f2a-4ffa-adc8-18140687fb80" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="0722bd9e-7797-4fcf-97b6-684f3d8e1af7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/WebContent/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/META-INF/context.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/WEB-INF/web.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/single-star.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebContent/single-star.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SingleStarServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/StarsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +28,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1aBxzfdq1p6V7LNfVsViBux5v14" />
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="ProjectId" id="1aH7JpDKqyWahudObmxug38ugN4" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -24,18 +45,225 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Tomcat 7.0.96" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.96" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="cs122b-spring20-team-114:war">
+          <settings>
+            <option name="CONTEXT_PATH" value="/cs122b_spring20_team_114_war" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Tomcat_7_0_96_cs122b-spring20-team-114_2" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file enabled="true" id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="61855" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="cs122b-spring20-team-114:war" />
+        </option>
+      </method>
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 7.0.96" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/target/" />
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <file path="$PROJECT_DIR$/target">
+          <settings>
+            <option name="CONTEXT_PATH" value="/target" />
+          </settings>
+        </file>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="_cs122b-spring20-team-114" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="61855" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="LOCAL" value="false" />
+      <deployment />
+      <server-settings>
+        <data>
+          <option name="targets">
+            <list>
+              <WatchedTargetModelImpl>
+                <option name="name" value="CONTEXT_XML" />
+                <name>CONTEXT_XML</name>
+              </WatchedTargetModelImpl>
+              <StagingTargetModelImpl>
+                <option name="name" value="STAGING" />
+                <name>STAGING</name>
+              </StagingTargetModelImpl>
+            </list>
+          </option>
+          <option name="transportHostId" />
+        </data>
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="TOMCAT_LOCALHOST_LOG_ID" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="61854" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="Tomcat Server" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="Running" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+            </expand>
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8ae2be56-5f2a-4ffa-adc8-18140687fb80" name="Default Changelist" comment="" />
-      <created>1586223051302</created>
+      <changelist id="0722bd9e-7797-4fcf-97b6-684f3d8e1af7" name="Default Changelist" comment="" />
+      <created>1586380595976</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1586223051302</updated>
-      <workItem from="1586223053894" duration="264000" />
+      <updated>1586380595976</updated>
+      <workItem from="1586380599727" duration="1241000" />
     </task>
     <servers />
   </component>
@@ -43,17 +271,65 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="814" y="474" key="VCS.ChangelistChooser" timestamp="1586223299989">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state x="808" y="-863" key="#Project_Structure" timestamp="1586380927618">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
     </state>
-    <state x="814" y="474" key="VCS.ChangelistChooser/0.23.1920.1057@0.23.1920.1057" timestamp="1586223299989" />
-    <state x="80" y="291" key="Vcs.Push.Dialog.v2" timestamp="1586223272219">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state x="808" y="-863" key="#Project_Structure/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586380927618" />
+    <state x="286" y="-868" width="1071" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586382676942">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
     </state>
-    <state x="80" y="291" key="Vcs.Push.Dialog.v2/0.23.1920.1057@0.23.1920.1057" timestamp="1586223272219" />
-    <state x="109" y="350" key="git4idea.merge.GitPullDialog" timestamp="1586223284018">
-      <screen x="0" y="23" width="1920" height="1057" />
+    <state x="286" y="-868" width="1071" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382676942" />
+    <state width="1294" height="265" key="GridCell.Tab.0.bottom" timestamp="1586382649013">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
     </state>
-    <state x="109" y="350" key="git4idea.merge.GitPullDialog/0.23.1920.1057@0.23.1920.1057" timestamp="1586223284018" />
+    <state width="1294" height="265" key="GridCell.Tab.0.bottom/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649013" />
+    <state width="1294" height="265" key="GridCell.Tab.0.center" timestamp="1586382649012">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.0.center/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649012" />
+    <state width="1294" height="265" key="GridCell.Tab.0.left" timestamp="1586382649010">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.0.left/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649010" />
+    <state width="1294" height="265" key="GridCell.Tab.0.right" timestamp="1586382649012">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.0.right/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649012" />
+    <state width="1294" height="265" key="GridCell.Tab.1.bottom" timestamp="1586382649019">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.1.bottom/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649019" />
+    <state width="1294" height="265" key="GridCell.Tab.1.center" timestamp="1586382649018">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.1.center/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649018" />
+    <state width="1294" height="265" key="GridCell.Tab.1.left" timestamp="1586382649016">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.1.left/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649016" />
+    <state width="1294" height="265" key="GridCell.Tab.1.right" timestamp="1586382649019">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.1.right/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649019" />
+    <state width="1294" height="265" key="GridCell.Tab.2.bottom" timestamp="1586382649027">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.2.bottom/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649027" />
+    <state width="1294" height="265" key="GridCell.Tab.2.center" timestamp="1586382649026">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.2.center/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649026" />
+    <state width="1294" height="265" key="GridCell.Tab.2.left" timestamp="1586382649020">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.2.left/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649020" />
+    <state width="1294" height="265" key="GridCell.Tab.2.right" timestamp="1586382649027">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state width="1294" height="265" key="GridCell.Tab.2.right/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586382649027" />
+    <state x="706" y="-890" key="SettingsEditor" timestamp="1586381112869">
+      <screen x="-232" y="-1057" width="1920" height="1057" />
+    </state>
+    <state x="706" y="-890" key="SettingsEditor/0.23.1440.877/-232.-1057.1920.1057@-232.-1057.1920.1057" timestamp="1586381112869" />
   </component>
 </project>
