@@ -101,6 +101,7 @@ public class SingleStarServlet extends HttpServlet {
 			response.setStatus(500);
 		}
 		out.close();
+		//close it;
 
 	}
 
