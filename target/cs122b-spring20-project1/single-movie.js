@@ -33,8 +33,21 @@ function handleResult(resultData) {
     let starInfoElement = jQuery("#movie_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    starInfoElement.append("<p>Movie Title: " + resultData[0]["movie_title"] + "</p>" +
-        "<p>Release Year: " + resultData[0]["movie_year"] + "</p>");
+    let firstRowHTML = "";
+    firstRowHTML += "<p>Movie Title: " + resultData["movie_title"] + "</p>" +
+        "<p>Release Year: " + resultData["movie_year"] + "</p>" +
+        "<p>Director: " + resultData["movie_director"] + "</p>" +
+        "<p>Rating: " + resultData["movie_rating"] + "</p>";
+
+    firstRowHTML += "<p>Genre: ";
+
+    for(let g = 0; g < resultData["genres"].length; g++){
+        firstRowHTML += resultData["genres"][g] + ", ";
+    }
+    firstRowHTML = firstRowHTML.substring(0, firstRowHTML.length - 2);
+    firstRowHTML += "</p>";
+
+    starInfoElement.append(firstRowHTML);
 
     console.log("handleResult: populating movie table from resultData");
 
@@ -43,18 +56,15 @@ function handleResult(resultData) {
     let movieTableBodyElement = jQuery("#movie_table_body");
 
     // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
+    for (let i = 0; i < resultData["stars"].length; i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
 
-        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["genres_name"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML +=
             "<th>" +
             // Add a link to single-star.html with id passed with GET url parameter
-            '<a href="single-star.html?id=' + resultData[i]['star_id'] + '">'
-            + resultData[i]["star_name"] +     // display star_name for the link text
+            '<a href="single-star.html?id=' + resultData["stars"][i]['star_id'] + '">'
+            + resultData["stars"][i]["star_name"] +     // display star_name for the link text
             '</a>' +
             "</th>";
 
