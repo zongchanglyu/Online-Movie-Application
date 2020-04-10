@@ -25,7 +25,7 @@ public class SingleStarServlet extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -82,11 +82,11 @@ public class SingleStarServlet extends HttpServlet {
 
 				jsonArray.add(jsonObject);
 			}
-			
-            // write JSON string to output
-            out.write(jsonArray.toString());
-            // set response status to 200 (OK)
-            response.setStatus(200);
+
+			// write JSON string to output
+			out.write(jsonArray.toString());
+			// set response status to 200 (OK)
+			response.setStatus(200);
 
 			rs.close();
 			statement.close();

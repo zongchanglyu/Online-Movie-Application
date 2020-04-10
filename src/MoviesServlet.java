@@ -11,8 +11,10 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 
 
 // Declaring a WebServlet called StarsServlet, which maps to url "/api/movies"
@@ -41,10 +43,10 @@ public class MoviesServlet extends HttpServlet {
             Statement statement = dbcon.createStatement();
 
             String query = "select movies.*, ratings.rating " +
-                           "from movies, ratings " +
-                           "where movies.id = ratings.movieId " +
-                           "order by ratings.rating desc " +
-                           "limit 20 offset 0;";
+                    "from movies, ratings " +
+                    "where movies.id = ratings.movieId " +
+                    "order by ratings.rating desc " +
+                    "limit 20 offset 0;";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -59,17 +61,54 @@ public class MoviesServlet extends HttpServlet {
                 String director = rs.getString("director");
                 float rating = rs.getFloat("rating");
 
+                // use movie_id to get 3 stars with new sql sentences
+                String starsQuery = "select stars.name, stars.id from stars join stars_in_movies as sim " +
+                        "on stars.id = sim.starId and sim.movieId = ? limit 3;";
+                // Declare our statement
+                PreparedStatement starsStatement = dbcon.prepareStatement(starsQuery);
+                // Set the parameter represented by "?" in the query to the id we get from url,
+                // num 1 indicates the first "?" in the query
+                starsStatement.setString(1, movie_id);
+                ResultSet starsRS = starsStatement.executeQuery();
+                JsonArray starsJsonArray = new JsonArray();
+                while(starsRS.next()){
+                    String star_name = starsRS.getString("name");
+                    String star_id = starsRS.getString("id");
+
+                    JsonObject starJsonObject = new JsonObject();
+                    starJsonObject.addProperty("star_name", star_name);
+                    starJsonObject.addProperty("star_id", star_id);
+                    starsJsonArray.add(starJsonObject);
+                }
+
+                // use movie_id to get 3 genres with new sql sentences
+                String genresQuery = "select genres.name from genres join genres_in_movies as gim " +
+                        "on genres.id = gim.genreId and gim.movieId = ? limit 3;";
+                // Declare our statement
+                PreparedStatement genresStatement = dbcon.prepareStatement(genresQuery);
+                // Set the parameter represented by "?" in the query to the id we get from url,
+                // num 1 indicates the first "?" in the query
+                genresStatement.setString(1, movie_id);
+                ResultSet genresRS = genresStatement.executeQuery();
+                JsonArray genresJsonArray = new JsonArray();
+                while(genresRS.next()){
+                    String star_name = genresRS.getString("name");
+                    genresJsonArray.add(star_name);
+                }
+
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movie_id", movie_id);
                 jsonObject.addProperty("movie_title", movie_title);
                 jsonObject.addProperty("movie_year", movie_year);
                 jsonObject.addProperty("director", director);
+                jsonObject.add("stars_name", starsJsonArray);
+                jsonObject.add("genres_name", genresJsonArray);
                 jsonObject.addProperty("rating", rating);
 
                 jsonArray.add(jsonObject);
             }
-            
+
             // write JSON string to output
             out.write(jsonArray.toString());
             // set response status to 200 (OK)
@@ -79,14 +118,14 @@ public class MoviesServlet extends HttpServlet {
             statement.close();
             dbcon.close();
         } catch (Exception e) {
-        	
-			// write error message JSON object to output
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("errorMessage", e.getMessage());
-			out.write(jsonObject.toString());
 
-			// set reponse status to 500 (Internal Server Error)
-			response.setStatus(500);
+            // write error message JSON object to output
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
+
+            // set reponse status to 500 (Internal Server Error)
+            response.setStatus(500);
 
         }
         out.close();
