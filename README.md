@@ -18,7 +18,7 @@ The detail can also be seen inthe demo video above.
 ### 3. Contribution of each member:
 Member 1: Haoming Gao:
 1. Finished two page: Movie page(landing page) and single-star page, which also include the corresponding java files, js files and html files.
-2. Finished the Demo vide.
+2. Finished the Demo video.
 
 Member 2: Zongchang Lyu:
 1. Finished single-movie page, which also include the corresponding java file, js file and html file.
