@@ -18,8 +18,8 @@ import java.util.Arrays;
 
 
 // Declaring a WebServlet called StarsServlet, which maps to url "/api/movies"
-@WebServlet(name = "MoviesServlet", urlPatterns = "/api/movies")
-public class MoviesServlet extends HttpServlet {
+@WebServlet(name = "HomeServlet", urlPatterns = "/api/home")
+public class HomeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Create a dataSource which registered in web.xml
