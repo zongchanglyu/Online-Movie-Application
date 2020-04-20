@@ -48,26 +48,21 @@
     </form>
 </div>
 
-<div class="movie_list">
-    <!-- Id "movie_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
-    <table id=movie_table class="table table-striped">
-        <!-- Create a table header -->
-        <thead>
-        <tr>
-            <!-- Titles of each column-->
-            <th>Title</th>
-            <th>Year</th>
-            <th>Director</th>
-            <th>Genres</th>
-            <th>Stars</th>
-            <th>Rating</th>
-        </tr>
-        </thead>
-        <!-- Table body is left empty here, will be populated with the data retrieved with oldIndex.js -->
-        <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
-        <tbody id=movie_table_body></tbody>
-    </table>
-</div>
+<h3 id="star_info"></h3>
+<table id=movie_table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Movie Title</th>
+        <th>Release Year</th>
+        <th>Director</th>
+    </tr>
+    </thead>
+
+    <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
+    <!-- single-star.js will find this html element by it's id "movie_table_body" -->
+    <tbody id=movie_table_body></tbody>
+</table>
+
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
