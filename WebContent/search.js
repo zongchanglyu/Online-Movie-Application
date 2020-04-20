@@ -58,7 +58,7 @@ function handleSearchInfo(searchEvent) {
      */
     searchEvent.preventDefault();
 
-    $.ajax("api/index", {
+    $.ajax("api/search", {
         method: "GET",
         data: advanceSearch.serialize(),
         success: handleMoviesResult
