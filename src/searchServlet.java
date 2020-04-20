@@ -35,11 +35,12 @@ public class searchServlet extends HttpServlet {
         String title = request.getParameter("title");
         title = "%" + title + "%";
         String year = request.getParameter("year");
+        if("".equals(year)) year = "%";
+        else if(year.length() < 4) year = "11111";
         String director = request.getParameter("director");
+        director = "%" + director + "%";
         String starName = request.getParameter("starName");
-        System.out.println("year = " + year);
-        System.out.println("director = " + director);
-        System.out.println("starName = " + starName);
+        starName = "%" + starName + "%";
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -49,14 +50,9 @@ public class searchServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-
-
-            String query = "select * from movies where movies.title like ?;";
-//            String query = "select movies.*, ratings.rating " +
-//                    "from movies, ratings " +
-//                    "where movies.id = ratings.movieId and movies.title like ?" +
-//                    "order by ratings.rating desc " +
-//                    "limit 8 offset 0;";
+            String query = "select distinct movies.* from movies, stars_in_movies as sim, stars " +
+                           "where movies.title like ? and movies.year like ? and movies.director like ? " +
+                           "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? ;";
             // Declare our statement
             PreparedStatement Statement = dbcon.prepareStatement(query);
 
@@ -65,9 +61,11 @@ public class searchServlet extends HttpServlet {
             // num 1 indicates the first "?" in the query
 
             Statement.setString(1, title);
-//            Statement.setString(2, director);
-//            Statement.setString(3, year);
-//            Statement.setString(4, starName);
+            Statement.setString(2, year);
+            Statement.setString(3, director);
+            Statement.setString(4, starName);
+
+            System.out.println(Statement);
             // Perform the query
             ResultSet rs = Statement.executeQuery();
 
