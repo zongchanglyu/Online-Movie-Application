@@ -46,7 +46,7 @@ public class HomeServlet extends HttpServlet {
                     "from movies, ratings " +
                     "where movies.id = ratings.movieId " +
                     "order by ratings.rating desc " +
-                    "limit 20 offset 0;";
+                    "limit 8 offset 0;";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
