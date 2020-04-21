@@ -25,43 +25,38 @@
 <body>
 
 <div class="header">
-    <h1>Movies</h1>
-
-    <form id="advance_search_form" method="get" action="#">
-        <label>
-            <input name="title" placeholder="movie title" type="text">
-        </label>
-        <br>
-        <label>
-            <input name="year" placeholder="year" type="text">
-        </label>
-        <br>
-        <label>
-            <input name="director" placeholder="director" type="text">
-        </label>
-        <br>
-        <label>
-            <input name="starName" placeholder="star name" type="text">
-        </label>
-        <br>
-        <input type="submit" value="search">
-    </form>
+    <h1>Fabflix</h1>
+    <div class="navigation_bar">
+        <a href="index.html">Home</a> |
+        <a href="adv-search.html">Advanced Search</a> |
+        <a href="#">cart</a>
+    </div>
 </div>
 
-<h3 id="star_info"></h3>
-<table id=movie_table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Movie Title</th>
-        <th>Release Year</th>
-        <th>Director</th>
-    </tr>
-    </thead>
+<div class="movie_list">
+    <h1>Movie List</h1>
 
-    <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
-    <!-- single-star.js will find this html element by it's id "movie_table_body" -->
-    <tbody id=movie_table_body></tbody>
-</table>
+    <!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
+    <!-- single-star.js will find this html element by it's id "star_info" -->
+    <h3 id="star_info"></h3>
+    <table id=movie_table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Director</th>
+            <th>Genres</th>
+            <th>Stars</th>
+            <th>Rating</th>
+        </tr>
+        </thead>
+
+        <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
+        <!-- single-star.js will find this html element by it's id "movie_table_body" -->
+        <tbody id=movie_table_body></tbody>
+    </table>
+
+</div>
 
 
 <!-- Load jQuery and Bootstrap JS -->
@@ -73,7 +68,7 @@
 <!-- The path is relative to oldIndex.html, since these two files are in the same directory -->
 <!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
      otherwise the url is relative to the root path-->
-<script src="adv-search.js"></script>
+<script src="movie-list.js"></script>
 </body>
 
 
