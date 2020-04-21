@@ -1,30 +1,14 @@
 let advanceSearch = $("#advance_search_form");
 
-function handleSearchResult(resultData) {
-    // Populate the movie table
-    // Find the table body by id "movie_table_body"
-    let movieTableBodyElement = jQuery("#movie_table_body");
-    movieTableBodyElement.empty();
-    console.log(resultData);
-    console.log(movieTableBodyElement);
-    // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        rowHTML +=
-            "<th>" +
-            '<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
-            + resultData[i]["movie_title"] +
-            '</a>' +
-            "</th>";
-
-        // rowHTML += "<th>" + resultData[i]["movie_title"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
-        rowHTML += "</tr>";
-
-        // Append the row created to the table body, which will refresh the page
-        movieTableBodyElement.append(rowHTML);
+function handleSearchResult(resultDataString) {
+    console.log(resultDataString);
+    // let resultDataJson = JSON.parse(resultDataString);
+    let resultDataJson = resultDataString;
+    console.log("handle search response");
+    console.log(resultDataJson);
+    console.log(resultDataJson["status"]);
+    if (resultDataJson["status"] === "success") {
+        window.location.replace("movie-list.html");
     }
 }
 

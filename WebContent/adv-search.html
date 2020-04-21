@@ -35,7 +35,7 @@
 
 
 <div id="advance_search" class="advance_search">
-    <form id="advance_search_form" method="get" action="#">
+    <form id="advance_search_form" method="get" action="movie-list.html">
         <label>
             <input name="title" placeholder="movie title" type="text">
         </label>
@@ -54,23 +54,6 @@
         <br>
         <input type="submit" value="search">
     </form>
-</div>
-
-<div id="movie_list" class="movie_list">
-    <h3 id="star_info"></h3>
-    <table id=movie_table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Movie Title</th>
-            <th>Release Year</th>
-            <th>Director</th>
-        </tr>
-        </thead>
-
-        <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
-        <!-- single-star.js will find this html element by it's id "movie_table_body" -->
-        <tbody id=movie_table_body></tbody>
-    </table>
 </div>
 
 
