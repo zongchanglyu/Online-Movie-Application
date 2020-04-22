@@ -43,9 +43,9 @@ public class browseResultServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            String query = "select distinct gim.movieId" +
-                    "from genres, genres_in_movies as gim" +
-                    "where genres.id = gim.genreId and genres.name = ?"
+            String query = "select gim.movieId " +
+                    "from genres, genres_in_movies as gim " +
+                    "where genres.id = gim.genreId and genres.name = ? limit 10";
 
             PreparedStatement Statement = dbcon.prepareStatement(query);
 
@@ -56,95 +56,87 @@ public class browseResultServlet extends HttpServlet {
             JsonArray jsonArray = new JsonArray();
 
 
-
             // Iterate through each row of rs
             while (rs.next()) {
+                String id = rs.getString("movieId");
+
+                // Construct a query with parameter represented by "?"
+                String movieQuery = "select movies.*, ratings.rating from movies, ratings " +
+                        "where movies.id = ratings.movieId and movies.id = ? ;";
 
 
+                String starsQuery = "select stars.* from stars, stars_in_movies as sim " +
+                        "where stars.id = sim.starId and sim.movieId = ? ;";
 
-
-
-
-
-
-
-                String movie_id = rs.getString("id");
-                String movie_title = rs.getString("title");
-                String movie_year = rs.getString("year");
-                String movie_director = rs.getString("director");
-                float rating = rs.getFloat("rating");
-
-                // use movie_id to get 3 stars with new sql sentences
-                String starsQuery = "select stars.name, stars.id from stars join stars_in_movies as sim " +
-                        "on stars.id = sim.starId and sim.movieId = ? limit 3;";
                 // Declare our statement
+                PreparedStatement movieStatement = dbcon.prepareStatement(movieQuery);
                 PreparedStatement starsStatement = dbcon.prepareStatement(starsQuery);
+
                 // Set the parameter represented by "?" in the query to the id we get from url,
                 // num 1 indicates the first "?" in the query
-                starsStatement.setString(1, movie_id);
+                movieStatement.setString(1, id);
+                starsStatement.setString(1, id);
+
+                // Perform the query
+                ResultSet movieRS = movieStatement.executeQuery();
                 ResultSet starsRS = starsStatement.executeQuery();
+
+                // First, get movie info
+                movieRS.next();
+                String movieId = movieRS.getString("id");
+                String movieTitle = movieRS.getString("title");
+                String movieYear = movieRS.getString("year");
+                String movieDirector = movieRS.getString("director");
+                float rating = movieRS.getFloat("rating");
+
+                // Second, iterate and put genres info into genresJsonArray
+
+
+                // Third, iterate and put stars info into starsJsonArray
                 JsonArray starsJsonArray = new JsonArray();
-                while(starsRS.next()){
-                    String star_name = starsRS.getString("name");
-                    String star_id = starsRS.getString("id");
+                while (starsRS.next()) {
+                    String starId = starsRS.getString("id");
+                    String starName = starsRS.getString("name");
+                    String starDob = starsRS.getString("birthYear");
 
-                    JsonObject starJsonObject = new JsonObject();
-                    starJsonObject.addProperty("star_name", star_name);
-                    starJsonObject.addProperty("star_id", star_id);
-                    starsJsonArray.add(starJsonObject);
+                    JsonObject starsJsonObject = new JsonObject();
+                    starsJsonObject.addProperty("star_id", starId);
+                    starsJsonObject.addProperty("star_name", starName);
+                    starsJsonObject.addProperty("star_dob", starDob);
+
+                    starsJsonArray.add(starsJsonObject);
                 }
 
-                // use movie_id to get 3 genres with new sql sentences
-                String genresQuery = "select genres.name from genres join genres_in_movies as gim " +
-                        "on genres.id = gim.genreId and gim.movieId = ? limit 3;";
-                // Declare our statement
-                PreparedStatement genresStatement = dbcon.prepareStatement(genresQuery);
-                // Set the parameter represented by "?" in the query to the id we get from url,
-                // num 1 indicates the first "?" in the query
-                genresStatement.setString(1, movie_id);
-                ResultSet genresRS = genresStatement.executeQuery();
-                JsonArray genresJsonArray = new JsonArray();
-                while(genresRS.next()){
-                    String star_name = genresRS.getString("name");
-                    genresJsonArray.add(star_name);
-                }
-
-                // Create a JsonObject based on the data we retrieve from rs
+                // Put all properties into jsonObject
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("movie_id", movie_id);
-                jsonObject.addProperty("movie_title", movie_title);
-                jsonObject.addProperty("movie_year", movie_year);
-                jsonObject.addProperty("movie_director", movie_director);
-                jsonObject.add("stars_name", starsJsonArray);
-                jsonObject.add("genres_name", genresJsonArray);
-                jsonObject.addProperty("rating", rating);
+                jsonObject.addProperty("movie_id", movieId);
+                jsonObject.addProperty("movie_title", movieTitle);
+                jsonObject.addProperty("movie_year", movieYear);
+                jsonObject.addProperty("movie_director", movieDirector);
+                jsonObject.addProperty("movie_rating", rating);
+                jsonObject.addProperty("genres", genres);
+                jsonObject.add("stars", starsJsonArray);
 
                 jsonArray.add(jsonObject);
             }
+                // write JSON string to output
+                out.write(jsonArray.toString());
+                // set response status to 200 (OK)
+                response.setStatus(200);
 
-            // get session, if exit, rewrite
-            HttpSession session = request.getSession();
-            JsonArray previousList = (JsonArray)session.getAttribute("previousList");
-            if (previousList != null) {
-                previousList = null;
-            }
-            session.setAttribute("previousList", jsonArray);
+//                starsRS.close();
+//                movieRS.close();
+//
+//                starsStatement.close();
+//                movieStatement.close();
 
-            JsonObject responseJsonObject = new JsonObject();
-            responseJsonObject.addProperty("status", "success");
 
-            System.out.println("set attribute finished");
+                rs.close();
 
-            out.write(responseJsonObject.toString());
-            System.out.println(responseJsonObject.toString());
-            // set response status to 200 (OK)
-            response.setStatus(200);
+                dbcon.close();
 
-            rs.close();
 
-            Statement.close();
 
-            dbcon.close();
         } catch (Exception e) {
             // write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
