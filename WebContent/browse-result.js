@@ -66,6 +66,7 @@ function handleResult(resultData) {
         // }
         // rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         // rowHTML += "</th>";
+        
         rowHTML += "<th>" +"temp" + "</th>";
 
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
