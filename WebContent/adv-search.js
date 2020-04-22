@@ -7,9 +7,11 @@ function handleSearchResult(resultDataString) {
     console.log("handle search response");
     console.log(resultDataJson);
     console.log(resultDataJson["status"]);
-    if (resultDataJson["status"] === "success") {
-        window.location.replace("movie-list.html");
-    }
+    // if (resultDataJson["status"] === "success") {
+    //     window.location.replace("movie-list.html");
+    // }
+    window.location.replace("movie-list.html");
+
 }
 
 function handleSearchInfo(searchEvent) {

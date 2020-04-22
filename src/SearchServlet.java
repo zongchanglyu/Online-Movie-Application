@@ -74,22 +74,7 @@ public class SearchServlet extends HttpServlet {
 
             JsonArray jsonArray = new JsonArray();
 
-//            // Iterate through each row of rs
-//            while (rs.next()) {
-//                String movie_id = rs.getString("id");
-//                String movie_title = rs.getString("title");
-//                String movie_year = rs.getString("year");
-//                String movie_director = rs.getString("director");
-//
-//                // Create a JsonObject based on the data we retrieve from rs
-//                JsonObject jsonObject = new JsonObject();
-//                jsonObject.addProperty("movie_id", movie_id);
-//                jsonObject.addProperty("movie_title", movie_title);
-//                jsonObject.addProperty("movie_year", movie_year);
-//                jsonObject.addProperty("movie_director", movie_director);
-//
-//                jsonArray.add(jsonObject);
-//            }
+
             // Iterate through each row of rs
             while (rs.next()) {
                 String movie_id = rs.getString("id");
