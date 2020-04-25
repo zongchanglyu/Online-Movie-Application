@@ -113,14 +113,29 @@ public class browseResultServlet extends HttpServlet {
                 jsonObject.addProperty("movie_title", movieTitle);
                 jsonObject.addProperty("movie_year", movieYear);
                 jsonObject.addProperty("movie_director", movieDirector);
-                jsonObject.addProperty("movie_rating", rating);
-                jsonObject.addProperty("genres", genres);
-                jsonObject.add("stars", starsJsonArray);
+                jsonObject.addProperty("rating", rating);
+                jsonObject.addProperty("genres_name", genres);
+                jsonObject.add("stars_name", starsJsonArray);
 
                 jsonArray.add(jsonObject);
             }
+
+            // get session, if exit, rewrite
+            HttpSession session = request.getSession();
+            JsonArray previousList = (JsonArray)session.getAttribute("previousList");
+            if (previousList != null) {
+                previousList = null;
+            }
+            session.setAttribute("previousList", jsonArray);
+
+            JsonObject responseJsonObject = new JsonObject();
+            responseJsonObject.addProperty("status", "success");
+
+
                 // write JSON string to output
                 out.write(jsonArray.toString());
+
+
                 // set response status to 200 (OK)
                 response.setStatus(200);
 
