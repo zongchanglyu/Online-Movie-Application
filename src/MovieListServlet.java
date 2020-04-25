@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 // Declaring a WebServlet called MovieListServlet, which maps to url "/api/movie-list"
 @WebServlet(name = "MovieListServlet", urlPatterns = "/api/movie-list")
@@ -36,7 +37,7 @@ public class MovieListServlet extends HttpServlet {
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-        String query = "";
+//        String query = "";
 
         try{
             // Get a connection from dataSource
@@ -59,14 +60,25 @@ public class MovieListServlet extends HttpServlet {
             String genre = genreElement == null ? null : genreElement.getAsString();
             JsonElement genreIdElement = movieParameter.get("genreId");
             String genreId = genreIdElement == null ? null : genreIdElement.getAsString();
+            JsonElement firstLaterElement = movieParameter.get("firstLater");
+            String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
             JsonElement orderByElement = movieParameter.get("orderBy");
             String orderBy = orderByElement == null ? null : orderByElement.getAsString();
             JsonElement NumberOfListElement = movieParameter.get("NumberOfList");
             String NumberOfList = NumberOfListElement == null ? null : NumberOfListElement.getAsString();
 
-            PreparedStatement statement = null;
             ResultSet rs = null;
             JsonArray jsonArray = new JsonArray();
+            System.out.println(status);
+            String query = "";
+            PreparedStatement statement = null;
+
+//            switch (status){
+//                case "adv-search" : rs = executeAdvSearch(movieParameter); break;
+//                case "browse-by-genre" : rs = executeBrowseByGenre(movieParameter); break;
+//                case "browse-by-title" : rs = executeBrowseByTitle(movieParameter); break;
+//            }
+
             if("adv-search".equals(status)){
                 System.out.println("status is adv-search");
                 query = "select distinct movies.*, ratings.rating " +
@@ -90,9 +102,22 @@ public class MovieListServlet extends HttpServlet {
                 rs = statement.executeQuery();
             }else if("browse-by-genre".equals(status)){
                 System.out.println("status is browse-by-genre");
+                query = "select  movies.*, ratings.rating " +
+                        "from movies, ratings, genres_in_movies as gim " +
+                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ?;";
+
+                // Declare our statement
+                statement = dbcon.prepareStatement(query);
+
+                // Set the parameter represented by "?" in the query to the id we get from url,
+                // num 1 indicates the first "?" in the query
+                statement.setString(1, genreId);
+
+                // Perform the query
+                rs = statement.executeQuery();
             }
 
-            // Iterate through each row of rs
+
             while (rs.next()) {
                 String movie_id = rs.getString("id");
                 String movie_title = rs.getString("title");
@@ -153,6 +178,10 @@ public class MovieListServlet extends HttpServlet {
             System.out.println("write jsonArray to out");
             // set response status to 200 (OK)
             response.setStatus(200);
+
+            rs.close();
+            statement.close();
+            dbcon.close();
         }catch (Exception e) {
             // write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
@@ -164,6 +193,76 @@ public class MovieListServlet extends HttpServlet {
         }
         out.close();
         //close it;
+    }
+
+    private ResultSet executeAdvSearch(JsonObject movieParameter) throws SQLException {
+        JsonElement titleElement = movieParameter.get("title");
+        String title = titleElement == null ? null : titleElement.getAsString();
+        JsonElement yearElement = movieParameter.get("year");
+        String year = yearElement == null ? null : yearElement.getAsString();
+        JsonElement directorElement = movieParameter.get("director");
+        String director = directorElement == null ? null : directorElement.getAsString();
+        JsonElement starNameElement = movieParameter.get("starName");
+        String starName = starNameElement == null ? null : starNameElement.getAsString();
+
+        // Get a connection from dataSource
+        Connection dbcon = dataSource.getConnection();
+        String query = "select distinct movies.*, ratings.rating " +
+                       "from movies, stars_in_movies as sim, stars, ratings " +
+                       "where movies.title like ? and movies.year like ? and movies.director like ? " +
+                       "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                       "and movies.id = ratings.movieId;";
+        // Declare our statement
+        PreparedStatement statement = dbcon.prepareStatement(query);
+        // Set the parameter represented by "?" in the query to the id we get from url,
+        // num 1 indicates the first "?" in the query
+        statement.setString(1, title);
+        statement.setString(2, year);
+        statement.setString(3, director);
+        statement.setString(4, starName);
+
+        return statement.executeQuery();
+    }
+
+    private ResultSet executeBrowseByGenre(JsonObject movieParameter) throws SQLException {
+        JsonElement genreIdElement = movieParameter.get("genreId");
+        String genreId = genreIdElement == null ? null : genreIdElement.getAsString();
+
+        // Get a connection from dataSource
+        Connection dbcon = dataSource.getConnection();
+        String query = "select  movies.*, ratings.rating " +
+                       "from movies, ratings, genres_in_movies as gim " +
+                       "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ?;";
+
+        // Declare our statement
+        PreparedStatement statement = dbcon.prepareStatement(query);
+
+        // Set the parameter represented by "?" in the query to the id we get from url,
+        // num 1 indicates the first "?" in the query
+        statement.setString(1, genreId);
+
+        return statement.executeQuery();
+    }
+
+    private ResultSet executeBrowseByTitle(JsonObject movieParameter) throws SQLException {
+        JsonElement firstLaterElement = movieParameter.get("firstLater");
+        String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
+        firstLater += "%";
+
+        // Get a connection from dataSource
+        Connection dbcon = dataSource.getConnection();
+        String query = "select  movies.*, ratings.rating " +
+                "from movies, ratings " +
+                "where ratings.movieId = movies.id and movies.title like ?;";
+
+        // Declare our statement
+        PreparedStatement statement = dbcon.prepareStatement(query);
+
+        // Set the parameter represented by "?" in the query to the id we get from url,
+        // num 1 indicates the first "?" in the query
+        statement.setString(1, firstLater);
+
+        return statement.executeQuery();
     }
 
 }

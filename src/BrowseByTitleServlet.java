@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "BrowseByGenreServlet", urlPatterns = "/api/browse-by-genre")
-public class BrowseByGenreServlet extends HttpServlet {
+@WebServlet(name = "BrowseByTitleServlet", urlPatterns = "/api/browse-by-title")
+public class BrowseByTitleServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
@@ -29,8 +29,8 @@ public class BrowseByGenreServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
 
         // Retrieve parameters from url request.
-        String genreId = request.getParameter("id");
-
+        String firstLater = request.getParameter("first-later");
+        System.out.println("firstLater = " + firstLater);
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
@@ -42,19 +42,22 @@ public class BrowseByGenreServlet extends HttpServlet {
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
             if (movieParameter == null) {
                 JsonObject newMovieParameter = new JsonObject();
-                newMovieParameter.addProperty("status", "browse-by-genre");
-                newMovieParameter.addProperty("genreId", genreId);
+                newMovieParameter.addProperty("status", "browse-by-title");
+                newMovieParameter.addProperty("firstLater", firstLater);
                 session.setAttribute("movieParameter", newMovieParameter);
             }else{
-                movieParameter.addProperty("status", "browse-by-genre");
-                movieParameter.addProperty("genreId", genreId);
+                movieParameter.addProperty("status", "browse-by-title");
+                movieParameter.addProperty("firstLater", firstLater);
                 session.setAttribute("movieParameter", movieParameter);
             }
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
 
+            System.out.println("set attribute finished");
+
             out.write(responseJsonObject.toString());
+            System.out.println(responseJsonObject.toString());
             // set response status to 200 (OK)
             response.setStatus(200);
 
@@ -69,7 +72,6 @@ public class BrowseByGenreServlet extends HttpServlet {
         }
         out.close();
         //close it;
-
     }
 
 }
