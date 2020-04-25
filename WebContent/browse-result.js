@@ -54,7 +54,7 @@ function handleResult(resultData) {
 
         rowHTML += "<th>";
 
-        rowHTML += resultData[0]["genres"];
+        rowHTML += resultData[0]["genres_name"];
 
         rowHTML += "</th>";
 
@@ -66,10 +66,10 @@ function handleResult(resultData) {
         // }
         // rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         // rowHTML += "</th>";
-        
+
         rowHTML += "<th>" +"temp" + "</th>";
 
-        rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
