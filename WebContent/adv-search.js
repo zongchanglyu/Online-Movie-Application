@@ -16,6 +16,9 @@ function handleSearchResult(resultDataString) {
 
 function handleSearchInfo(searchEvent) {
     console.log("submit search form");
+    const url = "api/adv-search";
+    console.log("api/adv-search");
+    console.log(url);
     /**
      * When users click the submit button, the browser will not direct
      * users to the url defined in HTML form. Instead, it will call this
@@ -23,7 +26,7 @@ function handleSearchInfo(searchEvent) {
      */
     searchEvent.preventDefault();
 
-    $.ajax("api/search", {
+    $.ajax("api/adv-search", {
         method: "GET",
         data: advanceSearch.serialize(),
         success: handleSearchResult

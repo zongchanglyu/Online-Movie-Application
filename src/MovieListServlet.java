@@ -34,14 +34,21 @@ public class MovieListServlet extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-        // Get a instance of current session on the request
-        HttpSession session = request.getSession();
-        JsonArray previousList = (JsonArray)session.getAttribute("previousList");
-
         try{
+            // Get a instance of current session on the request
+            HttpSession session = request.getSession();
+            JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
+
+            String status = movieParameter.get("status").toString();
+            System.out.println(status);
+            if("adv-search".equals(status)){
+                System.out.println("!!!!!!");
+
+            }
+
             // write JSON string to output
-            out.write(previousList.toString());
-            System.out.println("write previousList to out");
+//            out.write(previousList.toString());
+//            System.out.println("write previousList to out");
             // set response status to 200 (OK)
             response.setStatus(200);
         }catch (Exception e) {
