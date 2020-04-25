@@ -34,7 +34,7 @@ function handleMoviesResult(resultData) {
             '</a>' +
             "</th>";
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["director"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
 
         rowHTML += "<th>";
         for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
