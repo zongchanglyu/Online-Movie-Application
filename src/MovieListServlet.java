@@ -157,7 +157,7 @@ public class MovieListServlet extends HttpServlet {
                 }
 
                 // use movie_id to get 3 genres with new sql sentences
-                String genresQuery = "select genres.name from genres join genres_in_movies as gim " +
+                String genresQuery = "select genres.* from genres join genres_in_movies as gim " +
                         "on genres.id = gim.genreId and gim.movieId = ? limit 3;";
                 // Declare our statement
                 PreparedStatement genresStatement = dbcon.prepareStatement(genresQuery);
@@ -167,8 +167,13 @@ public class MovieListServlet extends HttpServlet {
                 ResultSet genresRS = genresStatement.executeQuery();
                 JsonArray genresJsonArray = new JsonArray();
                 while(genresRS.next()){
-                    String star_name = genresRS.getString("name");
-                    genresJsonArray.add(star_name);
+                    String genre_name = genresRS.getString("name");
+                    String genre_id = genresRS.getString("id");
+
+                    JsonObject genreJsonObject = new JsonObject();
+                    genreJsonObject.addProperty("genre_name", genre_name);
+                    genreJsonObject.addProperty("genre_id", genre_id);
+                    genresJsonArray.add(genreJsonObject);
                 }
 
                 // Create a JsonObject based on the data we retrieve from rs

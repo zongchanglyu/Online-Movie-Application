@@ -38,7 +38,9 @@ function handleMoviesResult(resultData) {
 
         rowHTML += "<th>";
         for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
-            rowHTML += resultData[i]["genres_name"][g] + "<br>";
+            rowHTML +=
+                '<a href="browse.html?genre-id=' + resultData[i]['genres_name'][g]['genre_id'] + '">'
+                + resultData[i]["genres_name"][g]["genre_name"] + "<br>";
         }
         rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         rowHTML += "</th>";
