@@ -101,7 +101,7 @@ public class MovieListServlet extends HttpServlet {
                 System.out.println("status is browse-by-genre");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings, genres_in_movies as gim " +
-                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ?;";
+                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? ;";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -137,8 +137,17 @@ public class MovieListServlet extends HttpServlet {
                 float rating = rs.getFloat("rating");
 
                 // use movie_id to get 3 stars with new sql sentences
-                String starsQuery = "select stars.name, stars.id from stars join stars_in_movies as sim " +
-                        "on stars.id = sim.starId and sim.movieId = ? limit 3;";
+                String starsQuery = "select count(*) as count, tmp.* " +
+                        "from (select stars.name, stars.id from stars, stars_in_movies as sim " +
+                        "where stars.id = sim.starId and sim.movieId = ? ) as tmp, " +
+                        "movies, stars_in_movies as sim " +
+                        "where movies.id = sim.movieId and sim.starId = tmp.id " +
+                        "group by sim.starId order by count desc, name asc limit 3;";
+/*
+* select count(*) as count, tmp.* from (select stars.name, stars.id from stars, stars_in_movies as sim
+where stars.id = sim.starId and sim.movieId = "tt0362227") as tmp, movies, stars_in_movies as sim
+where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order by count desc, name asc limit 3;
+* */
                 // Declare our statement
                 PreparedStatement starsStatement = dbcon.prepareStatement(starsQuery);
                 // Set the parameter represented by "?" in the query to the id we get from url,
@@ -158,7 +167,7 @@ public class MovieListServlet extends HttpServlet {
 
                 // use movie_id to get 3 genres with new sql sentences
                 String genresQuery = "select genres.* from genres join genres_in_movies as gim " +
-                        "on genres.id = gim.genreId and gim.movieId = ? limit 3;";
+                        "on genres.id = gim.genreId and gim.movieId = ? order by name limit 3;";
                 // Declare our statement
                 PreparedStatement genresStatement = dbcon.prepareStatement(genresQuery);
                 // Set the parameter represented by "?" in the query to the id we get from url,
