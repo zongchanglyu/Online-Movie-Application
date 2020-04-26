@@ -1,4 +1,5 @@
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
@@ -42,28 +43,26 @@ public class cardServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
 
+            String query = "select movie.title from movies where movies.id = ?;";
 
-            String query = "select movie.title from movies where movies.id = movieId ;";
+            PreparedStatement movieStatement = dbcon.prepareStatement(query);
+
+            movieStatement.setString(1, movieId);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = movieStatement.executeQuery();
 
-            JsonArray jsonArray = new JsonArray();
+            JsonObject newJsonObject = new JsonObject();
 
             // Iterate through each row of rs
             while (rs.next()) {
-                String genre_id = rs.getString("id");
-                String genre_name = rs.getString("name");
+                String movie_title = rs.getString("title");
 
-                // Create a JsonObject based on the data we retrieve from rs
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("genre_id", genre_id);
-                jsonObject.addProperty("genre_name", genre_name);
+                newJsonObject.addProperty("movie_title", movie_title);
+                newJsonObject.addProperty("price", "19.99");
+                newJsonObject.addProperty("quantity", 1);
 
-                jsonArray.add(jsonObject);
             }
 
             HttpSession session = request.getSession();
@@ -71,45 +70,27 @@ public class cardServlet extends HttpServlet {
 
             if(cardItem == null){
                 cardItem = new HashMap<>();
-
+                cardItem.put(movieId, newJsonObject);
+                session.setAttribute("cardItem", cardItem);
             }
+            else{
+                if(cardItem.get(movieId)==null){
+                    cardItem.put(movieId, newJsonObject);
+                }
+                else{
+                    JsonElement quantity = cardItem.get(movieId).get("quantity");
+                    int number = Integer.parseInt(quantity.toString());
 
+                    cardItem.get(movieId).addProperty("quantity", number+1);
 
-
-
-
-
-
-
-
-
-
-
-
-
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
-
-
-            String query = "select * from genres;";
-
-            // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+                }
+            }
 
             JsonArray jsonArray = new JsonArray();
-
-            // Iterate through each row of rs
-            while (rs.next()) {
-                String genre_id = rs.getString("id");
-                String genre_name = rs.getString("name");
-
-                // Create a JsonObject based on the data we retrieve from rs
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("genre_id", genre_id);
-                jsonObject.addProperty("genre_name", genre_name);
-
-                jsonArray.add(jsonObject);
+            for(JsonObject i: cardItem.values()){
+                jsonArray.add(i);
             }
+            
 
             // write JSON string to output
             out.write(jsonArray.toString());
@@ -117,7 +98,7 @@ public class cardServlet extends HttpServlet {
             response.setStatus(200);
 
             rs.close();
-            statement.close();
+            movieStatement.close();
             dbcon.close();
         } catch (Exception e) {
 
