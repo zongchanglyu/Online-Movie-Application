@@ -58,7 +58,7 @@ function handleMoviesResult(resultData) {
             "<th>" +
 
             '<a href="cardPage.html?id=' + resultData[i]['movie_id'] + '">'
-            + "Add to Card"
+            + "Add to Cart"
         '</a>' +
         "</th>";
 

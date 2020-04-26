@@ -30,11 +30,9 @@ function handleCardResult(resultData) {
 
     let count = 0;
 
-    if(movieId==null){
-        // starTableBodyElement.append("Welcome! Your card is empty, you can go shopping now!");
-        starTableBodyElement.append(resultData);
-    }
-    else {
+    if (resultData[0] == null) {
+        starTableBodyElement.append("Welcome! Your card is empty, you can go shopping now!");
+    } else {
         // Iterate through resultData, no more than 20 entries
         for (let i = 0; i < Math.min(20, resultData.length); i++) {
 
@@ -67,12 +65,21 @@ function handleCardResult(resultData) {
     }
 }
 
-
 let movieId = getParameterByName('id');
 
-jQuery.ajax({
-    dataType: "json", // Setting return data type
-    method: "GET", // Setting request method
-    url: "api/card?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
-    success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-});
+
+if(movieId !=null) {
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/card?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}else{
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/cartDisplay",
+        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}
