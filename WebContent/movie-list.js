@@ -9,7 +9,7 @@
  */
 
 
-/**
+/*
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
@@ -34,7 +34,7 @@ function handleMoviesResult(resultData) {
             '</a>' +
             "</th>";
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["director"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
 
         rowHTML += "<th>";
         for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
@@ -69,6 +69,6 @@ function handleMoviesResult(resultData) {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/home", // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+    url: "api/movie-list", // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
     success: (resultData) => handleMoviesResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

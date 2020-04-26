@@ -16,29 +16,46 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <!--My Own CSS-->
+    <link rel="stylesheet" href="test.css"/>
+
     <title>Single Star</title>
 </head>
 <body>
-<h1>Single Star Page</h1>
 
-<!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
-<!-- single-star.js will find this html element by it's id "star_info" -->
-<h3 id="star_info"></h3>
-<table id=movie_table class="table table-striped">
-    <thead>
-    <tr>
-        <th>Movie Title</th>
-        <th>Release Year</th>
-        <th>Director</th>
-    </tr>
-    </thead>
+<div class="header">
+    <h1>Fabflix</h1>
+    <div class="navigation_bar">
+        <a href="index.html">Home</a> |
+        <a href="adv-search.html">Advanced Search</a> |
+        <a href="browse.html">Browse</a> |
+        <a href="#">cart</a>
+    </div>
+</div>
 
-    <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
-    <!-- single-star.js will find this html element by it's id "movie_table_body" -->
-    <tbody id=movie_table_body></tbody>
-</table>
+<div class="movie_list">
+    <h1>Single Star Page</h1>
 
-<a href="index.html" class="btn btn-info">Back to landing page!</a>
+    <!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
+    <!-- single-star.js will find this html element by it's id "star_info" -->
+    <h3 id="star_info"></h3>
+    <table id=movie_table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Movie Title</th>
+            <th>Release Year</th>
+            <th>Director</th>
+        </tr>
+        </thead>
+
+        <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
+        <!-- single-star.js will find this html element by it's id "movie_table_body" -->
+        <tbody id=movie_table_body></tbody>
+    </table>
+
+    <a href="movie-list.html" class="btn btn-info">Back to Search/Browse Result</a>
+</div>
+
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

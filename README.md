@@ -2,7 +2,7 @@
 
 ### The final version
 
-Now we have three servlet files: MoviesServlet, SingleMovieServlet, SingleStarServlet.
+Now we have three servlet files: HomeServlet, SingleMovieServlet, SingleStarServlet.
 
 Three HTML pages with paired JavaScript pages: index.html, single-movie.html, single-star.html
 

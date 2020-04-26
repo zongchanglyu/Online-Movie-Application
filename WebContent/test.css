@@ -1,0 +1,25 @@
+.header{
+    width: 80%;
+    margin: auto;
+}
+
+.advance_search{
+    text-align: center;
+    margin: auto;
+}
+
+.movie_list{
+    width: 80%;
+    margin: auto;
+}
+
+.browse{
+    text-align: center;
+    margin: auto;
+}
+
+.login{
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
