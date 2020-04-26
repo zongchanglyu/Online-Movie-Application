@@ -53,6 +53,15 @@ function handleMoviesResult(resultData) {
         rowHTML += "</th>";
 
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
+
+        rowHTML +=
+            "<th>" +
+
+            '<a href="cardPage.html?id=' + resultData[i]['movie_id'] + '">'
+            + "Add to Card"
+            '</a>' +
+            "</th>";
+
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
