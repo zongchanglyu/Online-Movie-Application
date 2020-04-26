@@ -44,10 +44,12 @@ public class BrowseByTitleServlet extends HttpServlet {
                 JsonObject newMovieParameter = new JsonObject();
                 newMovieParameter.addProperty("status", "browse-by-title");
                 newMovieParameter.addProperty("firstLater", firstLater);
+                newMovieParameter.addProperty("page", "0");
                 session.setAttribute("movieParameter", newMovieParameter);
             }else{
                 movieParameter.addProperty("status", "browse-by-title");
                 movieParameter.addProperty("firstLater", firstLater);
+                movieParameter.addProperty("page", "0");
                 session.setAttribute("movieParameter", movieParameter);
             }
 

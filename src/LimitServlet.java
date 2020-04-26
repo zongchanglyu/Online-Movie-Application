@@ -41,6 +41,7 @@ public class LimitServlet extends HttpServlet {
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
 
             movieParameter.addProperty("numberOfList", numberOfList);
+            movieParameter.addProperty("page", "0");
             session.setAttribute("movieParameter", movieParameter);
 
             JsonObject responseJsonObject = new JsonObject();
