@@ -42,7 +42,13 @@ function handleResult(resultData) {
     firstRowHTML += "<p>Genre: ";
 
     for(let g = 0; g < resultData["genres"].length; g++){
-        firstRowHTML += resultData["genres"][g] + ", ";
+        firstRowHTML +=
+                // Add a link to single-star.html with id passed with GET url parameter
+                '<a href="browse.html?genre-id=' + resultData["genres"][g]["genre_id"] + '">'
+                + resultData["genres"][g]["genre_name"] +     // display star_name for the link text
+                '</a>';
+
+        firstRowHTML += ", ";
     }
     firstRowHTML = firstRowHTML.substring(0, firstRowHTML.length - 2);
     firstRowHTML += "</p>";

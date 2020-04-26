@@ -63,11 +63,16 @@ public class MovieListServlet extends HttpServlet {
             JsonElement firstLaterElement = movieParameter.get("firstLater");
             String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
             JsonElement orderByElement = movieParameter.get("orderBy");
-            String orderBy = orderByElement == null ? null : orderByElement.getAsString();
-            JsonElement NumberOfListElement = movieParameter.get("NumberOfList");
-            String NumberOfList = NumberOfListElement == null ? null : NumberOfListElement.getAsString();
+            String orderBy = orderByElement == null ? "rating desc, title asc" : orderByElement.getAsString();
+            JsonElement numberOfListElement = movieParameter.get("numberOfList");
+            String numberOfList = numberOfListElement == null ? "10" : numberOfListElement.getAsString();
+            JsonElement pageElement = movieParameter.get("page");
+            String page = pageElement == null ? "0" : pageElement.getAsString();
 
-            ResultSet rs = null;
+            int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
+            String offset = String.valueOf(offsetInt);
+
+            ResultSet rs;
             JsonArray jsonArray = new JsonArray();
             System.out.println(status);
             String query = "";
@@ -85,7 +90,10 @@ public class MovieListServlet extends HttpServlet {
                         "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
-                        "and movies.id = ratings.movieId;";
+                        "and movies.id = ratings.movieId " +
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -96,12 +104,14 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(2, year);
                 statement.setString(3, director);
                 statement.setString(4, starName);
-                
+
             }else if("browse-by-genre".equals(status)){
-                System.out.println("status is browse-by-genre");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings, genres_in_movies as gim " +
-                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ?;";
+                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? " +
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -112,10 +122,12 @@ public class MovieListServlet extends HttpServlet {
 
 
             }else if("browse-by-title".equals(status)){
-                System.out.println("status is browse-by-title");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings " +
-                        "where ratings.movieId = movies.id and movies.title like ?;";
+                        "where ratings.movieId = movies.id and movies.title like ? " +
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -137,8 +149,17 @@ public class MovieListServlet extends HttpServlet {
                 float rating = rs.getFloat("rating");
 
                 // use movie_id to get 3 stars with new sql sentences
-                String starsQuery = "select stars.name, stars.id from stars join stars_in_movies as sim " +
-                        "on stars.id = sim.starId and sim.movieId = ? limit 3;";
+                String starsQuery = "select count(*) as count, tmp.* " +
+                        "from (select stars.name, stars.id from stars, stars_in_movies as sim " +
+                        "where stars.id = sim.starId and sim.movieId = ? ) as tmp, " +
+                        "movies, stars_in_movies as sim " +
+                        "where movies.id = sim.movieId and sim.starId = tmp.id " +
+                        "group by sim.starId order by count desc, name asc limit 3;";
+/*
+* select count(*) as count, tmp.* from (select stars.name, stars.id from stars, stars_in_movies as sim
+where stars.id = sim.starId and sim.movieId = "tt0362227") as tmp, movies, stars_in_movies as sim
+where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order by count desc, name asc limit 3;
+* */
                 // Declare our statement
                 PreparedStatement starsStatement = dbcon.prepareStatement(starsQuery);
                 // Set the parameter represented by "?" in the query to the id we get from url,
@@ -157,8 +178,8 @@ public class MovieListServlet extends HttpServlet {
                 }
 
                 // use movie_id to get 3 genres with new sql sentences
-                String genresQuery = "select genres.name from genres join genres_in_movies as gim " +
-                        "on genres.id = gim.genreId and gim.movieId = ? limit 3;";
+                String genresQuery = "select genres.* from genres join genres_in_movies as gim " +
+                        "on genres.id = gim.genreId and gim.movieId = ? order by name limit 3;";
                 // Declare our statement
                 PreparedStatement genresStatement = dbcon.prepareStatement(genresQuery);
                 // Set the parameter represented by "?" in the query to the id we get from url,
@@ -167,8 +188,13 @@ public class MovieListServlet extends HttpServlet {
                 ResultSet genresRS = genresStatement.executeQuery();
                 JsonArray genresJsonArray = new JsonArray();
                 while(genresRS.next()){
-                    String star_name = genresRS.getString("name");
-                    genresJsonArray.add(star_name);
+                    String genre_name = genresRS.getString("name");
+                    String genre_id = genresRS.getString("id");
+
+                    JsonObject genreJsonObject = new JsonObject();
+                    genreJsonObject.addProperty("genre_name", genre_name);
+                    genreJsonObject.addProperty("genre_id", genre_id);
+                    genresJsonArray.add(genreJsonObject);
                 }
 
                 // Create a JsonObject based on the data we retrieve from rs
@@ -180,13 +206,15 @@ public class MovieListServlet extends HttpServlet {
                 jsonObject.add("stars_name", starsJsonArray);
                 jsonObject.add("genres_name", genresJsonArray);
                 jsonObject.addProperty("rating", rating);
+                jsonObject.addProperty("orderBy", orderBy);
+                jsonObject.addProperty("numberOfList", numberOfList);
+                jsonObject.addProperty("page", page);
 
                 jsonArray.add(jsonObject);
             }
 
             // write JSON string to output
             out.write(jsonArray.toString());
-            System.out.println("write jsonArray to out");
             // set response status to 200 (OK)
             response.setStatus(200);
 
@@ -205,7 +233,7 @@ public class MovieListServlet extends HttpServlet {
         out.close();
         //close it;
     }
-
+/*
     private ResultSet executeAdvSearch(JsonObject movieParameter) throws SQLException {
         JsonElement titleElement = movieParameter.get("title");
         String title = titleElement == null ? null : titleElement.getAsString();
@@ -275,5 +303,5 @@ public class MovieListServlet extends HttpServlet {
 
         return statement.executeQuery();
     }
-
+*/
 }

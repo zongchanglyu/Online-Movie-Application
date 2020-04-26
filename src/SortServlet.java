@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "BrowseByGenreServlet", urlPatterns = "/api/browse-by-genre")
-public class BrowseByGenreServlet extends HttpServlet {
+@WebServlet(name = "SortServlet", urlPatterns = "/api/sort-change")
+public class SortServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
@@ -29,8 +29,7 @@ public class BrowseByGenreServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
 
         // Retrieve parameters from url request.
-        String genreId = request.getParameter("id");
-
+        String orderBy = request.getParameter("orderBy");
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
@@ -40,18 +39,9 @@ public class BrowseByGenreServlet extends HttpServlet {
 //                jsonArray.add(jsonObject);
 
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
-            if (movieParameter == null) {
-                JsonObject newMovieParameter = new JsonObject();
-                newMovieParameter.addProperty("status", "browse-by-genre");
-                newMovieParameter.addProperty("genreId", genreId);
-                newMovieParameter.addProperty("page", "0");
-                session.setAttribute("movieParameter", newMovieParameter);
-            }else{
-                movieParameter.addProperty("status", "browse-by-genre");
-                movieParameter.addProperty("genreId", genreId);
-                movieParameter.addProperty("page", "0");
-                session.setAttribute("movieParameter", movieParameter);
-            }
+
+            movieParameter.addProperty("orderBy", orderBy);
+            session.setAttribute("movieParameter", movieParameter);
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
@@ -71,7 +61,6 @@ public class BrowseByGenreServlet extends HttpServlet {
         }
         out.close();
         //close it;
-
     }
 
 }
