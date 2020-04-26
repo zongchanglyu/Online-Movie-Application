@@ -64,16 +64,19 @@ public class MovieListServlet extends HttpServlet {
             String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
             JsonElement orderByElement = movieParameter.get("orderBy");
             String orderBy = orderByElement == null ? "rating desc, title asc" : orderByElement.getAsString();
-            JsonElement NumberOfListElement = movieParameter.get("NumberOfList");
-            String NumberOfList = NumberOfListElement == null ? null : NumberOfListElement.getAsString();
+            JsonElement numberOfListElement = movieParameter.get("numberOfList");
+            String numberOfList = numberOfListElement == null ? "10" : numberOfListElement.getAsString();
+            JsonElement pageElement = movieParameter.get("page");
+            String page = pageElement == null ? "0" : pageElement.getAsString();
 
-            ResultSet rs = null;
+            int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
+            String offset = String.valueOf(offsetInt);
+
+            ResultSet rs;
             JsonArray jsonArray = new JsonArray();
             System.out.println(status);
             String query = "";
             PreparedStatement statement = null;
-
-            System.out.println("orderBy = " + orderBy);
 
 //            switch (status){
 //                case "adv-search" : rs = executeAdvSearch(movieParameter); break;
@@ -88,7 +91,9 @@ public class MovieListServlet extends HttpServlet {
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
                         "and movies.id = ratings.movieId " +
-                        "order by " + orderBy + ";";
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -101,11 +106,12 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(4, starName);
 
             }else if("browse-by-genre".equals(status)){
-                System.out.println("status is browse-by-genre");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings, genres_in_movies as gim " +
                         "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? " +
-                        "order by " + orderBy + ";";
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -116,11 +122,12 @@ public class MovieListServlet extends HttpServlet {
 
 
             }else if("browse-by-title".equals(status)){
-                System.out.println("status is browse-by-title");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings " +
                         "where ratings.movieId = movies.id and movies.title like ? " +
-                        "order by " + orderBy + ";";
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -200,13 +207,14 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
                 jsonObject.add("genres_name", genresJsonArray);
                 jsonObject.addProperty("rating", rating);
                 jsonObject.addProperty("orderBy", orderBy);
+                jsonObject.addProperty("numberOfList", numberOfList);
+                jsonObject.addProperty("page", page);
 
                 jsonArray.add(jsonObject);
             }
 
             // write JSON string to output
             out.write(jsonArray.toString());
-            System.out.println("write jsonArray to out");
             // set response status to 200 (OK)
             response.setStatus(200);
 
@@ -225,7 +233,7 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
         out.close();
         //close it;
     }
-
+/*
     private ResultSet executeAdvSearch(JsonObject movieParameter) throws SQLException {
         JsonElement titleElement = movieParameter.get("title");
         String title = titleElement == null ? null : titleElement.getAsString();
@@ -295,5 +303,5 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
 
         return statement.executeQuery();
     }
-
+*/
 }
