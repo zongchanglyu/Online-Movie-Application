@@ -40,66 +40,69 @@ public class cardServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
-
-
-            String query = "select movies.title from movies where movies.id = ?;";
-
-            PreparedStatement movieStatement = dbcon.prepareStatement(query);
-
-            movieStatement.setString(1, movieId);
-
-            // Perform the query
-            ResultSet rs = movieStatement.executeQuery();
-
-            JsonObject newJsonObject = new JsonObject();
-
-            // Iterate through each row of rs
-            while (rs.next()) {
-                String movie_title = rs.getString("title");
-
-                newJsonObject.addProperty("movie_title", movie_title);
-                newJsonObject.addProperty("price", "19.99");
-                newJsonObject.addProperty("quantity", 1);
-                newJsonObject.addProperty("movie_id", movieId);
+            if(movieId==null){
+                out.write("Welcome! Your card is empty, you can go shopping now!");
             }
+            else {
+                // Get a connection from dataSource
+                Connection dbcon = dataSource.getConnection();
 
-            HttpSession session = request.getSession();
-            HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
 
-            if(cardItem == null){
-                cardItem = new HashMap<>();
-                cardItem.put(movieId, newJsonObject);
-                session.setAttribute("cardItem", cardItem);
-            }
-            else{
-                if(cardItem.get(movieId)==null){
+                String query = "select movies.title from movies where movies.id = ?;";
+
+                PreparedStatement movieStatement = dbcon.prepareStatement(query);
+
+                movieStatement.setString(1, movieId);
+
+                // Perform the query
+                ResultSet rs = movieStatement.executeQuery();
+
+                JsonObject newJsonObject = new JsonObject();
+
+                // Iterate through each row of rs
+                while (rs.next()) {
+                    String movie_title = rs.getString("title");
+
+                    newJsonObject.addProperty("movie_title", movie_title);
+                    newJsonObject.addProperty("price", "19.50");
+                    newJsonObject.addProperty("quantity", 1);
+                    newJsonObject.addProperty("movie_id", movieId);
+                }
+
+                HttpSession session = request.getSession();
+                HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+
+                if (cardItem == null) {
+                    cardItem = new HashMap<>();
                     cardItem.put(movieId, newJsonObject);
+                    session.setAttribute("cardItem", cardItem);
+                } else {
+                    if (cardItem.get(movieId) == null) {
+                        cardItem.put(movieId, newJsonObject);
+                    } else {
+                        JsonElement quantity = cardItem.get(movieId).get("quantity");
+                        int number = Integer.parseInt(quantity.toString());
+
+                        cardItem.get(movieId).addProperty("quantity", number + 1);
+
+                    }
                 }
-                else{
-                    JsonElement quantity = cardItem.get(movieId).get("quantity");
-                    int number = Integer.parseInt(quantity.toString());
 
-                    cardItem.get(movieId).addProperty("quantity", number+1);
-
+                JsonArray jsonArray = new JsonArray();
+                for (JsonObject i : cardItem.values()) {
+                    jsonArray.add(i);
                 }
+
+
+                // write JSON string to output
+                out.write(jsonArray.toString());
+                // set response status to 200 (OK)
+                response.setStatus(200);
+
+                rs.close();
+                movieStatement.close();
+                dbcon.close();
             }
-
-            JsonArray jsonArray = new JsonArray();
-            for(JsonObject i: cardItem.values()){
-                jsonArray.add(i);
-            }
-
-
-            // write JSON string to output
-            out.write(jsonArray.toString());
-            // set response status to 200 (OK)
-            response.setStatus(200);
-
-            rs.close();
-            movieStatement.close();
-            dbcon.close();
         } catch (Exception e) {
 
             // write error message JSON object to output
