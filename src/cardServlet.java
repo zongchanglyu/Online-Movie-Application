@@ -44,7 +44,7 @@ public class cardServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
 
-            String query = "select movie.title from movies where movies.id = ?;";
+            String query = "select movies.title from movies where movies.id = ?;";
 
             PreparedStatement movieStatement = dbcon.prepareStatement(query);
 
@@ -62,7 +62,7 @@ public class cardServlet extends HttpServlet {
                 newJsonObject.addProperty("movie_title", movie_title);
                 newJsonObject.addProperty("price", "19.99");
                 newJsonObject.addProperty("quantity", 1);
-
+                newJsonObject.addProperty("movie_id", movieId);
             }
 
             HttpSession session = request.getSession();
@@ -90,7 +90,7 @@ public class cardServlet extends HttpServlet {
             for(JsonObject i: cardItem.values()){
                 jsonArray.add(i);
             }
-            
+
 
             // write JSON string to output
             out.write(jsonArray.toString());
