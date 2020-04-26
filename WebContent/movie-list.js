@@ -16,6 +16,8 @@
 function handleMoviesResult(resultData) {
     console.log("handleMoviesResult: populating movie table from resultData");
 
+    $("#sortOrder").find("option[value='" + resultData[0]['orderBy'] + "']").attr("selected",true);
+
     // Populate the movie table
     // Find the empty table body by id "movie_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
@@ -62,10 +64,28 @@ function handleMoviesResult(resultData) {
     }
 }
 
+function redirectToMovieListPage(){
+    window.location.replace("movie-list.html");
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
+
+
+$(" #sortOrder").change(function(){
+    let options=$("#sortOrder");
+    let value = options.val();
+    // let text = options.text();
+    // alert("value = " + value);
+    // alert("text = " + text);
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/sort-change?orderBy=" + value, // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: redirectToMovieListPage // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+});
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({

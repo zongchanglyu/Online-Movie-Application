@@ -36,7 +36,14 @@
 
 <div class="movie_list">
     <h1>Movie List</h1>
-
+    <div class="sort-order">
+        <select id="sortOrder" class="selectpicker">
+            <option value="rating desc, title asc">Rating - Highest</option>
+            <option value="rating asc, title asc">Rating - Lowest</option>
+            <option value="title asc, rating desc">Title - A to Z</option>
+            <option value="title desc, rating asc">Title - Z to A</option>
+        </select>
+    </div>
     <!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
     <!-- single-star.js will find this html element by it's id "star_info" -->
     <h3 id="star_info"></h3>

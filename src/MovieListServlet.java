@@ -63,7 +63,7 @@ public class MovieListServlet extends HttpServlet {
             JsonElement firstLaterElement = movieParameter.get("firstLater");
             String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
             JsonElement orderByElement = movieParameter.get("orderBy");
-            String orderBy = orderByElement == null ? null : orderByElement.getAsString();
+            String orderBy = orderByElement == null ? "rating desc, title asc" : orderByElement.getAsString();
             JsonElement NumberOfListElement = movieParameter.get("NumberOfList");
             String NumberOfList = NumberOfListElement == null ? null : NumberOfListElement.getAsString();
 
@@ -72,6 +72,8 @@ public class MovieListServlet extends HttpServlet {
             System.out.println(status);
             String query = "";
             PreparedStatement statement = null;
+
+            System.out.println("orderBy = " + orderBy);
 
 //            switch (status){
 //                case "adv-search" : rs = executeAdvSearch(movieParameter); break;
@@ -85,7 +87,8 @@ public class MovieListServlet extends HttpServlet {
                         "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
-                        "and movies.id = ratings.movieId;";
+                        "and movies.id = ratings.movieId " +
+                        "order by " + orderBy + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -96,12 +99,13 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(2, year);
                 statement.setString(3, director);
                 statement.setString(4, starName);
-                
+
             }else if("browse-by-genre".equals(status)){
                 System.out.println("status is browse-by-genre");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings, genres_in_movies as gim " +
-                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? ;";
+                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? " +
+                        "order by " + orderBy + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -115,7 +119,8 @@ public class MovieListServlet extends HttpServlet {
                 System.out.println("status is browse-by-title");
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings " +
-                        "where ratings.movieId = movies.id and movies.title like ?;";
+                        "where ratings.movieId = movies.id and movies.title like ? " +
+                        "order by " + orderBy + ";";
 
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
@@ -194,6 +199,7 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
                 jsonObject.add("stars_name", starsJsonArray);
                 jsonObject.add("genres_name", genresJsonArray);
                 jsonObject.addProperty("rating", rating);
+                jsonObject.addProperty("orderBy", orderBy);
 
                 jsonArray.add(jsonObject);
             }
