@@ -96,10 +96,7 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(2, year);
                 statement.setString(3, director);
                 statement.setString(4, starName);
-
-                System.out.println(statement);
-                // Perform the query
-                rs = statement.executeQuery();
+                
             }else if("browse-by-genre".equals(status)){
                 System.out.println("status is browse-by-genre");
                 query = "select  movies.*, ratings.rating " +
@@ -113,9 +110,23 @@ public class MovieListServlet extends HttpServlet {
                 // num 1 indicates the first "?" in the query
                 statement.setString(1, genreId);
 
-                // Perform the query
-                rs = statement.executeQuery();
+
+            }else if("browse-by-title".equals(status)){
+                System.out.println("status is browse-by-title");
+                query = "select  movies.*, ratings.rating " +
+                        "from movies, ratings " +
+                        "where ratings.movieId = movies.id and movies.title like ?;";
+
+                // Declare our statement
+                statement = dbcon.prepareStatement(query);
+
+                // Set the parameter represented by "?" in the query to the id we get from url,
+                // num 1 indicates the first "?" in the query
+                statement.setString(1, firstLater + "%");
             }
+
+            // Perform the query
+            rs = statement.executeQuery();
 
 
             while (rs.next()) {
