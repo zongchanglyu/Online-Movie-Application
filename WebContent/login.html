@@ -17,27 +17,37 @@
     <title>Login to Fablix</title>
 </head>
 <body>
-<div id="login" class="login">
-    <h2>Login to Fablix</h2>
-    <!-- Set the method to POST to avoid showing the username/password in the URL
-     The default action is disabled to allow your own implementation. -->
-    <form id="login_form" method="post" action="#">
-        <label><b>Email</b></label>
-        <label>
-            <input name="email" placeholder="Enter Email" type="text">
-        </label>
-        <br>
-        <label><b>Password</b></label>
-        <label>
-            <input name="password" placeholder="Enter Password" type="password">
-        </label>
-        <br>
-        <input type="submit" value="Login">
-    </form>
+
+<body background="https://images.unsplash.com/photo-1587122402961-4f710d8ce3de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60" style="background-repeat:no-repeat; background-position:center;background-size:cover;">
+<!--<body style="background-image: url('https://images.unsplash.com/photo-1587122402961-4f710d8ce3de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60') no-repeat；">-->
+<div class="container padding-top-lg">
+    <div class="row">
+        <div style="width: 30%; margin: 25px auto;">
+            <div id="login" class="login">
+                <h2 class="margin-bottom-lg">Login to Fablix</h2>
+                <!-- Set the method to POST to avoid showing the username/password in the URL
+                 The default action is disabled to allow your own implementation. -->
+                <form id="login_form" method="post" action="#">
+                    <label><b>Email</b></label>
+                    <label>
+                        <input name="email" placeholder="Enter Email" type="text">
+                    </label>
+                    <br>
+                    <label><b>Password</b></label>
+                    <label>
+                        <input name="password" placeholder="Enter Password" type="password">
+                    </label>
+                    <br>
+                    <input class="btn btn-warning" type="submit" value="Login">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="login_error_message"></div>
 </div>
 
-
-<div id="login_error_message"></div>
 
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
