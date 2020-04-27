@@ -1,7 +1,7 @@
 
 let price = getParameterByName('price');
 let totalPrice = jQuery("#price");
-totalPrice.append("The Total Price are: " + price);
+totalPrice.append("The Total Price is: " + price);
 
 let paymentForm = $("#payment_form");
 
@@ -35,7 +35,9 @@ function handlePaymentResult(resultDataString) {
     // }
     if(resultDataString["status"]=== "fail") {
         alert("payment fail!");
-        window.location.replace("movie-list.html");
+        window.location.replace("payment.html?price=" + price);
+    }else{
+        window.location.replace("paymentSuccessful.html");
     }
 }
 

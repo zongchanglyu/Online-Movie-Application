@@ -1,5 +1,4 @@
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
@@ -12,15 +11,11 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "cartDisplayServlet", urlPatterns = "/api/cartDisplay")
-public class cartDisplayServlet extends HttpServlet {
+@WebServlet(name = "cartDisplayServlet", urlPatterns = "/api/paymentSuccessful")
+public class PaymentSuccessfulServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
@@ -39,55 +34,13 @@ public class cartDisplayServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-//                // Get a connection from dataSource
-//                Connection dbcon = dataSource.getConnection();
-//
-//
-//                String query = "select movies.title from movies where movies.id = ?;";
-//
-//                PreparedStatement movieStatement = dbcon.prepareStatement(query);
-//
-//                movieStatement.setString(1, movieId);
-//
-//                // Perform the query
-//                ResultSet rs = movieStatement.executeQuery();
-//
-//                JsonObject newJsonObject = new JsonObject();
-//
-//                // Iterate through each row of rs
-//                while (rs.next()) {
-//                    String movie_title = rs.getString("title");
-//
-//                    newJsonObject.addProperty("movie_title", movie_title);
-//                    newJsonObject.addProperty("price", "19.50");
-//                    newJsonObject.addProperty("quantity", 1);
-//                    newJsonObject.addProperty("movie_id", movieId);
-//                }
-
                 HttpSession session = request.getSession();
                 HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
-
-//                if (cardItem == null) {
-//                    cardItem = new HashMap<>();
-//                    cardItem.put(movieId, newJsonObject);
-//                    session.setAttribute("cardItem", cardItem);
-//                } else {
-//                    if (cardItem.get(movieId) == null) {
-//                        cardItem.put(movieId, newJsonObject);
-//                    } else {
-//                        JsonElement quantity = cardItem.get(movieId).get("quantity");
-//                        int number = Integer.parseInt(quantity.toString());
-//
-//                        cardItem.get(movieId).addProperty("quantity", number + 1);
-//
-//                    }
-//                }
 
                 JsonArray jsonArray = new JsonArray();
                 for (JsonObject i : cardItem.values()) {
                     jsonArray.add(i);
                 }
-
 
                 // write JSON string to output
                 out.write(jsonArray.toString());

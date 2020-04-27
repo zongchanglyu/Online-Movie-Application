@@ -69,8 +69,6 @@ public class paymentInfoServlet extends HttpServlet {
                     String dbdate = rs.getString("expiration");
 
                     if(firstName.equals(dbfirstName) && lastName.equals(dblastName) && date.equals(dbdate)){
-                        responseJsonObject.addProperty("status", "success");
-
                         HttpSession session = request.getSession();
                         Customer user = (Customer) session.getAttribute("user");
                         HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
@@ -80,19 +78,22 @@ public class paymentInfoServlet extends HttpServlet {
                         String nowDate = sdf.format((d));
 
                         for(JsonObject obj : cardItem.values()){
-                            String insertSql = "insert into sales(customerId, movieId, saleDate) values ( ?, ?, ? );";
-                            PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
+                            String quantity = obj.get("quantity").getAsString();
+                            int count = Integer.parseInt(quantity);
+                            for(int i = 0; i < count; i++){
+                                String insertSql = "insert into sales(customerId, movieId, saleDate) values ( ?, ?, ? );";
+                                PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
 
-                            insertStatement.setString(1, String.valueOf(user.getId()));
-                            insertStatement.setString(2, obj.get("movie_id").getAsString());
-                            insertStatement.setString(3, nowDate);
+                                insertStatement.setString(1, String.valueOf(user.getId()));
+                                insertStatement.setString(2, obj.get("movie_id").getAsString());
+                                insertStatement.setString(3, nowDate);
 
-                            int insertRS = insertStatement.executeUpdate();
-                            System.out.println(insertRS);
+                                insertStatement.executeUpdate();
 
-                            insertStatement.close();
+                                insertStatement.close();
+                            }
                         }
-
+                        responseJsonObject.addProperty("status", "success");
                     }
                     else{
                         responseJsonObject.addProperty("status", "fail");
