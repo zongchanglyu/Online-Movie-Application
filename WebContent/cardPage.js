@@ -81,6 +81,10 @@ function handleCardResult(resultData) {
 
         let totalCost = jQuery("#totalCost");
         totalCost.append("Grand Total: " + count * 19.50);
+        let toPayment = jQuery("#toPayment");
+        let temp = "";
+        temp += '<a class="btn btn-warning" href="payment.html?price=' + count * 19.50 + '">' + 'Go to Payment' + '</a>';
+        toPayment.append(temp);
     }
 }
 
