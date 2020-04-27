@@ -28,6 +28,11 @@
     margin: auto;
     padding-top: 50px;
 }
+.padding-top-m{
+    margin: auto;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
 
 .margin-bottom-lg{
     margin-bottom: 30px;
