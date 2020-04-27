@@ -48,7 +48,20 @@ function handleCardResult(resultData) {
                 "</th>";
             rowHTML += "<th>" + resultData[i]["price"] + "</th>";
 
+
+
             rowHTML += "<th>" + resultData[i]["quantity"] + "</th>";
+
+
+            
+
+            rowHTML +=
+                "<th>" +
+
+                '<a href="cardPage.html?id=' + resultData[i]['movie_id'] + '&method=delete' + '">'
+                + "Delete" +
+                '</a>' +
+                "</th>";
 
             count += resultData[i]["quantity"];
 
@@ -66,20 +79,35 @@ function handleCardResult(resultData) {
 }
 
 let movieId = getParameterByName('id');
+let method = getParameterByName('method');
 
+if(method==null) {
+    if (movieId != null) {
+        jQuery.ajax({
+            dataType: "json", // Setting return data type
+            method: "GET", // Setting request method
+            url: "api/card?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+            success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        });
+    } else {
+        jQuery.ajax({
+            dataType: "json", // Setting return data type
+            method: "GET", // Setting request method
+            url: "api/cartDisplay",
+            success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        });
+    }
+}
+else{
+    if(method=="delete"){
+        jQuery.ajax({
+            dataType: "json", // Setting return data type
+            method: "POST", // Setting request method
+            url: "api/cartDelete?id=" + movieId,
+            success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        });
+    }
+    if(method=="put"){
 
-if(movieId !=null) {
-    jQuery.ajax({
-        dataType: "json", // Setting return data type
-        method: "GET", // Setting request method
-        url: "api/card?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
-        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-    });
-}else{
-    jQuery.ajax({
-        dataType: "json", // Setting return data type
-        method: "GET", // Setting request method
-        url: "api/cartDisplay",
-        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-    });
+    }
 }
