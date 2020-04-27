@@ -24,6 +24,11 @@
     width: 50%;
 }
 
+.padding-top-lg{
+    margin: auto;
+    padding-top: 50px;
+}
+
 .sort-order{
     width: 50%;
     float: left;
