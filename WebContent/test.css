@@ -28,3 +28,13 @@
     margin: auto;
     padding-top: 50px;
 }
+
+.sort-order{
+    width: 50%;
+    float: left;
+}
+
+.result-limit{
+    width: 50%;
+    float: left;
+}

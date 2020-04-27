@@ -36,10 +36,24 @@
 
 <div class="movie_list">
     <h1>Movie List</h1>
-
+    <div class="sort-order">
+        <select id="sortOrder" class="selectpicker">
+            <option value="rating desc, title asc">Rating - Highest</option>
+            <option value="rating asc, title asc">Rating - Lowest</option>
+            <option value="title asc, rating desc">Title - A to Z</option>
+            <option value="title desc, rating asc">Title - Z to A</option>
+        </select>
+    </div>
+    <div class="result-limit">
+        <select id="resultLimit" class="selectpicker">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
     <!-- H3 body is left empty here, will be populated with the data retrieved with single-star.js -->
     <!-- single-star.js will find this html element by it's id "star_info" -->
-    <h3 id="star_info"></h3>
     <table id=movie_table class="table table-striped">
         <thead>
         <tr>
@@ -57,7 +71,10 @@
         <!-- single-star.js will find this html element by it's id "movie_table_body" -->
         <tbody id=movie_table_body></tbody>
     </table>
-
+    <div id="paging" class="paging">
+        <button type="submit" id="prev" class="btn btn-info">Prev</button>
+        <button type="submit" id="next" class="btn btn-info">Next</button>
+    </div>
 </div>
 
 

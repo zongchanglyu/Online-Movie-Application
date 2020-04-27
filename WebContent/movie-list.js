@@ -16,12 +16,22 @@
 function handleMoviesResult(resultData) {
     console.log("handleMoviesResult: populating movie table from resultData");
 
+    $("#sortOrder").find("option[value='" + resultData[0]['orderBy'] + "']").attr("selected",true);
+
+    $("#resultLimit").find("option[value='" + resultData[0]['numberOfList'] + "']").attr("selected",true);
+
+    let currentPage = resultData[0]['page'];
+
+    if(currentPage == 0){
+        $("#prev").attr('disabled',true);
+    }
+
     // Populate the movie table
     // Find the empty table body by id "movie_table_body"
     let starTableBodyElement = jQuery("#movie_table_body");
 
     // Iterate through resultData, no more than 20 entries
-    for (let i = 0; i < Math.min(20, resultData.length); i++) {
+    for (let i = 0; i < resultData.length; i++) {
 
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
@@ -38,7 +48,9 @@ function handleMoviesResult(resultData) {
 
         rowHTML += "<th>";
         for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
-            rowHTML += resultData[i]["genres_name"][g] + "<br>";
+            rowHTML +=
+                '<a href="browse.html?genre-id=' + resultData[i]['genres_name'][g]['genre_id'] + '">'
+                + resultData[i]["genres_name"][g]["genre_name"] + "<br>";
         }
         rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         rowHTML += "</th>";
@@ -69,10 +81,59 @@ function handleMoviesResult(resultData) {
     }
 }
 
+function redirectToMovieListPage(){
+    window.location.replace("movie-list.html");
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
+
+$(" #sortOrder").change(function(){
+    let options=$("#sortOrder");
+    let value = options.val();
+    // let text = options.text();
+    // alert("value = " + value);
+    // alert("text = " + text);
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/sort-change?orderBy=" + value, // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: redirectToMovieListPage // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+});
+
+$(" #resultLimit").change(function(){
+    let options=$("#resultLimit");
+    let value = options.val();
+    // let text = options.text();
+    // alert("value = " + value);
+    // alert("text = " + text);
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/limit-change?numberOfList=" + value, // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: redirectToMovieListPage // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+});
+
+$('#prev').click(function(){
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/page?page=prev", // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: redirectToMovieListPage // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+});
+
+$('#next').click(function(){
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "api/page?page=next", // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
+        success: redirectToMovieListPage // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+});
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
