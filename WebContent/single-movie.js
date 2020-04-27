@@ -53,6 +53,11 @@ function handleResult(resultData) {
     firstRowHTML = firstRowHTML.substring(0, firstRowHTML.length - 2);
     firstRowHTML += "</p>";
 
+    firstRowHTML +=
+        '<a class="btn btn-info" href="cart.html?method=add&id=' + resultData['movie_id'] + '">'
+        + "Add to Cart"
+        '</a>';
+
     starInfoElement.append(firstRowHTML);
 
     console.log("handleResult: populating movie table from resultData");
