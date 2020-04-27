@@ -49,11 +49,14 @@ function handleCardResult(resultData) {
             rowHTML += "<th>" + resultData[i]["price"] + "</th>";
 
 
+            rowHTML += "<th>" +
+            '<form ACTION="cardPage.html?id=' + movieId + '&method=put" method="POST">' +
 
-            rowHTML += "<th>" + resultData[i]["quantity"] + "</th>";
+                '<input id="item" name="item" type="number" value=' + resultData[i]["quantity"]+ '>' +
+                '<input type="submit" VALUE="update">' +
+                '</form>'
 
-
-            
+                + "</th>";
 
             rowHTML +=
                 "<th>" +
@@ -62,6 +65,9 @@ function handleCardResult(resultData) {
                 + "Delete" +
                 '</a>' +
                 "</th>";
+
+            item = $("input[id='item']").attr("value");
+
 
             count += resultData[i]["quantity"];
 
@@ -78,6 +84,10 @@ function handleCardResult(resultData) {
     }
 }
 
+// let item = getParameterByName('item');
+
+let item = 6;
+// alert(item);
 let movieId = getParameterByName('id');
 let method = getParameterByName('method');
 
@@ -108,6 +118,11 @@ else{
         });
     }
     if(method=="put"){
-
+        jQuery.ajax({
+            dataType: "json", // Setting return data type
+            method: "GET", // Setting request method
+            url: "api/cartUpdate?id=" + movieId + "&item=" + item,
+            success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        });
     }
 }
