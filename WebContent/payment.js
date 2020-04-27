@@ -23,7 +23,7 @@ function getParameterByName(target) {
 
 
 
-function handleSearchResult(resultDataString) {
+function handlePaymentResult(resultDataString) {
     console.log(resultDataString);
     // let resultDataJson = JSON.parse(resultDataString);
     let resultDataJson = resultDataString;
@@ -33,14 +33,15 @@ function handleSearchResult(resultDataString) {
     // if (resultDataJson["status"] === "success") {
     //     window.location.replace("movie-list.html");
     // }
-    window.location.replace("movie-list.html");
-
+    if(resultDataString[0]["status"]=== "fail") {
+        window.location.replace("movie-list.html");
+    }
 }
 
-function handleSearchInfo(searchEvent) {
-    console.log("submit search form");
-    const url = "api/adv-search";
-    console.log("api/adv-search");
+function handlePaymentInfo(searchEvent) {
+    console.log("submit payment form");
+    const url = "api/payment-info";
+    console.log("api/payment-info");
     console.log(url);
     /**
      * When users click the submit button, the browser will not direct
@@ -49,11 +50,11 @@ function handleSearchInfo(searchEvent) {
      */
     searchEvent.preventDefault();
 
-    $.ajax("api/adv-search", {
-        method: "GET",
+    $.ajax("api/payment-info", {
+        method: "POST",
         data: paymentForm.serialize(),
-        success: handleSearchResult
+        success: handlePaymentResult
     });
 }
 
-paymentForm.submit(handleSearchInfo);
+paymentForm.submit(handlePaymentInfo);
