@@ -69,7 +69,7 @@ function handleMoviesResult(resultData) {
         rowHTML +=
             "<th>" +
 
-            '<a href="cardPage.html?id=' + resultData[i]['movie_id'] + '">'
+            '<a href="cart.html?method=add&id=' + resultData[i]['movie_id'] + '">'
             + "Add to Cart"
             '</a>' +
             "</th>";

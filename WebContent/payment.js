@@ -33,7 +33,8 @@ function handlePaymentResult(resultDataString) {
     // if (resultDataJson["status"] === "success") {
     //     window.location.replace("movie-list.html");
     // }
-    if(resultDataString[0]["status"]=== "fail") {
+    if(resultDataString["status"]=== "fail") {
+        alert("payment fail!");
         window.location.replace("movie-list.html");
     }
 }

@@ -16,6 +16,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
@@ -59,23 +61,43 @@ public class paymentInfoServlet extends HttpServlet {
 
                 JsonObject responseJsonObject = new JsonObject();
 
-                String dbfirstName = rs.getString("firstName");
-                String dblastName = rs.getString("lastName");
-                String dbdate = rs.getString("expiration");
-
-                if(firstName.equals(dbfirstName) && lastName.equals(dblastName) && date.equals(dbdate)){
-                    responseJsonObject.addProperty("status", "success");
-                    String sql = "insert into sales(customerId,movieId,saleDate) values(?,?,?);";
-                    PreparedStatement preStatement = dbcon.prepareStatement(sql);
-
-                    preStatement.setString(1, cardNumber);
-                    preStatement.setString(2, cardNumber);
-                    preStatement.setString(3, cardNumber);
-                }
-                else{
+                if(!rs.next()){
                     responseJsonObject.addProperty("status", "fail");
-                }
+                }else{
+                    String dbfirstName = rs.getString("firstName");
+                    String dblastName = rs.getString("lastName");
+                    String dbdate = rs.getString("expiration");
 
+                    if(firstName.equals(dbfirstName) && lastName.equals(dblastName) && date.equals(dbdate)){
+                        responseJsonObject.addProperty("status", "success");
+
+                        HttpSession session = request.getSession();
+                        Customer user = (Customer) session.getAttribute("user");
+                        HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+                        SimpleDateFormat sdf = new SimpleDateFormat();
+                        sdf.applyPattern("yyyy-MM-dd");
+                        Date d = new Date();
+                        String nowDate = sdf.format((d));
+
+                        for(JsonObject obj : cardItem.values()){
+                            String insertSql = "insert into sales(customerId, movieId, saleDate) values ( ?, ?, ? );";
+                            PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
+
+                            insertStatement.setString(1, String.valueOf(user.getId()));
+                            insertStatement.setString(2, obj.get("movie_id").getAsString());
+                            insertStatement.setString(3, nowDate);
+
+                            int insertRS = insertStatement.executeUpdate();
+                            System.out.println(insertRS);
+
+                            insertStatement.close();
+                        }
+
+                    }
+                    else{
+                        responseJsonObject.addProperty("status", "fail");
+                    }
+                }
 
 
                 // write JSON string to output
