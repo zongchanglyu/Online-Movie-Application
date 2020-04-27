@@ -21,10 +21,21 @@ function handleMoviesResult(resultData) {
     $("#resultLimit").find("option[value='" + resultData[0]['numberOfList'] + "']").attr("selected",true);
 
     let currentPage = resultData[0]['page'];
+    let numOfData = resultData[0]['numOfData'];
+    let numberOfList = resultData[0]['numberOfList'];
+
+    let numOfPage = Math.floor(numOfData / numberOfList);
 
     if(currentPage == 0){
         $("#prev").attr('disabled',true);
     }
+    if(currentPage == numOfPage){
+        $("#next").attr('disabled',true);
+    }
+    let pageBodyElement = $("#page");
+    pageBodyElement.append(parseInt(currentPage) + 1);
+    pageBodyElement.append(" / ");
+    pageBodyElement.append(parseInt(numOfPage) + 1);
 
     // Populate the movie table
     // Find the empty table body by id "movie_table_body"

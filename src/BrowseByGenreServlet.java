@@ -45,11 +45,13 @@ public class BrowseByGenreServlet extends HttpServlet {
                 newMovieParameter.addProperty("status", "browse-by-genre");
                 newMovieParameter.addProperty("genreId", genreId);
                 newMovieParameter.addProperty("page", "0");
+                newMovieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", newMovieParameter);
             }else{
                 movieParameter.addProperty("status", "browse-by-genre");
                 movieParameter.addProperty("genreId", genreId);
                 movieParameter.addProperty("page", "0");
+                movieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", movieParameter);
             }
 
