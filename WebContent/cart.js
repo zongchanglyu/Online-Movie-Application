@@ -89,7 +89,7 @@ function redirectToCartPage() {
 }
 
 function addRedirectToCartPage() {
-    alert("add to cart successful!");
+    // alert("add to cart successful!");
     window.location.replace("cart.html");
 }
 
