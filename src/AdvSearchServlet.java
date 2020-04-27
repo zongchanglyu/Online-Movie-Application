@@ -60,6 +60,7 @@ public class AdvSearchServlet extends HttpServlet {
                 newMovieParameter.addProperty("director", director);
                 newMovieParameter.addProperty("starName", starName);
                 newMovieParameter.addProperty("page", "0");
+                newMovieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", newMovieParameter);
             }else{
                 movieParameter.addProperty("status", "adv-search");
@@ -68,6 +69,7 @@ public class AdvSearchServlet extends HttpServlet {
                 movieParameter.addProperty("director", director);
                 movieParameter.addProperty("starName", starName);
                 movieParameter.addProperty("page", "0");
+                movieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", movieParameter);
             }
 

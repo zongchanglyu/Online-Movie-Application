@@ -56,8 +56,8 @@ public class MovieListServlet extends HttpServlet {
             String director = directorElement == null ? null : directorElement.getAsString();
             JsonElement starNameElement = movieParameter.get("starName");
             String starName = starNameElement == null ? null : starNameElement.getAsString();
-            JsonElement genreElement = movieParameter.get("genre");
-            String genre = genreElement == null ? null : genreElement.getAsString();
+//            JsonElement genreElement = movieParameter.get("genre");
+//            String genre = genreElement == null ? null : genreElement.getAsString();
             JsonElement genreIdElement = movieParameter.get("genreId");
             String genreId = genreIdElement == null ? null : genreIdElement.getAsString();
             JsonElement firstLaterElement = movieParameter.get("firstLater");
@@ -68,6 +68,8 @@ public class MovieListServlet extends HttpServlet {
             String numberOfList = numberOfListElement == null ? "10" : numberOfListElement.getAsString();
             JsonElement pageElement = movieParameter.get("page");
             String page = pageElement == null ? "0" : pageElement.getAsString();
+            JsonElement numOfDataElement = movieParameter.get("numOfData");
+            String numOfData = numOfDataElement == null ? "0" : numOfDataElement.getAsString();
 
             int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
             String offset = String.valueOf(offsetInt);
@@ -85,7 +87,27 @@ public class MovieListServlet extends HttpServlet {
 //            }
 
             if("adv-search".equals(status)){
-                System.out.println("status is adv-search");
+                String sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
+                        "from movies, stars_in_movies as sim, stars, ratings " +
+                        "where movies.title like ? and movies.year like ? and movies.director like ? " +
+                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                        "and movies.id = ratings.movieId) as tmp ;";
+
+                PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
+                tmpStatement.setString(1, title);
+                tmpStatement.setString(2, year);
+                tmpStatement.setString(3, director);
+                tmpStatement.setString(4, starName);
+
+                ResultSet tmpRS = tmpStatement.executeQuery();
+                if(tmpRS.next()){
+                    numOfData = tmpRS.getString("count");
+                    movieParameter.addProperty("numOfData", numOfData);
+                }
+                tmpRS.close();
+                tmpStatement.close();
+
+
                 query = "select distinct movies.*, ratings.rating " +
                         "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
@@ -106,7 +128,23 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(4, starName);
 
             }else if("browse-by-genre".equals(status)){
-                query = "select  movies.*, ratings.rating " +
+                String sumQuery = "select count(*) as count from (select movies.*, ratings.rating " +
+                        "from movies, ratings, genres_in_movies as gim " +
+                        "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ?) as tmp ;";
+
+                PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
+                tmpStatement.setString(1, genreId);
+
+                ResultSet tmpRS = tmpStatement.executeQuery();
+                if(tmpRS.next()){
+                    numOfData = tmpRS.getString("count");
+                    movieParameter.addProperty("numOfData", numOfData);
+                }
+                tmpRS.close();
+                tmpStatement.close();
+
+
+                query = "select movies.*, ratings.rating " +
                         "from movies, ratings, genres_in_movies as gim " +
                         "where ratings.movieId = movies.id and movies.id = gim.movieId and gim.genreId = ? " +
                         "order by " + orderBy + " " +
@@ -122,6 +160,22 @@ public class MovieListServlet extends HttpServlet {
 
 
             }else if("browse-by-title".equals(status)){
+                String sumQuery = "select count(*) as count from (select  movies.*, ratings.rating " +
+                        "from movies, ratings " +
+                        "where ratings.movieId = movies.id and movies.title like ? ) as tmp ;";
+
+                PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
+                tmpStatement.setString(1, firstLater + "%");
+
+                ResultSet tmpRS = tmpStatement.executeQuery();
+                if(tmpRS.next()){
+                    numOfData = tmpRS.getString("count");
+                    movieParameter.addProperty("numOfData", numOfData);
+                }
+                tmpRS.close();
+                tmpStatement.close();
+
+
                 query = "select  movies.*, ratings.rating " +
                         "from movies, ratings " +
                         "where ratings.movieId = movies.id and movies.title like ? " +
@@ -139,7 +193,6 @@ public class MovieListServlet extends HttpServlet {
 
             // Perform the query
             rs = statement.executeQuery();
-
 
             while (rs.next()) {
                 String movie_id = rs.getString("id");
@@ -209,6 +262,7 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
                 jsonObject.addProperty("orderBy", orderBy);
                 jsonObject.addProperty("numberOfList", numberOfList);
                 jsonObject.addProperty("page", page);
+                jsonObject.addProperty("numOfData", numOfData);
 
                 jsonArray.add(jsonObject);
             }
