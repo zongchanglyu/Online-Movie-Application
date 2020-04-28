@@ -47,12 +47,14 @@
 }
 
 .sort-order{
-    width: 50%;
+    text-align: right;
+    width: 75%;
     float: left;
 }
 
 .result-limit{
-    width: 50%;
+    text-align: right;
+    width: 25%;
     float: left;
 }
 

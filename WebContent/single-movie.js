@@ -32,6 +32,10 @@ function handleResult(resultData) {
     // find the empty h3 body by id "star_info"
     let starInfoElement = jQuery("#movie_info");
 
+    if(resultData["display"] == "0"){
+        $("#toMovieList").attr('style', 'visibility: hidden');
+    }
+
     // append two html <p> created to the h3 body, which will refresh the page
     let firstRowHTML = "";
     firstRowHTML += "<p>Movie Title: " + resultData["movie_title"] + "</p>" +

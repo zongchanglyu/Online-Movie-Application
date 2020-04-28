@@ -1,4 +1,5 @@
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
@@ -7,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -114,8 +116,19 @@ public class SingleMovieServlet extends HttpServlet {
                 starsJsonArray.add(starsJsonObject);
             }
 
+            // page info from session
+            HttpSession session = request.getSession();
+            JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
+            String display;
+            if(movieParameter == null){
+                display = "0";
+            }else{
+                display = "1";
+            }
+
             // Put all properties into jsonObject
             JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("display", display);
             jsonObject.addProperty("movie_id", movieId);
             jsonObject.addProperty("movie_title", movieTitle);
             jsonObject.addProperty("movie_year", movieYear);

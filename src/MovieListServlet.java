@@ -189,6 +189,32 @@ public class MovieListServlet extends HttpServlet {
                 // Set the parameter represented by "?" in the query to the id we get from url,
                 // num 1 indicates the first "?" in the query
                 statement.setString(1, firstLater + "%");
+            }else if("browse-other".equals(status)){
+                String sumQuery = "select count(*) as count from (select  movies.*, ratings.rating " +
+                        "from movies, ratings " +
+                        "where ratings.movieId = movies.id and movies.title regexp '^[^a-zA-Z0-9]' ) as tmp ;";
+
+                PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
+
+                ResultSet tmpRS = tmpStatement.executeQuery();
+                if(tmpRS.next()){
+                    numOfData = tmpRS.getString("count");
+                    movieParameter.addProperty("numOfData", numOfData);
+                }
+                tmpRS.close();
+                tmpStatement.close();
+
+
+                query = "select  movies.*, ratings.rating " +
+                        "from movies, ratings " +
+                        "where ratings.movieId = movies.id and movies.title regexp '^[^a-zA-Z0-9]' " +
+                        "order by " + orderBy + " " +
+                        "limit " + numberOfList + " " +
+                        "offset " + offset + ";";
+
+                // Declare our statement
+                statement = dbcon.prepareStatement(query);
+
             }
 
             // Perform the query
