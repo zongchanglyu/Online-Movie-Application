@@ -44,8 +44,7 @@ Member 2: Zongchang Lyu:
 1. Finished drop box of browse by genres, cart check out page, delete and update item functionality in cart page and payment page. He also did some part of movieListServelt, some part of adv-search functionality and some jump links. Added some css features.
 2. Finished README file.
 
-
-
+It can be seen that some of works are overlapped, because we do not seperate the work precisely, in many part, both of us did a different version, and the final version is just one of them. For more details, it can be check by commit records.
 
 
 
