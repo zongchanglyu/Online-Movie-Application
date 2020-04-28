@@ -84,6 +84,9 @@ function handleResult(resultData) {
             rowHTML += " | ";
         }
     }
+    rowHTML += '<a href="browse.html?first-later=*">'
+        + " * " +     // display star_name for the link text
+        '</a>';
     // Append the row created to the table body, which will refresh the page
     browseTitleBodyElement.append(rowHTML);
 }
@@ -113,14 +116,24 @@ if(genreId != null){
 let firstLater = getParameterByName('first-later');
 
 if(firstLater != null){
-    // Makes the HTTP GET request and registers on success callback function handleResult
-    jQuery.ajax({
-        dataType: "json",  // Setting return data type
-        method: "GET",// Setting request method
-        url: "api/browse-by-title?first-later=" + firstLater, // Setting request url, which is mapped by StarsServlet in Stars.java
-        // success: (resultData) => handleBrowseByGenreResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
-        success: redirectToMovieListPage
-    });
+    if(firstLater == "*"){
+        jQuery.ajax({
+            dataType: "json",  // Setting return data type
+            method: "GET",// Setting request method
+            url: "api/browse-other", // Setting request url, which is mapped by StarsServlet in Stars.java
+            // success: (resultData) => handleBrowseByGenreResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+            success: redirectToMovieListPage
+        });
+    }else{
+        // Makes the HTTP GET request and registers on success callback function handleResult
+        jQuery.ajax({
+            dataType: "json",  // Setting return data type
+            method: "GET",// Setting request method
+            url: "api/browse-by-title?first-later=" + firstLater, // Setting request url, which is mapped by StarsServlet in Stars.java
+            // success: (resultData) => handleBrowseByGenreResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+            success: redirectToMovieListPage
+        });
+    }
 }
 
 // Makes the HTTP GET request and registers on success callback function handleResult
