@@ -71,13 +71,13 @@ public class paymentInfoServlet extends HttpServlet {
                     if(firstName.equals(dbfirstName) && lastName.equals(dblastName) && date.equals(dbdate)){
                         HttpSession session = request.getSession();
                         Customer user = (Customer) session.getAttribute("user");
-                        HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+                        HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
                         SimpleDateFormat sdf = new SimpleDateFormat();
                         sdf.applyPattern("yyyy-MM-dd");
                         Date d = new Date();
                         String nowDate = sdf.format((d));
 
-                        for(JsonObject obj : cardItem.values()){
+                        for(JsonObject obj : cartItem.values()){
                             String quantity = obj.get("quantity").getAsString();
                             int count = Integer.parseInt(quantity);
                             for(int i = 0; i < count; i++){

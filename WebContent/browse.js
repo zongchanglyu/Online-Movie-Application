@@ -63,7 +63,6 @@ function handleResult(resultData) {
         //  a b c d e f g h
         // i j k l m n o p q
         // r s t u v w x y z
-        // 0 1 2 3 4 5 6 7 8 9
         if(tmp == 'H' || tmp == 'Q' || tmp == 'Z'){
             rowHTML += "<br>";
         }else{
@@ -77,7 +76,7 @@ function handleResult(resultData) {
             '<a href="browse.html?first-later=' + i + '">'
             + i +     // display star_name for the link text
             '</a>';
-
+        // 0 1 2 3 4 5 6 7 8 9
         if(i == 9){
             rowHTML += "<br>";
         }else{

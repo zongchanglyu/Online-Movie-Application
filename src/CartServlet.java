@@ -19,8 +19,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "cardServlet", urlPatterns = "/api/card")
-public class cardServlet extends HttpServlet {
+@WebServlet(name = "CartServlet", urlPatterns = "/api/cart")
+public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
@@ -41,7 +41,7 @@ public class cardServlet extends HttpServlet {
 
         try {
             if(movieId==null){
-                out.write("Welcome! Your card is empty, you can go shopping now!");
+                out.write("Welcome! Your cart is empty, you can go shopping now!");
             }
             else {
                 // Get a connection from dataSource
@@ -70,26 +70,26 @@ public class cardServlet extends HttpServlet {
                 }
 
                 HttpSession session = request.getSession();
-                HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+                HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
 
-                if (cardItem == null) {
-                    cardItem = new HashMap<>();
-                    cardItem.put(movieId, newJsonObject);
-                    session.setAttribute("cardItem", cardItem);
+                if (cartItem == null) {
+                    cartItem = new HashMap<>();
+                    cartItem.put(movieId, newJsonObject);
+                    session.setAttribute("cartItem", cartItem);
                 } else {
-                    if (cardItem.get(movieId) == null) {
-                        cardItem.put(movieId, newJsonObject);
+                    if (cartItem.get(movieId) == null) {
+                        cartItem.put(movieId, newJsonObject);
                     } else {
-                        JsonElement quantity = cardItem.get(movieId).get("quantity");
+                        JsonElement quantity = cartItem.get(movieId).get("quantity");
                         int number = Integer.parseInt(quantity.toString());
 
-                        cardItem.get(movieId).addProperty("quantity", number + 1);
+                        cartItem.get(movieId).addProperty("quantity", number + 1);
 
                     }
                 }
 
                 JsonArray jsonArray = new JsonArray();
-                for (JsonObject i : cardItem.values()) {
+                for (JsonObject i : cartItem.values()) {
                     jsonArray.add(i);
                 }
 

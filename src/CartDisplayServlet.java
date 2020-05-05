@@ -32,68 +32,28 @@ public class CartDisplayServlet extends HttpServlet {
      * response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         response.setContentType("application/json"); // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
         try {
-//                // Get a connection from dataSource
-//                Connection dbcon = dataSource.getConnection();
-//
-//
-//                String query = "select movies.title from movies where movies.id = ?;";
-//
-//                PreparedStatement movieStatement = dbcon.prepareStatement(query);
-//
-//                movieStatement.setString(1, movieId);
-//
-//                // Perform the query
-//                ResultSet rs = movieStatement.executeQuery();
-//
-//                JsonObject newJsonObject = new JsonObject();
-//
-//                // Iterate through each row of rs
-//                while (rs.next()) {
-//                    String movie_title = rs.getString("title");
-//
-//                    newJsonObject.addProperty("movie_title", movie_title);
-//                    newJsonObject.addProperty("price", "19.50");
-//                    newJsonObject.addProperty("quantity", 1);
-//                    newJsonObject.addProperty("movie_id", movieId);
-//                }
+            HttpSession session = request.getSession();
+            HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
 
-                HttpSession session = request.getSession();
-                HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+            JsonArray jsonArray = new JsonArray();
 
-//                if (cardItem == null) {
-//                    cardItem = new HashMap<>();
-//                    cardItem.put(movieId, newJsonObject);
-//                    session.setAttribute("cardItem", cardItem);
-//                } else {
-//                    if (cardItem.get(movieId) == null) {
-//                        cardItem.put(movieId, newJsonObject);
-//                    } else {
-//                        JsonElement quantity = cardItem.get(movieId).get("quantity");
-//                        int number = Integer.parseInt(quantity.toString());
-//
-//                        cardItem.get(movieId).addProperty("quantity", number + 1);
-//
-//                    }
-//                }
-
-                JsonArray jsonArray = new JsonArray();
-                for (JsonObject i : cardItem.values()) {
+            if(cartItem != null){
+                for (JsonObject i : cartItem.values()) {
                     jsonArray.add(i);
                 }
+            }
 
-
-                // write JSON string to output
-                out.write(jsonArray.toString());
-                // set response status to 200 (OK)
-                response.setStatus(200);
-
+            // write JSON string to output
+            out.write(jsonArray.toString());
+            // set response status to 200 (OK)
+            response.setStatus(200);
 
         } catch (Exception e) {
 
@@ -102,15 +62,13 @@ public class CartDisplayServlet extends HttpServlet {
             jsonObject.addProperty("errorMessage", e.getMessage());
             out.write(jsonObject.toString());
 
-            // set reponse status to 500 (Internal Server Error)
+            // set response status to 500 (Internal Server Error)
             response.setStatus(500);
 
         }
         out.close();
         //close it;
-
     }
-
 }
 
 

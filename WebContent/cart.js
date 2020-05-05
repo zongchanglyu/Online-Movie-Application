@@ -21,7 +21,7 @@ function getParameterByName(target) {
 
 
 
-function handleCardResult(resultData) {
+function handleCartResult(resultData) {
     console.log("handleMoviesResult: populating movie table from resultData");
 
     // Populate the movie table
@@ -31,7 +31,7 @@ function handleCardResult(resultData) {
     let count = 0;
 
     if (resultData[0] == null) {
-        starTableBodyElement.append("Welcome! Your card is empty, you can go shopping now!");
+        starTableBodyElement.append("Welcome! Your cart is empty, you can go shopping now!");
     } else {
         // Iterate through resultData, no more than 20 entries
         for (let i = 0; i < resultData.length; i++) {
@@ -98,11 +98,7 @@ function add() {
     jQuery.ajax({
         dataType: "json", // Setting return data type
         method: "GET", // Setting request method
-        url: "api/card?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
-        // I think it can just redirect to this page(cardPage.html) so that can remove the appended url
-        // And also the requirement include "A message should display to indicate success/failure."
-        // we can do that using alert("add to cart success") in the new redirect function
-        // success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        url: "api/cart?id=" + movieId,  // Setting request url, which is mapped by StarsServlet in MoviesServlet.java
         success: addRedirectToCartPage
     });
 }
@@ -130,7 +126,7 @@ function deleteItem() {
         dataType: "json", // Setting return data type
         method: "POST", // Setting request method
         url: "api/cartDelete?id=" + movieId,
-        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        success: redirectToCartPage
     });
 }
 
@@ -139,7 +135,7 @@ function display() {
         dataType: "json", // Setting return data type
         method: "GET", // Setting request method
         url: "api/cartDisplay",
-        success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+        success: (resultData) => handleCartResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
     });
 }
 

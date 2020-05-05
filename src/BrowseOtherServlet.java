@@ -43,7 +43,7 @@ public class BrowseOtherServlet extends HttpServlet {
                 newMovieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", newMovieParameter);
             }else{
-                movieParameter.addProperty("status", "browse-by-title");
+                movieParameter.addProperty("status", "browse-other");
                 movieParameter.addProperty("page", "0");
                 movieParameter.addProperty("numOfData", "0");
                 session.setAttribute("movieParameter", movieParameter);

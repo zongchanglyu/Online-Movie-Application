@@ -1,4 +1,4 @@
-function handleCardResult(resultData) {
+function handleCartResult(resultData) {
     console.log("handleMoviesResult: populating movie table from resultData");
 
     // Populate the movie table
@@ -26,8 +26,6 @@ function handleCardResult(resultData) {
             resultData[i]["quantity"] +
             "</th>";
 
-        // item = $("input[id='item']").attr("value");
-
         count *= 1;
         count += resultData[i]["quantity"] * 1;
 
@@ -37,19 +35,14 @@ function handleCardResult(resultData) {
         starTableBodyElement.append(rowHTML);
     }
 
-
     let totalCost = jQuery("#totalCost");
     totalCost.append("Grand Total: " + count * 19.50);
 }
 
-function addRedirectToCartPage() {
-    alert("add to cart successful!");
-    window.location.replace("cart.html");
-}
 
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
     url: "api/paymentSuccessful",
-    success: (resultData) => handleCardResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    success: (resultData) => handleCartResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

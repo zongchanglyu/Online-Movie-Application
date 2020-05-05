@@ -35,10 +35,10 @@ public class PaymentSuccessfulServlet extends HttpServlet {
 
         try {
                 HttpSession session = request.getSession();
-                HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+                HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
 
                 JsonArray jsonArray = new JsonArray();
-                for (JsonObject i : cardItem.values()) {
+                for (JsonObject i : cartItem.values()) {
                     jsonArray.add(i);
                 }
 
