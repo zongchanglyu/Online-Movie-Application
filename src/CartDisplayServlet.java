@@ -40,7 +40,7 @@ public class CartDisplayServlet extends HttpServlet {
 
         try {
             HttpSession session = request.getSession();
-            HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+            HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
 
             JsonArray jsonArray = new JsonArray();
 

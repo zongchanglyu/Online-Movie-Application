@@ -39,45 +39,26 @@ public class UpdateCartItemQuantity extends HttpServlet {
         try {
 
                 HttpSession session = request.getSession();
-                HashMap<String, JsonObject> cardItem = (HashMap<String, JsonObject>) session.getAttribute("cardItem");
+                HashMap<String, JsonObject> cartItem = (HashMap<String, JsonObject>) session.getAttribute("cartItem");
 
-//                if (cardItem == null) {
-////                    cardItem = new HashMap<>();
-////                    cardItem.put(movieId, newJsonObject);
-////                    session.setAttribute("cardItem", cardItem);
-////                } else {
-////                    if (cardItem.get(movieId) == null) {
-////                        cardItem.put(movieId, newJsonObject);
-////                    } else {
-////                        JsonElement quantity = cardItem.get(movieId).get("quantity");
-////                        int number = Integer.parseInt(quantity.toString());
-////
-////                        cardItem.get(movieId).addProperty("quantity", number + 1);
-////
-////                    }
-////                }
-
-                String quantity = cardItem.get(movieId).get("quantity").getAsString();
+                String quantity = cartItem.get(movieId).get("quantity").getAsString();
                 if("plus".equals(operate)) {
                     quantity = String.valueOf(Integer.parseInt(quantity) + 1);
                 }else{
                     quantity = "1".equals(quantity) ? "1" : String.valueOf(Integer.parseInt(quantity) - 1);
                 }
 
-                cardItem.get(movieId).addProperty("quantity", quantity);
-
+                cartItem.get(movieId).addProperty("quantity", quantity);
 
                 JsonArray jsonArray = new JsonArray();
-                for (JsonObject i : cardItem.values()) {
+                for (JsonObject i : cartItem.values()) {
                     jsonArray.add(i);
                 }
-
 
                 // write JSON string to output
                 out.write(jsonArray.toString());
                 // set response status to 200 (OK)
                 response.setStatus(200);
-
 
         } catch (Exception e) {
 
@@ -92,7 +73,5 @@ public class UpdateCartItemQuantity extends HttpServlet {
         }
         out.close();
         //close it;
-
     }
-
 }
