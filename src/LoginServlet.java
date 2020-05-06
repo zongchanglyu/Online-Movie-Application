@@ -40,14 +40,10 @@ public class LoginServlet extends HttpServlet {
         try {
             RecaptchaVerifyUtils.verify(gRecaptchaResponse);
         } catch (Exception e) {
-            out.println("<html>");
-            out.println("<head><title>Error</title></head>");
-            out.println("<body>");
-            out.println("<p>recaptcha verification error</p>");
-            out.println("<p>" + e.getMessage() + "</p>");
-            out.println("</body>");
-            out.println("</html>");
-
+            JsonObject responseJsonObject = new JsonObject();
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", e.getMessage());
+            out.write(responseJsonObject.toString());
             out.close();
             return;
         }
