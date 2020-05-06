@@ -29,8 +29,8 @@ public class RecaptchaVerifyUtils {
 
 
         // Data will be sent to the server.
-//        String postParams = "secret=" + RecaptchaConstants.SECRET_KEY + "&response=" + gRecaptchaResponse;
-        String postParams = "secret=" + "6LfPGPMUAAAAAG1Gj3IywcdrSFSzigXGqKHEmBLh" + "&response=" + gRecaptchaResponse;
+        String postParams = "secret=" + RecaptchaConstants.SECRET_KEY + "&response=" + gRecaptchaResponse;
+//        String postParams = "secret=" + "6LfPGPMUAAAAAG1Gj3IywcdrSFSzigXGqKHEmBLh" + "&response=" + gRecaptchaResponse;
 
         // Send Request
         conn.setDoOutput(true);
