@@ -16,6 +16,11 @@ import java.sql.Statement;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    public String getServletInfo() {
+        return "Servlet connects to MySQL database and displays result of a SELECT";
+    }
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
@@ -25,10 +30,26 @@ public class LoginServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        PrintWriter out = response.getWriter();
+
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+
+        // Verify reCAPTCHA
+        try {
+            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+            JsonObject responseJsonObject = new JsonObject();
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", e.getMessage());
+            out.write(responseJsonObject.toString());
+            out.close();
+            return;
+        }
+
         String inputEmail = request.getParameter("email");
         String inputPassword = request.getParameter("password");
-        System.out.println(inputEmail);
-        System.out.println(inputPassword);
 
         try {
             // Get a connection from dataSource
@@ -69,11 +90,12 @@ public class LoginServlet extends HttpServlet {
                 }
             }
 
-            response.getWriter().write(responseJsonObject.toString());
+            out.write(responseJsonObject.toString());
 
             rs.close();
             statement.close();
             dbcon.close();
+            out.close();
         } catch (Exception e) {
 
             // write error message JSON object to output
@@ -83,6 +105,7 @@ public class LoginServlet extends HttpServlet {
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
 
+            out.close();
         }
     }
 }
