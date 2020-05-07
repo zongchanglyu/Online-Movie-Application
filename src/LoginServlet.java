@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -75,16 +77,18 @@ public class LoginServlet extends HttpServlet {
                 String ccId = rs.getString("ccId");
                 String address = rs.getString("address");
                 String email = rs.getString("email");
-                String password = rs.getString("password");
+                String encryptedPassword = rs.getString("password");
+
+                boolean success = new StrongPasswordEncryptor().checkPassword(inputPassword, encryptedPassword);
                 // input password noes not match
-                if(!password.equals(inputPassword)){
+                if(!success){
                     // Login fail
                     responseJsonObject.addProperty("status", "fail");
                     responseJsonObject.addProperty("message", "incorrect password");
                 }else{
                     // Login success
                     // set this user into the session
-                    request.getSession().setAttribute("user", new Customer(id, firstName, lastName, ccId, address, email, password));
+                    request.getSession().setAttribute("user", new Customer(id, firstName, lastName, ccId, address, email, encryptedPassword));
                     responseJsonObject.addProperty("status", "success");
                     responseJsonObject.addProperty("message", "success");
                 }
