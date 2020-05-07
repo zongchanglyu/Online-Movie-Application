@@ -71,3 +71,13 @@ body{
     background-position:center;
     background-size:cover;
 }
+
+#dashboard-header-left{
+    width: 50%;
+    float: left;
+}
+
+#dashboard-header-right{
+    width: 50%;
+    float: left;
+}
