@@ -1,11 +1,5 @@
-<!-- This example is following frontend and backend separation.
-
-    This .html performs two steps:
-    1. Create a html template skeleton, with all the elements defined (some left empty) and named with ids.
-    2. Load oldIndex.js to populate the data into empty elements.
-    -->
-
-<!doctype html>
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -22,55 +16,58 @@
 
     <title>Dashboard</title>
 </head>
-<body>
 
-<div class="header">
-    <h1>Fabflix - Employee Login</h1>
-    <div id="dashboard-header-left">
-        <!-- Set the method to POST to avoid showing the username/password in the URL
-         The default action is disabled to allow your own implementation. -->
-        <form id="login_form" method="post" action="#">
-            <div>
-                <label style="width: 20%; float: left"> Email: </label>
-                <label style="width: 80%; float: left">
-                    <input name="email" placeholder="Enter Email" type="text">
-                </label>
+<body background="https://images.unsplash.com/photo-1587122402961-4f710d8ce3de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+      style="background-size: cover;
+    background-position: 50% 50%;
+    background-attachment: fixed;">
+<div id="emp-login-container" class="container padding-top-lg">
+    <div class="row">
+        <div style="width: 30%; margin: 25px auto;">
+            <div id="login" class="login">
+                <h2 class="margin-bottom-lg">Employee Login</h2>
+                <!-- Set the method to POST to avoid showing the username/password in the URL
+                 The default action is disabled to allow your own implementation. -->
+                <form id="emp_login_form" method="post" action="#">
+                    <label><b>Email</b></label>
+                    <label>
+                        <input name="email" placeholder="Enter Email" type="text">
+                    </label>
+                    <br>
+                    <label><b>Password</b></label>
+                    <label>
+                        <input name="password" placeholder="Enter Password" type="password">
+                    </label>
+                    <br>
+                    <div class="g-recaptcha" data-sitekey="6LfPGPMUAAAAAP6rJN-0TEeRf02m8pVCfZsBmEBJ"></div>
+                    <input class="btn btn-warning" type="submit" value="Login">
+                </form>
             </div>
-            <div>
-                <label style="width: 20%; float: left">Password</label>
-                <label style="width: 40%; float: left">
-                    <input name="password" placeholder="Enter Password" type="password">
-                </label>
-            </div>
-            <div class="g-recaptcha" data-sitekey="6LfPGPMUAAAAAP6rJN-0TEeRf02m8pVCfZsBmEBJ"></div>
-            <input class="btn btn-warning" type="submit" value="Login">
-        </form>
+        </div>
     </div>
+    <div id="login_error_message"></div>
+</div>
 
-    <div id="dashboard-header-right">
-        <p>hello, man</p>
+<div id="emp-content-container" class="container padding-top-lg">
+    <div class="header">
+        <h1>Fabflix - Dashboard <span><h2 id="login_employee"></h2></span> </h1>
+        <div class="navigation_bar">
+            <a href="_dashboard.html">Home</a> |
+            <a href="add-new-star.html">Add New Star</a> |
+            <a href="add-new-movie.html">Add New Movie</a> |
+            <a href="metadata.html">Database Metadata</a>
+        </div>
     </div>
 </div>
 
-<div class="content">
-    <p>you can do this</p>
-</div>
 
-
-
-
-<!-- Load jQuery and Bootstrap JS -->
+<!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- include our own JS file -->
+<script src="employee-login.js"></script>
+<script src="_dashboard.js"></script>
+<!-- include recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
 
-<!-- Load our own JS file -->
-<!-- The path is relative to oldIndex.html, since these two files are in the same directory -->
-<!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
-     otherwise the url is relative to the root path-->
-<!--<script src="index.js"></script>-->
-<!--<script src="adv-search.js"></script>-->
 </body>
-
-
 </html>

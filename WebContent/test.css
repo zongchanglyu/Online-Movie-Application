@@ -72,6 +72,16 @@ body{
     background-size:cover;
 }
 
+.dashboard-navigation-bar{
+    margin: auto;
+    width: 100%;
+}
+
+.dashboard-content{
+    width: 80%;
+    margin: auto;
+}
+
 #dashboard-header-left{
     width: 50%;
     float: left;
@@ -79,5 +89,5 @@ body{
 
 #dashboard-header-right{
     width: 50%;
-    float: left;
+    float: right;
 }
