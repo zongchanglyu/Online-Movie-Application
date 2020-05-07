@@ -1,5 +1,6 @@
+import java.util.List;
 
-public class movies {
+public class Movies {
 
     private String title;
 
@@ -9,13 +10,13 @@ public class movies {
 
     private String director;
 
-    private String genres;
+    private List<String> genres;
 
-    public movies(){
+    public Movies(){
 
     }
 
-    public movies(String title, String id, int year, String director, String genres) {
+    public Movies(String title, String id, int year, String director, List<String> genres) {
         this.title = title;
         this.id  = id;
         this.year = year;
@@ -23,38 +24,6 @@ public class movies {
         this.genres = genres;
     }
 
-//    public int getAge() {
-//        return age;
-//    }
-//
-//    public void setAge(int age) {
-//        this.age = age;
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//
-//    public String getType() {
-//        return type;
-//    }
-//
-//    public void setType(String type) {
-//        this.type = type;
-//    }
 
 
     public String getTitle() {
@@ -89,11 +58,11 @@ public class movies {
         this.director = director;
     }
 
-    public String getGenres() {
+    public List<String> getGenres() {
         return genres;
     }
 
-    public void setGenres(String genres) {
+    public void setGenres(List<String> genres) {
         this.genres = genres;
     }
 

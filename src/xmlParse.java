@@ -13,12 +13,14 @@ import java.util.List;
 
 public class xmlParse {
 
-    List<Employee> myEmpls;
+    List<Movies> myMovies;
     Document dom;
+
+    private String tempDirectorName;
 
     public xmlParse() {
         //create a list to hold the employee objects
-        myEmpls = new ArrayList<>();
+        myMovies = new ArrayList<>();
     }
 
     public void runExample() {
@@ -44,7 +46,7 @@ public class xmlParse {
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             //parse using builder to get DOM representation of the XML file
-            dom = db.parse("main32.xml");
+            dom = db.parse("main243.xml");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -60,44 +62,102 @@ public class xmlParse {
         Element docEle = dom.getDocumentElement();
 
         //get a nodelist of <employee> elements
-        NodeList nl = docEle.getElementsByTagName("Employee");
+        NodeList nl = docEle.getElementsByTagName("directorfilms");
         if (nl != null && nl.getLength() > 0) {
             for (int i = 0; i < nl.getLength(); i++) {
 
-                //get the employee element
+                //get the directorfilms element
                 Element el = (Element) nl.item(i);
 
-                //get the Employee object
-                Employee e = getEmployee(el);
+                NodeList dir = el.getElementsByTagName("director");
+                if (dir != null && dir.getLength() > 0) {
+                    Element director = (Element) dir.item(0);
+                    NodeList dirn = director.getElementsByTagName("dirname");
+                    if (dirn != null && dirn.getLength() > 0) {
+                        Element dirname = (Element) dirn.item(0);
+                        tempDirectorName = dirname.getFirstChild().getNodeValue();
+                    }
+                }
 
-                //add it to list
-                myEmpls.add(e);
+                NodeList films = el.getElementsByTagName("films");
+                if (films != null && films.getLength() > 0) {
+                    Element fs = (Element) films.item(0);
+
+                    NodeList film = fs.getElementsByTagName("film");
+                    if (film != null && film.getLength() > 0) {
+                        for (int j = 0; j < nl.getLength(); j++) {
+
+                            //get the film element
+                            Element Film = (Element) film.item(j);
+
+                            //get the movie object
+                            Movies m = getMovie(Film);
+
+                            //add it to list
+                            myMovies.add(m);
+                        }
+                    }
+
+                }
+
+
             }
         }
     }
 
+
+
     /**
-     * I take an employee element and read the values in, create
-     * an Employee object and return it
+     * I take an film element and read the values in, create
+     * an Movies object and return it
      * 
-     * @param empEl
+     * @param film
      * @return
      */
-    private Employee getEmployee(Element empEl) {
+        private Movies getMovie(Element film){
+            String title = getTextValue(film, "t");
+            String id = getTextValue(film, "fid");
+            int year = getIntValue(film, "year");
+            String director = tempDirectorName;
 
-        //for each <employee> element get text or int values of 
-        //name ,id, age and name
-        String name = getTextValue(empEl, "Name");
-        int id = getIntValue(empEl, "Id");
-        int age = getIntValue(empEl, "Age");
+            List<String> tempGenres = new ArrayList<String>();
+            NodeList cats = film.getElementsByTagName("cats");
+            if(cats != null && cats.getLength()>0){
+                Element Cats = (Element) cats.item(0);
+                NodeList cat = Cats.getElementsByTagName("cat");
+                if(cat != null && cat.getLength()>0){
+                    for (int i = 0; i < cat.getLength(); i++){
+                        Element Cat = (Element) cat.item(i);
+                        tempGenres.add(Cat.getFirstChild().getNodeValue());
+                    }
 
-        String type = empEl.getAttribute("type");
+                }
+            }
 
-        //Create a new Employee with the value read from the xml nodes
-        Employee e = new Employee(name, id, age, type);
+            List<String> genres = tempGenres;
 
-        return e;
-    }
+            Movies m = new Movies(title, id, year, director, genres);
+
+            return m;
+
+        }
+
+
+//    private Employee getEmployee(Element empEl) {
+//
+//        //for each <employee> element get text or int values of
+//        //name ,id, age and name
+//        String name = getTextValue(empEl, "Name");
+//        int id = getIntValue(empEl, "Id");
+//        int age = getIntValue(empEl, "Age");
+//
+//        String type = empEl.getAttribute("type");
+//
+//        //Create a new Employee with the value read from the xml nodes
+//        Employee e = new Employee(name, id, age, type);
+//
+//        return e;
+//    }
 
     /**
      * I take a xml element and the tag name, look for the tag and get
@@ -138,9 +198,9 @@ public class xmlParse {
      */
     private void printData() {
 
-        System.out.println("No of Employees '" + myEmpls.size() + "'.");
+        System.out.println("No of Movies '" + myMovies.size() + "'.");
 
-        Iterator<Employee> it = myEmpls.iterator();
+        Iterator<Movies> it = myMovies.iterator();
         while (it.hasNext()) {
             System.out.println(it.next().toString());
         }
@@ -155,3 +215,4 @@ public class xmlParse {
     }
 
 }
+
