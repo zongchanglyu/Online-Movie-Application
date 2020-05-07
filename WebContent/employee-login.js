@@ -5,7 +5,6 @@ let login_form = $("#emp_login_form");
  * @param resultDataString jsonObject
  */
 function handleLoginResult(resultDataString) {
-    alert(resultDataString);
     let resultDataJson = JSON.parse(resultDataString);
 
     console.log("handle login response");
@@ -15,8 +14,7 @@ function handleLoginResult(resultDataString) {
     // If login succeeds, it will redirect the user to index.html
     if (resultDataJson["status"] === "success") {
         // window.location.replace("index.html");
-        $("#emp-login-container").attr("style","display:none;");
-        $("#emp-content-container").attr("style","display:block;");
+        window.location.replace("_dashboard.html");
     } else {
         // If login fails, the web page will display 
         // error messages on <div> with id "login_error_message"

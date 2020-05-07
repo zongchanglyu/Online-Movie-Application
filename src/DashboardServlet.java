@@ -45,6 +45,30 @@ public class DashboardServlet extends HttpServlet {
                 jsonObject.addProperty("empFullname", employee.getFullname());
             }
 
+            Connection database = dataSource.getConnection();
+            JsonArray jsonArray = new JsonArray();
+            String query = "select table_name, group_concat(concat(column_name, ':', column_type)) as attributes " +
+                           "from information_schema.columns " +
+                           "where table_schema = 'moviedb' and table_name != 'customers_backup' " +
+                           "group by table_name;";
+            Statement statement = database.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while(rs.next()){
+                String table_name = rs.getString("table_name");
+                String attributes = rs.getString("attributes");
+
+                JsonObject tmpJsonObject = new JsonObject();
+                tmpJsonObject.addProperty("table_name", table_name);
+                tmpJsonObject.addProperty("attributes", attributes);
+
+                jsonArray.add(tmpJsonObject);
+            }
+            jsonObject.add("metadata", jsonArray);
+
+            rs.close();
+            statement.close();
+            database.close();
+
             // write JSON string to output
             out.write(jsonObject.toString());
             // set response status to 200 (OK)

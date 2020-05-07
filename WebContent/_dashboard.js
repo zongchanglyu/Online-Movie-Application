@@ -20,7 +20,16 @@ function handleDashboardResult(resultData) {
     }else{
         $("#emp-content-container").attr('style', 'display: block');
         $("#emp-login-container").attr('style', 'display: none');
-        $("#login-employee").append("welcome, " + resultData["empFullname"]);
+        let metadata_table_body = $("#metadata_table_body");
+        for (let i = 0; i < resultData["metadata"].length; i++) {
+            let rowHTML = "";
+            rowHTML += "<tr>";
+            rowHTML += "<th>" + resultData["metadata"][i]["table_name"] + "</th>";
+            rowHTML += "<th>" + resultData["metadata"][i]["attributes"] + "</th>";
+            rowHTML += "</tr>";
+            metadata_table_body.append(rowHTML);
+            console.log(rowHTML);
+        }
     }
 
 
