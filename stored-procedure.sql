@@ -1,10 +1,13 @@
--- delete from stars_in_movies where movieId > "tt0499470";
--- delete from genres_in_movies where genreId > 23;
--- delete from movies where id > "tt0499470";
--- delete from stars where id > "nm9423080";
--- delete from genres where id > 23;
+alter table ratings modify column rating float;
+alter table ratings modify column numVotes int(11);
 
--- insert into stars(id, name, birthYear) values("nm9423081", "Star1", null);
+delete from stars_in_movies where movieId > "tt0499470";
+delete from genres_in_movies where genreId > 23;
+delete from ratings where movieId > "tt0499470";
+delete from movies where id > "tt0499470";
+delete from stars where id > "nm9423080";
+delete from genres where id > 23;
+
 
 drop procedure if exists add_movie;
 
@@ -111,6 +114,9 @@ else
 	insert into genres_in_movies(genreId, movieId)
 	values(genreId, movieId);
 
+	insert into ratings(movieId, rating, numVotes)
+	values(movieId, null, null);
+
 	-- done
 
 	set movieMessage = concat("new movie ", title, " added, movie ID = ", movieId);
@@ -121,11 +127,13 @@ end if;
 end$$
 delimiter ;
 
-call add_movie("Movie1", 2020, "Director1", "Star2", "Genre1", @movieMessage, @starMessage, @genreMessage);
-select @movieMessage, @starMessage, @genreMessage;
+-- insert into stars(id, name, birthYear) values("nm9423081", "Star1", null);
 
-call add_movie("Movie2", 2020, "Director1", "Star1", "Genre1", @movieMessage, @starMessage, @genreMessage);
-select @movieMessage, @starMessage, @genreMessage;
-
-call add_movie("Movie1", 2020, "Director1", "Star2", "Genre2", @movieMessage, @starMessage, @genreMessage);
-select @movieMessage, @starMessage, @genreMessage;
+-- call add_movie("Movie1", 2020, "Director1", "Star2", "Genre1", @movieMessage, @starMessage, @genreMessage);
+-- select @movieMessage, @starMessage, @genreMessage;
+--
+-- call add_movie("Movie2", 2020, "Director1", "Star1", "Genre1", @movieMessage, @starMessage, @genreMessage);
+-- select @movieMessage, @starMessage, @genreMessage;
+--
+-- call add_movie("Movie1", 2020, "Director1", "Star2", "Genre2", @movieMessage, @starMessage, @genreMessage);
+-- select @movieMessage, @starMessage, @genreMessage;

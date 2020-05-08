@@ -39,6 +39,14 @@ function handleAddStarResult(resultDataString){
     window.location.replace("_dashboard.html");
 }
 
+function handleAddMovieResult(resultDataString){
+    let resultDataJson = JSON.parse(resultDataString);
+    let movieMessage = resultDataJson["movieMessage"];
+    let starMessage = resultDataJson["starMessage"];
+    let genreMessage = resultDataJson["genreMessage"];
+    alert(movieMessage + "\n" + starMessage + "\n" + genreMessage + "\n");
+    window.location.replace("_dashboard.html");
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
@@ -66,6 +74,31 @@ function submitAddStarForm(formSubmitEvent) {
 
 // Bind the submit action of the form to a handler function
 add_new_star_form.submit(submitAddStarForm);
+
+
+
+let add_new_movie_form = $("#add_new_movie_form");
+
+function submitAddMovieForm(formSubmitEvent) {
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    formSubmitEvent.preventDefault();
+
+    $.ajax(
+        "api/add-new-movie", {
+            method: "POST",
+            // Serialize the login form to the data sent by POST request
+            data: add_new_movie_form.serialize(),
+            success: (resultDataString) => handleAddMovieResult(resultDataString)
+        }
+    );
+}
+
+// Bind the submit action of the form to a handler function
+add_new_movie_form.submit(submitAddMovieForm);
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
