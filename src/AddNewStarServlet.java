@@ -66,6 +66,8 @@ public class AddNewStarServlet extends HttpServlet {
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
+            responseJsonObject.addProperty("newStarId", starId);
+            out.write(responseJsonObject.toString());
 
             dbcon.close();
             out.close();
@@ -74,6 +76,7 @@ public class AddNewStarServlet extends HttpServlet {
             // write error message JSON object to output
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
 
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);

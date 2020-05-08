@@ -28,13 +28,14 @@ function handleDashboardResult(resultData) {
             rowHTML += "<th>" + resultData["metadata"][i]["attributes"] + "</th>";
             rowHTML += "</tr>";
             metadata_table_body.append(rowHTML);
-            console.log(rowHTML);
         }
     }
 }
 
-function handleAddStarResult(){
-    alert("Add new star successful!");
+function handleAddStarResult(resultDataString){
+    let resultDataJson = JSON.parse(resultDataString);
+    let newStarId = resultDataJson["newStarId"];
+    alert("Add new star successful,\n new star ID = " + newStarId);
     window.location.replace("_dashboard.html");
 }
 
@@ -58,7 +59,7 @@ function submitAddStarForm(formSubmitEvent) {
             method: "POST",
             // Serialize the login form to the data sent by POST request
             data: add_new_star_form.serialize(),
-            success: handleAddStarResult
+            success: (resultDataString) => handleAddStarResult(resultDataString)
         }
     );
 }
