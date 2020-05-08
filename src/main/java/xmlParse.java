@@ -11,27 +11,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 public class xmlParse {
-
-    private static final long serialVersionUID = 2L;
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
 
     List<Movies> myMovies;
     Document dom;
@@ -43,7 +29,7 @@ public class xmlParse {
         myMovies = new ArrayList<>();
     }
 
-    public void runExample() throws SQLException {
+    public void runExample() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 
         //parse the xml file and get the dom object
         parseXmlFile();
@@ -212,44 +198,59 @@ public class xmlParse {
     }
 
 
-    private void insertData() throws SQLException {
-        try{
-            System.out.println("debugging connection....");
-            Connection dbcon = dataSource.getConnection();
+    private void insertData() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 
-            System.out.println("connect to db");
+            System.out.println("debugging connection....");
+
+            Connection conn = null;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+
+
+            try {
+                conn = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
+                System.out.println("connect to db");
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+            PreparedStatement psInsertRecord=null;
+
+            String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
 
             for(int i = 0; i < myMovies.size(); i++){
                 Movies movie = myMovies.get(i);
 
-                String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
-                PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
+//              PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
 
-                insertStatement.setString(1, movie.getId());
-                insertStatement.setString(2, movie.getTitle());
-                insertStatement.setInt(3, movie.getYear());
-                insertStatement.setString(4, movie.getDirector());
-                System.out.println("pre finished");
+                psInsertRecord=conn.prepareStatement(insertSql);
 
-                insertStatement.executeUpdate();
+                psInsertRecord.setString(1, movie.getId());
+                psInsertRecord.setString(2, movie.getTitle());
+                psInsertRecord.setInt(3, movie.getYear());
+                psInsertRecord.setString(4, movie.getDirector());
 
-                insertStatement.close();
+//                System.out.println("prepare stat finished");
+
+                psInsertRecord.executeUpdate();
+
+
+
+                psInsertRecord.close();
             }
-        }
-        catch (Exception e) {
-            System.out.println("errorMessage of SQL: "+e.getMessage());
-        }
+            System.out.println("executed sql finished");
 
     }
 
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         //create an instance
         xmlParse dpe = new xmlParse();
 
         //call run example
         dpe.runExample();
+
     }
 
 }
