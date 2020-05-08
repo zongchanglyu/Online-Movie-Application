@@ -87,10 +87,11 @@ public class MovieListServlet extends HttpServlet {
 //            }
 
             if("adv-search".equals(status)){
-                String sumQuery = "select count(*) as count from (select distinct movies.* " +
-                        "from movies, stars_in_movies as sim, stars " +
+                String sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
+                        "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
-                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? )" +
+                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                        "and movies.id = ratings.movieId)" +
                         " as tmp ;";
 
                 PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
@@ -108,8 +109,8 @@ public class MovieListServlet extends HttpServlet {
                 tmpStatement.close();
 
 
-                query = "select distinct movies.* " +
-                        "from movies, stars_in_movies as sim, stars " +
+                query = "select distinct movies.*, ratings.rating " +
+                        "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
                         "and movies.id = ratings.movieId " +
