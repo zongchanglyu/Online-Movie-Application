@@ -1,19 +1,37 @@
 package main.java;
 
+import com.google.gson.JsonObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class xmlParse {
+
+    private static final long serialVersionUID = 2L;
+    @Resource(name = "jdbc/moviedb")
+    private DataSource dataSource;
 
     List<Movies> myMovies;
     Document dom;
@@ -25,7 +43,7 @@ public class xmlParse {
         myMovies = new ArrayList<>();
     }
 
-    public void runExample() {
+    public void runExample() throws SQLException {
 
         //parse the xml file and get the dom object
         parseXmlFile();
@@ -36,7 +54,10 @@ public class xmlParse {
         //Iterate through the list and print the data
         printData();
 
+        System.out.println("begin to insertData.....");
+        insertData();
     }
+
 
     private void parseXmlFile() {
         //get the factory
@@ -48,7 +69,7 @@ public class xmlParse {
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             //parse using builder to get DOM representation of the XML file
-            dom = db.parse("mains243.xml");
+            dom = db.parse("mains243test.xml");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -190,7 +211,40 @@ public class xmlParse {
         }
     }
 
-    public static void main(String[] args) {
+
+    private void insertData() throws SQLException {
+        try{
+            System.out.println("debugging connection....");
+            Connection dbcon = dataSource.getConnection();
+
+            System.out.println("connect to db");
+
+            for(int i = 0; i < myMovies.size(); i++){
+                Movies movie = myMovies.get(i);
+
+                String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
+                PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
+
+                insertStatement.setString(1, movie.getId());
+                insertStatement.setString(2, movie.getTitle());
+                insertStatement.setInt(3, movie.getYear());
+                insertStatement.setString(4, movie.getDirector());
+                System.out.println("pre finished");
+
+                insertStatement.executeUpdate();
+
+                insertStatement.close();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("errorMessage of SQL: "+e.getMessage());
+        }
+
+    }
+
+
+
+    public static void main(String[] args) throws SQLException {
         //create an instance
         xmlParse dpe = new xmlParse();
 
