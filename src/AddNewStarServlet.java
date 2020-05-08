@@ -15,11 +15,7 @@ import java.sql.ResultSet;
 
 @WebServlet(name = "AddNewStar", urlPatterns = "/api/add-new-star")
 public class AddNewStarServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
-    public String getServletInfo() {
-        return "Servlet connects to MySQL database and displays result of a SELECT";
-    }
+    private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
@@ -34,8 +30,7 @@ public class AddNewStarServlet extends HttpServlet {
 
         String starName = request.getParameter("starName");
         String birthYear = request.getParameter("birthYear");
-        birthYear = birthYear == null ? null : birthYear;
-        String starId = "";
+        String starId;
 
         try {
             // Get a connection from dataSource
@@ -50,19 +45,28 @@ public class AddNewStarServlet extends HttpServlet {
             String starNextIdNum = String.valueOf(Integer.parseInt(starIdNum) + 1);
             starId = starIdPrefix + starNextIdNum;
             statement.close();
+            rs.close();
 
-            String insertQuery = "insert into stars(id, name, birthYear) values(?, ?, ?);";
-            PreparedStatement insertStatement = dbcon.prepareStatement(insertQuery);
-            insertStatement.setString(1, starId);
-            insertStatement.setString(2, starName);
-            insertStatement.setString(3, birthYear);
-            insertStatement.executeUpdate();
+            if("".equals(birthYear)){
+                String insertQuery = "insert into stars(id, name) values(?, ?);";
+                PreparedStatement insertStatement = dbcon.prepareStatement(insertQuery);
+                insertStatement.setString(1, starId);
+                insertStatement.setString(2, starName);
+                insertStatement.executeUpdate();
+                insertStatement.close();
+            }else{
+                String insertQuery = "insert into stars(id, name, birthYear) values(?, ?, ?);";
+                PreparedStatement insertStatement = dbcon.prepareStatement(insertQuery);
+                insertStatement.setString(1, starId);
+                insertStatement.setString(2, starName);
+                insertStatement.setInt(3, Integer.parseInt(birthYear));
+                insertStatement.executeUpdate();
+                insertStatement.close();
+            }
 
             JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "success");
 
-            rs.close();
-            insertStatement.close();
             dbcon.close();
             out.close();
         } catch (Exception e) {

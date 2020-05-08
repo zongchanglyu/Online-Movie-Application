@@ -57,7 +57,7 @@ function submitAddStarForm(formSubmitEvent) {
         "api/add-new-star", {
             method: "POST",
             // Serialize the login form to the data sent by POST request
-            data: login_form.serialize(),
+            data: add_new_star_form.serialize(),
             success: handleAddStarResult
         }
     );
