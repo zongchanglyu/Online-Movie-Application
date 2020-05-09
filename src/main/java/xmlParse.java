@@ -12,9 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 public class xmlParse {
@@ -23,10 +21,13 @@ public class xmlParse {
     Document dom;
 
     private String tempDirectorName;
+    private HashSet<String> allKindsOfGenres;
 
     public xmlParse() {
         //create a list to hold the employee objects
         myMovies = new ArrayList<>();
+
+        allKindsOfGenres = new HashSet<String>();
     }
 
     public void runExample() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
@@ -137,6 +138,7 @@ public class xmlParse {
                     for (int i = 0; i < cat.getLength(); i++){
                         Element Cat = (Element) cat.item(i);
                         tempGenres.add(Cat.getFirstChild().getNodeValue());
+                        allKindsOfGenres.add(Cat.getFirstChild().getNodeValue());
                     }
 
                 }
@@ -198,7 +200,7 @@ public class xmlParse {
     }
 
 
-    private void insertData() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+        private void insertData() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 
             System.out.println("debugging connection....");
 
@@ -214,6 +216,46 @@ public class xmlParse {
             catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            HashMap<String, HashMap<String, Integer>> oldMovies = new HashMap<>();
+
+            String query = "select * from movies";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            ResultSet result = statement.executeQuery();
+
+            while(result.next()){
+                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(result.getString("director"), new HashMap<>());
+                tempMovie.put(result.getString("title"), result.getInt("year"));
+                oldMovies.put(result.getString("director"), tempMovie);
+            }
+
+            System.out.println("old movies size is: "+oldMovies.size());
+
+            conn.setAutoCommit(false);
+
+            query = "insert into genres (name) select ? from DUAL where NOT EXISTS(select name from genres where name = ?);";
+
+            statement = conn.prepareStatement(query);
+
+            for(String genre : allKindsOfGenres){
+                statement.setString(1, genre);
+                statement.setString(2, genre);
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+            conn.commit();
+
+            System.out.println("execute genres sql finished!!!");
+
+
+
+
+
+
+
             PreparedStatement psInsertRecord=null;
 
             String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
@@ -240,7 +282,7 @@ public class xmlParse {
             }
             System.out.println("executed sql finished");
 
-    }
+        }
 
 
 
