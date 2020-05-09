@@ -260,46 +260,51 @@ public class xmlParse {
 
             String gimSql = "insert into genres_in_movies (genreId, movieId) values ((select id from genres where name = ?), ?)";
 
+            psInsertRecord = conn.prepareStatement(insertSql);
             PreparedStatement gimStatement = conn.prepareStatement(gimSql);
 
-            for(int i = 0; i < myMovies.size(); i++){
-                Movies movie = myMovies.get(i);
-
-                if (oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) &&
-                        oldMovies.get(movie.getDirector()).get(movie.getTitle()).equals(movie.getYear()) || movie.getId()==null) {
+            for (Movies movie : myMovies) {
+//                if (oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) &&
+//                        oldMovies.get(movie.getDirector()).get(movie.getTitle()).equals(movie.getYear()) || movie.getId() == null) {
+//                    continue;
+//                }
+                if(oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) || movie.getId() == null){
                     continue;
                 }
 
 //              PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
 
-                psInsertRecord=conn.prepareStatement(insertSql);
 
                 psInsertRecord.setString(1, movie.getId());
                 psInsertRecord.setString(2, movie.getTitle());
                 psInsertRecord.setInt(3, movie.getYear());
                 psInsertRecord.setString(4, movie.getDirector());
 
-                psInsertRecord.executeUpdate();
-//                System.out.println("prepare stat finished");
-                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(result.getString("director"), new HashMap<>());
-                tempMovie.put(result.getString("title"), result.getInt("year"));
-                oldMovies.put(result.getString("director"), tempMovie);
+//                psInsertRecord.executeUpdate();
+                System.out.println("prepare stat finished");
+                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(movie.getDirector(), new HashMap<String, Integer>());
+                tempMovie.put(movie.getTitle(), movie.getYear());
+                oldMovies.put(movie.getDirector(), tempMovie);
+                if(movie.getGenres()!=null && movie.getGenres().size()>0){
+                    for (String genre : movie.getGenres()) {
 
-                for(String genre : movie.getGenres()){
-                    gimStatement.setString(1, genre);
-                    gimStatement.setString(2, movie.getId());
-                    gimStatement.executeUpdate();
+                        gimStatement.setString(1, genre);
+                        gimStatement.setString(2, movie.getId());
+                        //                    gimStatement.executeUpdate();
+                        gimStatement.addBatch();
+                    }
                 }
 
-//                psInsertRecord.addBatch();
-//                gimStatement.addBatch();
-
+                psInsertRecord.addBatch();
+//                System.out.println("debug000");
 
             }
-//            psInsertRecord.executeBatch();
-//            gimStatement.executeBatch();
-//            conn.commit();
 
+            psInsertRecord.executeBatch();
+            gimStatement.executeBatch();
+            conn.commit();
+
+            System.out.println("debug111");
 //            psInsertRecord.executeUpdate();
             result.close();
             statement.close();
