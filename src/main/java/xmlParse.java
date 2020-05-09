@@ -240,7 +240,7 @@ public class xmlParse {
             statement = conn.prepareStatement(query);
 
             for(String genre : allKindsOfGenres){
-                statement.setString(1, genre);
+                statement.setString(1,genre);
                 statement.setString(2, genre);
                 statement.addBatch();
             }
@@ -251,10 +251,8 @@ public class xmlParse {
             System.out.println("execute genres sql finished!!!");
 
 
-
-
-
-
+//insert movies
+            conn.setAutoCommit(false);
 
             PreparedStatement psInsertRecord=null;
 
@@ -262,6 +260,11 @@ public class xmlParse {
 
             for(int i = 0; i < myMovies.size(); i++){
                 Movies movie = myMovies.get(i);
+
+                if (oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) &&
+                        oldMovies.get(movie.getDirector()).get(movie.getTitle()).equals(movie.getYear())) {
+                    continue;
+                }
 
 //              PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
 
@@ -273,11 +276,19 @@ public class xmlParse {
                 psInsertRecord.setString(4, movie.getDirector());
 
 //                System.out.println("prepare stat finished");
+                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(result.getString("director"), new HashMap<>());
+                tempMovie.put(result.getString("title"), result.getInt("year"));
+                oldMovies.put(result.getString("director"), tempMovie);
+
+                for(String genre : movie.getGenres()){
+                    
+                }
+
 
                 psInsertRecord.executeUpdate();
 
 
-
+                statement.close();
                 psInsertRecord.close();
             }
             System.out.println("executed sql finished");
