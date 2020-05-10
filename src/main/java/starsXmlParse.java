@@ -151,6 +151,7 @@ public class starsXmlParse {
     }
 
     public HashSet<Stars> getMyStars(){
+        System.out.println("size: "+myStars.size());
         return myStars;
     }
 
