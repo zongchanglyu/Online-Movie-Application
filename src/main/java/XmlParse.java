@@ -140,15 +140,31 @@ public class XmlParse {
         statement = conn.prepareStatement(query);
 
         result = statement.executeQuery();
+        int successful = 0;
+        int failed = 0;
 
         while(result.next()){
             try{
-                oldStars.put(result.getString("name"), result.getInt("year"));
+                String name = result.getString("name");
+                Integer birthYear = result.getInt("birthYear");
+                oldStars.put(name, birthYear);
+                successful++;
+            }catch(Exception e){
+                System.out.println("get name or birthYear failed");
+                failed++;
             }
-            catch (Exception e){
-                oldStars.put(result.getString("name"), 0);
-            }
+
+
+//            try{
+//                oldStars.put(result.getString("name"), Integer.parseInt(result.getString("year")));
+//                successful++;
+//            }catch (Exception e){
+//                oldStars.put(result.getString("name"), 0);
+//                failed++;
+//            }
         }
+
+        System.out.println("successful = " + successful + "\tfailed = " + failed);
 
         System.out.println("old stars size is: " + oldStars.size());
 

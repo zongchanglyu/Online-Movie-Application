@@ -117,7 +117,7 @@ public class ParseStar {
 
     private void printData() {
 
-        System.out.println("No of Stars '" + myStars.size() + "'.");
+        System.out.println("Number of Stars: " + myStars.size());
 
 //        Iterator<Stars> it = myStars.iterator();
 //        while (it.hasNext()) {
