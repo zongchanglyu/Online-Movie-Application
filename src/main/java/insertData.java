@@ -19,6 +19,12 @@ public class insertData {
         HashSet<String> allKindsOfGenres = moviesParse.getAllKindsOfGenres();
 
 
+        starsXmlParse starParse = new starsXmlParse();
+
+        starParse.run();
+
+        HashSet<Stars> myStars = starParse.getMyStars();
+
 
 
 
@@ -83,8 +89,11 @@ public class insertData {
 
         System.out.println("execute genres sql finished!!!");
 
+//================================================================
+//insert movies data:
+//================================================================
 
-//insert movies
+
         conn.setAutoCommit(false);
 
         PreparedStatement psInsertRecord = null;
@@ -141,7 +150,6 @@ public class insertData {
 
             ratingStatement.addBatch();
 //                System.out.println("debug000");
-
         }
 
         psInsertRecord.executeBatch();
@@ -152,10 +160,75 @@ public class insertData {
 
         System.out.println("debug111");
 //            psInsertRecord.executeUpdate();
+        System.out.println("insert movies and genres_in_movies finished!");
+
+
+//=================================================================
+//        insert stars data:
+//=================================================================
+
+
+        HashMap<String, Integer> oldStars = new HashMap<>();
+
+        query = "select * from stars";
+
+        statement = conn.prepareStatement(query);
+
+        result = statement.executeQuery();
+
+        while(result.next()){
+            try{
+                oldStars.put(result.getString("name"), result.getInt("year"));
+            }
+            catch (Exception e){
+                oldStars.put(result.getString("name"), 0);
+            }
+        }
+
+        System.out.println("old stars size is: " + oldStars.size());
+
+        conn.setAutoCommit(false);
+
+        query = "select max(id) as starId from stars";
+
+        statement = conn.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
+        rs.next();
+
+        String starId = rs.getString("starId");
+        String prefix = starId.substring(0, 2);
+        int number = Integer.parseInt(starId.substring(2, starId.length()));
+
+        query = "insert into stars (id, name, birthYear) values (?,?,?) ";
+        statement = conn.prepareStatement(query);
+
+        for(Stars star : myStars){
+            if(oldStars.containsKey(star.getName()) && oldStars.get(star.getName())==star.getBirthYear()){
+                continue;
+            }
+
+            String id = prefix + (number++);
+
+            statement.setString(1, id);
+            statement.setString(2, star.getName());
+            statement.setInt(3, star.getBirthYear());
+
+            oldStars.put(star.getName(), star.getBirthYear());
+
+            statement.addBatch();
+
+        }
+        statement.executeBatch();
+        conn.commit();
+
+        System.out.println("insert stars data into db finished!!!");
+
+
+
+
         result.close();
         statement.close();
         psInsertRecord.close();
 
-        System.out.println("insert movies and genres_in_movies finished!");
     }
 }

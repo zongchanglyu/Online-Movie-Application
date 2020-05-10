@@ -87,7 +87,7 @@ public class starsXmlParse {
         }
     }
 
-    
+
     private Stars getStar(Element star){
         try{
             String name = getTextValue(star, "stagename");
