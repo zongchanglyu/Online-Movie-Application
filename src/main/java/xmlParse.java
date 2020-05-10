@@ -182,7 +182,14 @@ public class xmlParse {
      */
     private int getIntValue(Element ele, String tagName) {
         //in production application you would catch the exception
-        return Integer.parseInt(getTextValue(ele, tagName));
+        String str = getTextValue(ele, tagName);
+
+        if(isInteger(str)){
+            return Integer.parseInt(str);
+        }
+        else{
+            return -1;
+        }
     }
 
     /**
@@ -314,7 +321,14 @@ public class xmlParse {
 
         }
 
-
+    public boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
 
     public static void main(String[] args) throws SQLException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         //create an instance
