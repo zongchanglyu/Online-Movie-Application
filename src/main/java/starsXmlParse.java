@@ -18,7 +18,7 @@ import java.util.List;
 
 public class starsXmlParse {
 //    List<Stars> myStars;
-    HashSet<Stars> myStars;
+    static HashSet<Stars> myStars;
     Document dom;
 
     public starsXmlParse() {
