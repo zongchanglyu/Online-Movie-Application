@@ -56,7 +56,7 @@ public class xmlParse {
             DocumentBuilder db = dbf.newDocumentBuilder();
 
             //parse using builder to get DOM representation of the XML file
-            dom = db.parse("mains243test.xml");
+            dom = db.parse("mains243.xml");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -104,12 +104,11 @@ public class xmlParse {
                             Movies m = getMovie(Film);
 
                             //add it to list
-                            myMovies.add(m);
+                            if(m != null)
+                                myMovies.add(m);
                         }
                     }
-
                 }
-
             }
         }
     }
@@ -123,11 +122,13 @@ public class xmlParse {
      * @param film
      * @return
      */
-        private Movies getMovie(Element film){
+    private Movies getMovie(Element film){
+        try{
             String title = getTextValue(film, "t");
             String id = getTextValue(film, "fid");
             int year = getIntValue(film, "year");
             String director = tempDirectorName;
+            if(title == null || id == null || director == null) return null;
 
             List<String> tempGenres = new ArrayList<String>();
             NodeList cats = film.getElementsByTagName("cats");
@@ -143,14 +144,13 @@ public class xmlParse {
 
                 }
             }
-
             List<String> genres = tempGenres;
-
             Movies m = new Movies(title, id, year, director, genres);
-
             return m;
-
+        }catch (Exception e){
+            return null;
         }
+    }
 
     /**
      * I take a xml element and the tag name, look for the tag and get
@@ -193,126 +193,147 @@ public class xmlParse {
 
         System.out.println("No of Movies '" + myMovies.size() + "'.");
 
-        Iterator<Movies> it = myMovies.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        Iterator<Movies> it = myMovies.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
 
-        private void insertData() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+    private void insertData() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 
-            System.out.println("debugging connection....");
+        System.out.println("debugging connection....");
 
-            Connection conn = null;
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+        Connection conn = null;
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
 
 
-            try {
-                conn = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
-                System.out.println("connect to db");
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            conn = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
+            System.out.println("connect to db");
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-            HashMap<String, HashMap<String, Integer>> oldMovies = new HashMap<>();
+        // oldMovies<director, tmpMovie<title, year>>
+        HashMap<String, HashMap<String, Integer>> oldMovies = new HashMap<>();
 
-            String query = "select * from movies";
+        // avoid duplicate movieId
+        Set<String> movieId = new HashSet<>();
 
-            PreparedStatement statement = conn.prepareStatement(query);
+        String query = "select * from movies";
 
-            ResultSet result = statement.executeQuery();
+        PreparedStatement statement = conn.prepareStatement(query);
 
-            while(result.next()){
-                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(result.getString("director"), new HashMap<>());
-                tempMovie.put(result.getString("title"), result.getInt("year"));
-                oldMovies.put(result.getString("director"), tempMovie);
-            }
+        ResultSet result = statement.executeQuery();
 
-            System.out.println("old movies size is: "+oldMovies.size());
+        while(result.next()){
+            HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(result.getString("director"), new HashMap<>());
+            tempMovie.put(result.getString("title"), result.getInt("year"));
+            oldMovies.put(result.getString("director"), tempMovie);
 
-            conn.setAutoCommit(false);
+            movieId.add(result.getString("id"));
+        }
 
-            query = "insert into genres (name) select ? from DUAL where NOT EXISTS(select name from genres where name = ?);";
+        // this should be the size of old directors
+        System.out.println("old movies size is: "+oldMovies.size());
 
-            statement = conn.prepareStatement(query);
+        conn.setAutoCommit(false);
 
-            for(String genre : allKindsOfGenres){
-                statement.setString(1,genre);
-                statement.setString(2, genre);
-                statement.addBatch();
-            }
+        query = "insert into genres (name) select ? from DUAL where NOT EXISTS(select name from genres where name = ?);";
 
-            statement.executeBatch();
-            conn.commit();
+        statement = conn.prepareStatement(query);
 
-            System.out.println("execute genres sql finished!!!");
+        for(String genre : allKindsOfGenres){
+            if(genre == null) continue;
+            statement.setString(1, genre);
+            statement.setString(2, genre);
+            statement.addBatch();
+        }
+
+        statement.executeBatch();
+        conn.commit();
+
+        System.out.println("execute genres sql finished!!!");
 
 
 //insert movies
-            conn.setAutoCommit(false);
+        conn.setAutoCommit(false);
 
-            PreparedStatement psInsertRecord=null;
+        PreparedStatement psInsertRecord=null;
 
-            String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
+        String insertSql = "insert into movies(id, title, year, director) values ( ?, ?, ?, ? );";
 
-            String gimSql = "insert into genres_in_movies (genreId, movieId) values ((select id from genres where name = ?), ?)";
+        String gimSql = "insert into genres_in_movies (genreId, movieId) values ((select id from genres where name = ?), ?)";
 
-            psInsertRecord = conn.prepareStatement(insertSql);
-            PreparedStatement gimStatement = conn.prepareStatement(gimSql);
+        String ratingSql = "insert into ratings (movieId) values ( ? );";
 
-            for (Movies movie : myMovies) {
+        psInsertRecord = conn.prepareStatement(insertSql);
+        PreparedStatement gimStatement = conn.prepareStatement(gimSql);
+        PreparedStatement ratingStatement = conn.prepareStatement(ratingSql);
+
+        for (Movies movie : myMovies) {
 //                if (oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) &&
 //                        oldMovies.get(movie.getDirector()).get(movie.getTitle()).equals(movie.getYear()) || movie.getId() == null) {
 //                    continue;
 //                }
-                if(oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) || movie.getId() == null){
-                    continue;
-                }
+            if(oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) || movie.getId() == null){
+                continue;
+            }
 
 //              PreparedStatement insertStatement = dbcon.prepareStatement(insertSql);
 
 
-                psInsertRecord.setString(1, movie.getId());
-                psInsertRecord.setString(2, movie.getTitle());
-                psInsertRecord.setInt(3, movie.getYear());
-                psInsertRecord.setString(4, movie.getDirector());
+            while(movieId.contains(movie.getId()))
+                movie.setId(movie.getId() + "1");
+            movieId.add(movie.getId());
+
+            psInsertRecord.setString(1, movie.getId());
+            psInsertRecord.setString(2, movie.getTitle());
+            psInsertRecord.setInt(3, movie.getYear());
+            psInsertRecord.setString(4, movie.getDirector());
+
+            ratingStatement.setString(1, movie.getId());
 
 //                psInsertRecord.executeUpdate();
-                System.out.println("prepare stat finished");
-                HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(movie.getDirector(), new HashMap<String, Integer>());
-                tempMovie.put(movie.getTitle(), movie.getYear());
-                oldMovies.put(movie.getDirector(), tempMovie);
-                if(movie.getGenres()!=null && movie.getGenres().size()>0){
-                    for (String genre : movie.getGenres()) {
-
-                        gimStatement.setString(1, genre);
-                        gimStatement.setString(2, movie.getId());
-                        //                    gimStatement.executeUpdate();
-                        gimStatement.addBatch();
-                    }
+            System.out.println("prepare stat finished");
+            HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(movie.getDirector(), new HashMap<String, Integer>());
+            tempMovie.put(movie.getTitle(), movie.getYear());
+            oldMovies.put(movie.getDirector(), tempMovie);
+            if(movie.getGenres()!=null && movie.getGenres().size()>0){
+                for (String genre : movie.getGenres()) {
+                    if(genre == null) continue;
+                    gimStatement.setString(1, genre);
+                    gimStatement.setString(2, movie.getId());
+                    //                    gimStatement.executeUpdate();
+                    gimStatement.addBatch();
                 }
-
-                psInsertRecord.addBatch();
-//                System.out.println("debug000");
-
             }
 
-            psInsertRecord.executeBatch();
-            gimStatement.executeBatch();
-            conn.commit();
+            psInsertRecord.addBatch();
 
-            System.out.println("debug111");
-//            psInsertRecord.executeUpdate();
-            result.close();
-            statement.close();
-            psInsertRecord.close();
-
-            System.out.println("insert movies and genres_in_movies finished!");
+            ratingStatement.addBatch();
+//                System.out.println("debug000");
 
         }
+
+        psInsertRecord.executeBatch();
+        gimStatement.executeBatch();
+
+        ratingStatement.executeBatch();
+        conn.commit();
+
+        System.out.println("debug111");
+//            psInsertRecord.executeUpdate();
+        result.close();
+        statement.close();
+        psInsertRecord.close();
+
+        System.out.println("insert movies and genres_in_movies finished!");
+
+    }
 
 
 
