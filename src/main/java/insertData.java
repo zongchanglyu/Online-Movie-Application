@@ -18,6 +18,7 @@ public class insertData {
         List<Movies> myMovies = moviesParse.getMyMovies();
         HashSet<String> allKindsOfGenres = moviesParse.getAllKindsOfGenres();
 
+        System.out.println("mymovies size: "+myMovies.size());
 
         starsXmlParse starParse = new starsXmlParse();
 
@@ -25,7 +26,7 @@ public class insertData {
 
         HashSet<Stars> myStars = starParse.getMyStars();
 
-
+        System.out.println("mystars size: "+myStars.size());
 
 
 
@@ -202,7 +203,14 @@ public class insertData {
         query = "insert into stars (id, name, birthYear) values (?,?,?) ";
         statement = conn.prepareStatement(query);
 
+        System.out.println("debug333......");
+
+        System.out.println("mystars size is: "+myStars.size());
+
         for(Stars star : myStars){
+
+            System.out.println("debug222......");
+
             if(oldStars.containsKey(star.getName()) && oldStars.get(star.getName())==star.getBirthYear()){
                 continue;
             }
@@ -217,6 +225,7 @@ public class insertData {
 
             statement.addBatch();
 
+            System.out.println("add 1 star!");
         }
         statement.executeBatch();
         conn.commit();
