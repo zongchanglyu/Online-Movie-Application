@@ -91,7 +91,8 @@ public class MovieListServlet extends HttpServlet {
                         "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
-                        "and movies.id = ratings.movieId) as tmp ;";
+                        "and movies.id = ratings.movieId)" +
+                        " as tmp ;";
 
                 PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
                 tmpStatement.setString(1, title);

@@ -71,3 +71,35 @@ body{
     background-position:center;
     background-size:cover;
 }
+
+.dashboard-navigation-bar{
+    margin: auto;
+    width: 100%;
+}
+
+.dashboard-content{
+    width: 80%;
+    margin: auto;
+}
+
+#dashboard-header-left{
+    width: 50%;
+    float: left;
+}
+
+#dashboard-header-right{
+    width: 50%;
+    float: right;
+}
+
+.dashboard-content-left{
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.dashboard-content-right{
+    width: 50%;
+    float: right;
+    text-align: center;
+}
