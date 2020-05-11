@@ -11,6 +11,9 @@ public class insertData {
 
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
 
+
+        long startTime = System.currentTimeMillis();
+
         moviesXmlParse moviesParse = new moviesXmlParse();
 
         moviesParse.run();
@@ -33,6 +36,7 @@ public class insertData {
         starsInMovies.run();
         HashMap<String, String> myStarsInMovies = starsInMovies.getMyStarsInMovies();
         System.out.println("myStarsInMovies size is: "+ myStarsInMovies.size());
+        System.out.println("Time spent on parse 3 xml files is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
 
 
 //==============================================================

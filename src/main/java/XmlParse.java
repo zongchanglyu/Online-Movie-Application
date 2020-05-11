@@ -11,7 +11,10 @@ public class XmlParse {
          * connect to database
          * */
 
+        long startTime = System.currentTimeMillis();
+
         System.out.println("connect to database....");
+
 
         Connection conn = null;
         Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -132,6 +135,8 @@ public class XmlParse {
         conn.commit();
 
         System.out.println("insert movies and genres_in_movies finished!");
+        System.out.println("Time spent on insert movies and genres_in_movies is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
+
 
         /**
          * parse stars into database
@@ -199,6 +204,8 @@ public class XmlParse {
         conn.commit();
 
         System.out.println("insert stars data into db finished!!!");
+        System.out.println("Time spent on insert stars data into db is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
+
 
         /**
          * parse stars_in_movies into database
@@ -322,6 +329,7 @@ public class XmlParse {
 
         System.out.println("insert into stars_in_movies complete!!!");
 
+        System.out.println("Finally, the total running is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
 
 
         result.close();
