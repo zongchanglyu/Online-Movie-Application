@@ -143,10 +143,10 @@ public class starsXmlParse {
 
         System.out.println("No of Stars '" + myStars.size() + "'.");
 
-        Iterator<Stars> it = myStars.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        Iterator<Stars> it = myStars.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
 
     }
 
