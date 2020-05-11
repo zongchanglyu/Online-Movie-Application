@@ -2,14 +2,40 @@ package main.java;
 
 import java.sql.*;
 import java.util.*;
+import java.io.*;
 
 public class XmlParse {
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
 
         /**
          * connect to database
          * */
+
+//        try {
+//            String sWrite[] = { "11", "21", "3", "40", "5" };
+//            OutputStream os = new FileOutputStream("test.txt");
+//            for (int x = 0; x < sWrite.length; x++) {
+//                os.write(Integer.parseInt(sWrite[x])); // writes the bytes
+//            }
+//            os.close();
+//
+//            InputStream is = new FileInputStream("test.txt");
+//            int size = is.available();
+//
+//            for (int i = 0; i < size; i++) {
+//                System.out.print((char) is.read() + "  ");
+//            }
+//            is.close();
+//        } catch (IOException e) {
+//            System.out.print("Exception");
+//        }
+
+        File f = new File("inconsistentData.txt");
+        FileOutputStream fop = new FileOutputStream(f);
+
+        OutputStreamWriter writer = new OutputStreamWriter(fop, "UTF-8");
+
 
         long startTime = System.currentTimeMillis();
 
@@ -316,6 +342,10 @@ public class XmlParse {
                 // maybe a new movie, not sure add to db or not
                 count++;
 
+                writer.append("movie title not found: " + StarName_MovieName[1]);
+
+                writer.append("\r\n");
+
 //                System.out.println("movie title not found: " + myStarsInMovies.get(starName));
             }
         }
@@ -331,6 +361,10 @@ public class XmlParse {
 
         System.out.println("Finally, the total running is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
 
+
+
+        writer.close();
+        fop.close();
 
         result.close();
         statement.close();
