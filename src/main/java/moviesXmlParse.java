@@ -17,7 +17,7 @@ import java.util.List;
 
 public class moviesXmlParse {
 
-    List<Movies> myMovies;
+    static List<Movies> myMovies;
     Document dom;
 
     private String tempDirectorName;

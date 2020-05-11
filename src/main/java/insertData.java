@@ -179,7 +179,7 @@ public class insertData {
 
         while(result.next()){
             try{
-                oldStars.put(result.getString("name"), result.getInt("year"));
+                oldStars.put(result.getString("name"), result.getInt("birthYear"));
             }
             catch (Exception e){
                 oldStars.put(result.getString("name"), 0);
@@ -209,13 +209,13 @@ public class insertData {
 
         for(Stars star : myStars){
 
-            System.out.println("debug222......");
+//            System.out.println("debug222......");
 
             if(oldStars.containsKey(star.getName()) && oldStars.get(star.getName())==star.getBirthYear()){
                 continue;
             }
 
-            String id = prefix + (number++);
+            String id = prefix + (++number);
 
             statement.setString(1, id);
             statement.setString(2, star.getName());
@@ -225,7 +225,7 @@ public class insertData {
 
             statement.addBatch();
 
-            System.out.println("add 1 star!");
+//            System.out.println("add 1 star!");
         }
         statement.executeBatch();
         conn.commit();
