@@ -10,6 +10,10 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!--My Own CSS-->
     <link rel="stylesheet" href="test.css"/>
@@ -52,18 +56,33 @@
     <div class="header">
         <h1>Fabflix - Dashboard</h1>
     </div>
-    <table id=metadata class="table table-striped">
-        <!-- Create a table header -->
-        <thead>
-        <tr>
-            <td>Table Names</td>
-            <td>Attributes</td>
-        </tr>
-        </thead>
-        <!-- Table body is left empty here, will be populated with the data retrieved with oldIndex.js -->
-        <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
-        <tbody id=metadata_table_body></tbody>
-    </table>
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title" style="text-align: center">
+                    <a data-toggle="collapse" href="#collapse2">Metadata</a>
+                </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <table id=metadata class="table table-striped">
+                        <!-- Create a table header -->
+                        <thead>
+                        <tr>
+                            <td>Table Names</td>
+                            <td>Attributes</td>
+                        </tr>
+                        </thead>
+                        <!-- Table body is left empty here, will be populated with the data retrieved with oldIndex.js -->
+                        <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+                        <tbody id=metadata_table_body></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="dashboard-content-left">
         <h2 class="margin-bottom-lg">Add New Star</h2>
