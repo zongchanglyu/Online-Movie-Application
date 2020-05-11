@@ -29,6 +29,11 @@ public class insertData {
         System.out.println("mystars size: "+myStars.size());
 
 
+        starsInMoviesXmlParse starsInMovies = new starsInMoviesXmlParse();
+        starsInMovies.run();
+        HashMap<String, String> myStarsInMovies = starsInMovies.getMyStarsInMovies();
+        System.out.println("myStarsInMovies size is: "+ myStarsInMovies.size());
+
 
 //==============================================================
 //        Start to insert data:
@@ -137,6 +142,7 @@ public class insertData {
             HashMap<String, Integer> tempMovie = oldMovies.getOrDefault(movie.getDirector(), new HashMap<String, Integer>());
             tempMovie.put(movie.getTitle(), movie.getYear());
             oldMovies.put(movie.getDirector(), tempMovie);
+
             if (movie.getGenres() != null && movie.getGenres().size() > 0) {
                 for (String genre : movie.getGenres()) {
                     if (genre == null) continue;
@@ -231,6 +237,60 @@ public class insertData {
         conn.commit();
 
         System.out.println("insert stars data into db finished!!!");
+
+
+//=================================================================
+//        insert stars_in_movies data:
+//=================================================================
+
+
+
+
+        query = "select max(id) as id from stars";
+        statement = conn.prepareStatement(query);
+        rs = statement.executeQuery();
+        rs.next();
+
+        starId = rs.getString("id");
+        prefix = starId.substring(0, 2);
+        number = Integer.parseInt(starId.substring(2, starId.length()));
+
+
+        conn.setAutoCommit(false);
+
+        //just in case of some extra new stars data in casts124.xml, so we want to insert stars again.
+        String starInsertQuery = "insert into stars (id, name, birthYear) values (?,?,?) ";
+        PreparedStatement starInsertStatement = conn.prepareStatement(starInsertQuery);
+
+        query = "insert into stars_in_movies (starId, movieId) values ((select id from stars where name = ? limit 1), ? )";
+        statement = conn.prepareStatement(query);
+
+        for(String star: myStarsInMovies.keySet()){
+            if(movieId.contains(myStarsInMovies.get(star))){
+                if(!oldStars.containsKey(star)){
+                    starInsertStatement.setString(1, prefix + (++number));
+                    starInsertStatement.setString(2, star);
+                    starInsertStatement.setInt(3,0);
+                    starInsertStatement.addBatch();
+
+                    oldStars.put(star, 0);
+                }
+                statement.setString(1, star);
+                statement.setString(2, myStarsInMovies.get(star));
+                statement.addBatch();
+
+            }
+            else{
+//                System.out.println("This is an inconsistent data!!!");
+            }
+        }
+        System.out.println("debug aaaaaaaaaaa");
+        
+        starInsertStatement.executeBatch();
+        statement.executeBatch();
+        conn.commit();
+
+        System.out.println("insert into stars_in_movies complete!!!");
 
 
 

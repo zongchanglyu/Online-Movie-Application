@@ -86,6 +86,8 @@ public class starsInMoviesXmlParse {
                                 String movieId = getTextValue(M, "f");
                                 String stageName = getTextValue(M, "a");
 
+                                if(stageName==null || movieId==null) continue;
+
                                 myStarsInMovies.put(stageName, movieId);
 //                                System.out.println("debug00000000");
                             }
@@ -96,16 +98,6 @@ public class starsInMoviesXmlParse {
             }
         }
     }
-
-
-
-    /**
-     * I take an film element and read the values in, create
-     * an Movies object and return it
-     *
-     * @param film
-     * @return
-     */
 
 
     /**
@@ -151,13 +143,13 @@ public class starsInMoviesXmlParse {
 
         System.out.println("numbers of data '" + myStarsInMovies.size() + "'.");
 
-       for(String s: myStarsInMovies.keySet()){
-           System.out.println("star is: "+s);
-//           for(String id: myStarsInMovies.get(s)){
-//               System.out.println("Star is: "+s+", movieId is: "+id);
-//
-//           }
-       }
+//       for(String s: myStarsInMovies.keySet()){
+//           System.out.println("star is: "+s);
+////           for(String id: myStarsInMovies.get(s)){
+////               System.out.println("Star is: "+s+", movieId is: "+id);
+////
+////           }
+//       }
     }
 
 
