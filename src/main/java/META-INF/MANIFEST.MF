@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: main.java.xmlParse
+Class-Path: mysql-connector-java-5.1.46.jar gson-2.8.2.jar jasypt-1.9.2.
+ jar
+
