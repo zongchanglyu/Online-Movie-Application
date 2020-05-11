@@ -12,24 +12,6 @@ public class XmlParse {
          * connect to database
          * */
 
-//        try {
-//            String sWrite[] = { "11", "21", "3", "40", "5" };
-//            OutputStream os = new FileOutputStream("test.txt");
-//            for (int x = 0; x < sWrite.length; x++) {
-//                os.write(Integer.parseInt(sWrite[x])); // writes the bytes
-//            }
-//            os.close();
-//
-//            InputStream is = new FileInputStream("test.txt");
-//            int size = is.available();
-//
-//            for (int i = 0; i < size; i++) {
-//                System.out.print((char) is.read() + "  ");
-//            }
-//            is.close();
-//        } catch (IOException e) {
-//            System.out.print("Exception");
-//        }
 
         File f = new File("inconsistentData.txt");
         FileOutputStream fop = new FileOutputStream(f);
@@ -39,7 +21,7 @@ public class XmlParse {
 
         long startTime = System.currentTimeMillis();
 
-        System.out.println("connect to database....");
+        writer.append("*****************connect to database....*****************\n");
 
 
         Connection conn = null;
@@ -56,7 +38,7 @@ public class XmlParse {
         /**
          * parse movies into database
          * */
-        System.out.println("parse movies into database");
+        writer.append("\n*****************parse movies into database*****************\n");
 
         ParseMovie pm = new ParseMovie();
         pm.run();
@@ -70,7 +52,6 @@ public class XmlParse {
         Set<String> movieId = new HashSet<>();
         // save all movieTitle
         Map<String, String> movieTitleId = new HashMap<>();
-//        Set<String> movieTitle = new HashSet<>();
 
         String query = "select * from movies";
 
@@ -83,7 +64,6 @@ public class XmlParse {
             oldMovies.put(result.getString("director"), tempMovie);
 
             movieId.add(result.getString("id"));
-//            movieTitle.add(result.getString("title"));
             movieTitleId.put(result.getString("title"), result.getString("id"));
         }
 
@@ -117,9 +97,12 @@ public class XmlParse {
         PreparedStatement gimStatement = conn.prepareStatement(gimSql);
         PreparedStatement ratingStatement = conn.prepareStatement(ratingSql);
 
+        int countMovie = 0;
         for (Movies movie : myMovies) {
             if (oldMovies.containsKey(movie.getDirector()) && oldMovies.get(movie.getDirector()).containsKey(movie.getTitle()) || movie.getId() == null) {
 //                System.out.println("duplicate movie: " + movie.getTitle());
+                countMovie++;
+                writer.append("\nduplicate movie: " + movie.getTitle());
                 continue;
             }
 
@@ -127,7 +110,6 @@ public class XmlParse {
                 movie.setId(movie.getId() + "1");
             movieId.add(movie.getId());
 
-//            movieTitle.add(movie.getTitle());
             movieTitleId.put(movie.getTitle(), movie.getId());
 
             psInsertRecord.setString(1, movie.getId());
@@ -154,19 +136,28 @@ public class XmlParse {
             ratingStatement.addBatch();
         }
 
+        writer.append("\n");
+
+        writer.append("\n**************duplicate movie number: " + countMovie + "**************\n");
+
         psInsertRecord.executeBatch();
         gimStatement.executeBatch();
 
         ratingStatement.executeBatch();
         conn.commit();
 
+        writer.append("\n*****************insert movies and genres_in_movies finished!*****************\n");
+        writer.append("\n*****************Time spent on insert movies and genres_in_movies is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds*****************\n");
         System.out.println("insert movies and genres_in_movies finished!");
         System.out.println("Time spent on insert movies and genres_in_movies is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
-
 
         /**
          * parse stars into database
          * */
+
+        writer.append("\n*****************parse stars into database*****************\n");
+
+        long starStartTime = System.currentTimeMillis();
 
         ParseStar ps = new ParseStar();
         ps.run();
@@ -209,8 +200,11 @@ public class XmlParse {
         query = "insert into stars (id, name, birthYear) values (?,?,?) ";
         statement = conn.prepareStatement(query);
 
+        int starCount = 0;
         for(Stars star : myStars){
             if(oldStars.containsKey(star.getName()) && oldStars.get(star.getName())==star.getBirthYear()){
+                writer.append("\nstar duplicate: " + star.getName());
+                starCount++;
                 continue;
             }
 
@@ -226,16 +220,25 @@ public class XmlParse {
             statement.addBatch();
         }
 
+        writer.append("\n");
+        writer.append("\n**************duplicate star number: " + starCount + "**************\n");
+
         statement.executeBatch();
         conn.commit();
 
+        writer.append("\n*****************insert stars data into db finished!!!*****************\n");
+        writer.append("\n*****************Time spent on insert stars data into db is: "+ (double)(System.currentTimeMillis() - starStartTime)/1000 + " Seconds*****************\n");
         System.out.println("insert stars data into db finished!!!");
-        System.out.println("Time spent on insert stars data into db is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
+        System.out.println("Time spent on insert stars data into db is: "+ (double)(System.currentTimeMillis() - starStartTime)/1000 + " Seconds");
 
 
         /**
          * parse stars_in_movies into database
          * */
+
+        writer.append("\n*****************parse stars_in_movies into database*****************\n");
+
+        long simStartTime = System.currentTimeMillis();
 
         ParseStarsInMovies psim = new ParseStarsInMovies();
         psim.run();
@@ -255,52 +258,6 @@ public class XmlParse {
 
 
         conn.setAutoCommit(false);
-/*
-        //just in case of some extra new stars data in casts124.xml, so we want to insert stars again.
-        String starInsertQuery = "insert into stars (id, name, birthYear) values (?,?,?) ";
-        PreparedStatement starInsertStatement = conn.prepareStatement(starInsertQuery);
-
-        query = "insert into stars_in_movies (starId, movieId) " +
-                "values ((select id from stars where name = ? limit 1), (select id from movies where title = ? limit 1))";
-        statement = conn.prepareStatement(query);
-
-        String tmpQuery = "insert into stars_in_movies (starId, movieId) " +
-                          "values( ? , (select id from movies where title = ? limit 1));";
-        PreparedStatement tmpQueryStatement = conn.prepareStatement(tmpQuery);
-
-        int count = 0;
-
-        for(String starName: myStarsInMovies.keySet()){
-            if(movieTitle.contains(myStarsInMovies.get(starName))){
-                if("Forrest Gump".equals(myStarsInMovies.get(starName))) System.out.println("Forrest Gump found");
-                if("Tom Hanks".equals(starName)) System.out.println("Tom Hanks found");
-                if(!oldStars.containsKey(starName)){
-                    String tmpStarId = prefix + (++number);
-                    starInsertStatement.setString(1, tmpStarId);
-                    starInsertStatement.setString(2, starName);
-                    starInsertStatement.setInt(3,0);
-                    starInsertStatement.addBatch();
-
-                    oldStars.put(starName, 0);
-
-                    tmpQueryStatement.setString(1, tmpStarId);
-                    tmpQueryStatement.setString(2, myStarsInMovies.get(starName));
-                    tmpQueryStatement.addBatch();
-                }else{
-                    statement.setString(1, starName);
-                    statement.setString(2, myStarsInMovies.get(starName));
-                    statement.addBatch();
-                }
-            }
-            else{
-                // maybe a new movie, not sure add to db or not
-                count++;
-
-//                System.out.println("movie title not found: " + myStarsInMovies.get(starName));
-            }
-        }
-        System.out.println("sum of movie title not fount: " + count + "\nmaybe a new movie, not sure add to db or not");
-*/
 
         String starInsertQuery = "insert into stars (id, name, birthYear) values (?,?,?) ";
         PreparedStatement starInsertStatement = conn.prepareStatement(starInsertQuery);
@@ -341,15 +298,11 @@ public class XmlParse {
             else{
                 // maybe a new movie, not sure add to db or not
                 count++;
-
-                writer.append("movie title not found: " + StarName_MovieName[1]);
-
-                writer.append("\r\n");
-
-//                System.out.println("movie title not found: " + myStarsInMovies.get(starName));
+                writer.append("\nmovie title not found: " + StarName_MovieName[1]);
             }
         }
-        System.out.println("sum of movie title not fount: " + count + "\nmaybe a new movie, not sure add to db or not");
+        writer.append("\r\n");
+        writer.append("\n**************sum of movie title not fount: " + count + "**************\n");
 
 
         starInsertStatement.executeBatch();
@@ -357,10 +310,11 @@ public class XmlParse {
         statement.executeBatch();
         conn.commit();
 
+        writer.append("\n*****************insert into stars_in_movies complete!!!*****************\n");
+        writer.append("\nTime spent on insert stars_in_movies data into db is: "+ (double)(System.currentTimeMillis() - simStartTime)/1000 + " Seconds\n");
+        writer.append("\nFinally total time spent: " + (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds\n");
         System.out.println("insert into stars_in_movies complete!!!");
-
-        System.out.println("Finally, the total running is: "+ (double)(System.currentTimeMillis() - startTime)/1000 + " Seconds");
-
+        System.out.println("Time spent on insert stars_in_movies data into db is: "+ (double)(System.currentTimeMillis() - simStartTime)/1000 + " Seconds");
 
 
         writer.close();

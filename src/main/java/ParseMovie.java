@@ -37,7 +37,7 @@ public class ParseMovie {
         return allKindsOfGenres;
     }
 
-    public void run() throws SQLException, IllegalAccessException, ClassNotFoundException, InstantiationException {
+    public void run(){
 
         //parse the xml file and get the dom object
         parseXmlFile();
@@ -48,8 +48,6 @@ public class ParseMovie {
         //Iterate through the list and print the data
         printData();
 
-//        System.out.println("begin to insertData.....");
-//        insertData();
     }
 
     private void parseXmlFile() {

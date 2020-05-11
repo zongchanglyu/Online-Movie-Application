@@ -96,9 +96,6 @@ public class ParseStarsInMovies {
                                 String movieName = getTextValue(M, "t");
                                 String stageName = getTextValue(M, "a");
 
-                                if("Forrest Gump".equals(movieName))
-                                    System.out.println("Forrest Gump in xml, actor is: " + stageName);
-
                                 if(stageName==null || movieName==null) continue;
 
                                 myStarsInMovies.put(stageName, movieName);
