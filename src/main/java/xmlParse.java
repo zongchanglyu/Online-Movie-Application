@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.io.*;
 
-public class XmlParse {
+public class xmlParse {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IOException {
 
