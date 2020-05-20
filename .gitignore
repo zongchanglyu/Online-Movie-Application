@@ -3,7 +3,16 @@
 *.iml
 target/
 /moviedb
+
 FbaFlixWeb/.idea
 FbaFlixWeb/.DS_Store
 FbaFlixWeb/*.iml
 FbaFlixWeb/target/
+
+FabFlixMobile/*.iml
+FabFlixMobile/.gradle
+FabFlixMobile/local.properties
+FabFlixMobile/.idea
+FabFlixMobile/.DS_Store
+FabFlixMobile/build
+FabFlixMobile/captures
