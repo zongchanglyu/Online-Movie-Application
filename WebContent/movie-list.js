@@ -58,21 +58,29 @@ function handleMoviesResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
 
         rowHTML += "<th>";
-        for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
-            rowHTML +=
-                '<a href="browse.html?genre-id=' + resultData[i]['genres_name'][g]['genre_id'] + '">'
-                + resultData[i]["genres_name"][g]["genre_name"] + "<br>";
+        if(resultData[i]["genres_name"].length == 0){
+            rowHTML += "N/A";
+        }else{
+            for(let g = 0; g < Math.min(3, resultData[i]["genres_name"].length); g++){
+                rowHTML +=
+                    '<a href="browse.html?genre-id=' + resultData[i]['genres_name'][g]['genre_id'] + '">'
+                    + resultData[i]["genres_name"][g]["genre_name"] + "<br>";
+            }
+            rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         }
-        rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         rowHTML += "</th>";
 
         rowHTML += "<th>";
-        for(let s = 0; s < Math.min(3, resultData[i]["stars_name"].length); s++){
-            // Add a link to single-movie.html with id passed with GET url parameter
-            rowHTML += '<a href="single-star.html?id=' + resultData[i]["stars_name"][s]["star_id"] + '">'
-            rowHTML += resultData[i]["stars_name"][s]["star_name"] + "<br>";
+        if(resultData[i]["stars_name"].length == 0){
+            rowHTML += "N/A";
+        }else {
+            for (let s = 0; s < Math.min(3, resultData[i]["stars_name"].length); s++) {
+                // Add a link to single-movie.html with id passed with GET url parameter
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]["stars_name"][s]["star_id"] + '">'
+                rowHTML += resultData[i]["stars_name"][s]["star_name"] + "<br>";
+            }
+            rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         }
-        rowHTML = rowHTML.substring(0, rowHTML.length - 4);
         rowHTML += "</th>";
 
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
