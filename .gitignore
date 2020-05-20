@@ -3,3 +3,7 @@
 *.iml
 target/
 /moviedb
+FbaFlixWeb/.idea
+FbaFlixWeb/.DS_Store
+FbaFlixWeb/*.iml
+FbaFlixWeb/target/
