@@ -33,8 +33,8 @@ public class AdvSearchServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
 
         // Retrieve parameters from url request.
-        String title = request.getParameter("title");
-        title = "%" + title + "%";
+//        String title = request.getParameter("title");
+//        title = "%" + title + "%";
         String year = request.getParameter("year");
         if("".equals(year)) year = "%";
         else if(year.length() < 4) year = "11111";
@@ -42,6 +42,15 @@ public class AdvSearchServlet extends HttpServlet {
         director = "%" + director + "%";
         String starName = request.getParameter("starName");
         starName = "%" + starName + "%";
+
+        String title = request.getParameter("title");
+        String [] arrTitle = title.split("\\s+");
+        title = "";
+        for(String s: arrTitle){
+            title += "+"+s+"* ";
+        }
+
+
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
@@ -96,5 +105,6 @@ public class AdvSearchServlet extends HttpServlet {
         //close it;
 
     }
+
 
 }
