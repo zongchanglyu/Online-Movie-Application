@@ -42,7 +42,7 @@ public class HomeServlet extends HttpServlet {
             // Declare our statement
             Statement statement = dbcon.createStatement();
 
-            String query = "select movies.*, ratings.rating " +
+            String query = "select distinct movies.*, ratings.rating " +
                     "from movies, ratings " +
                     "where movies.id = ratings.movieId " +
                     "order by ratings.rating desc " +
