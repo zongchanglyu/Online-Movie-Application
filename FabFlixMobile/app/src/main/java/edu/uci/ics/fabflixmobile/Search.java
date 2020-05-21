@@ -13,68 +13,70 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class Login extends ActionBarActivity {
+public class Search extends ActionBarActivity {
 
-    private EditText username;
-    private EditText password;
+    private EditText movieTitle;
     private TextView message;
-    private Button loginButton;
+    private Button searchButton;
     private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // upon creation, inflate and initialize the layout
-        setContentView(R.layout.login);
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
+        setContentView(R.layout.search);
+        movieTitle = findViewById(R.id.movieTitle);
         message = findViewById(R.id.message);
-        loginButton = findViewById(R.id.login);
+        searchButton = findViewById(R.id.searchButton);
         /**
          * In Android, localhost is the address of the device or the emulator.
          * To connect to your machine, you need to use the below IP address
          * **/
 //        url = "https://192.168.0.106:8443/fabflix/api/";
-//        url = "https://new.soommate.com:47373/fabflix/api/";
         url = "https://71.69.162.72:47373/fabflix/api/";
 
         //assign a listener to call a function to handle the user request when clicking a button
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                search();
             }
         });
     }
 
-    public void login() {
+    public void search() {
 
-        message.setText("Trying to login");
+        message.setText("Searching...");
         // Use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         //request type is POST
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, url + "login", new Response.Listener<String>() {
+        final StringRequest searchRequest = new StringRequest(Request.Method.GET, url + "home", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //TODO should parse the json response to redirect to appropriate functions.
-
+                ArrayList<Movie> movies = new ArrayList<>();
                 try{
-                    JSONObject jObject = new JSONObject(response);
-                    if(jObject.getString("status").equals("success")){
-                        Log.d("login.success", response);
+                    JSONArray jsonArray = new JSONArray(response);
+                    if(jsonArray != null){
+                        Log.d("search.success", response);
                         //initialize the activity(page)/destination
-                        Intent listPage = new Intent(Login.this, Search.class);
+                        Intent listPage = new Intent(Search.this, ListViewActivity.class);
+                        listPage.putExtra("message", response);
                         //without starting the activity/page, nothing would happen
                         startActivity(listPage);
+//                        //initialize the activity(page)/destination
+//                        Intent listPage = new Intent(Search.this, ListViewActivity.class);
+//                        //without starting the activity/page, nothing would happen
+//                        startActivity(listPage);
                     }else{
                         Log.d("login.failed", response);
-                        message.setText("Email or Password incorrect");
+                        message.setText("Movie not found, please try again");
                     }
                 }catch(JSONException e){
                     Log.e("MYAPP", "unexpected JSON exception", e);
@@ -93,19 +95,19 @@ public class Login extends ActionBarActivity {
                         Log.d("login.error", error.toString());
                     }
                 }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Post request form data
-                final Map<String, String> params = new HashMap<>();
-                params.put("email", username.getText().toString());
-                params.put("password", password.getText().toString());
-
-                return params;
-            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                // Post request form data
+//                final Map<String, String> params = new HashMap<>();
+//                params.put("email", username.getText().toString());
+//                params.put("password", password.getText().toString());
+//
+//                return params;
+//            }
         };
 
         // !important: queue.add is where the login request is actually sent
-        queue.add(loginRequest);
+        queue.add(searchRequest);
 
     }
 }
