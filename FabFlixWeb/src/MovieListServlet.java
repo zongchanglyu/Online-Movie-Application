@@ -87,12 +87,30 @@ public class MovieListServlet extends HttpServlet {
 //            }
 
             if("adv-search".equals(status)){
+//                String sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
+//                        "from movies, stars_in_movies as sim, stars, ratings " +
+//                        "where movies.title like ? and movies.year like ? and movies.director like ? " +
+//                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+//                        "and movies.id = ratings.movieId)" +
+//                        " as tmp ;";
+
                 String sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
+                        "from movies, stars_in_movies as sim, stars, ratings " +
+                        "where match (movies.title) against (? in boolean mode) " +
+                        "and movies.year like ? and movies.director like ? " +
+                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                        "and movies.id = ratings.movieId)" +
+                        " as tmp ;";
+                if(title.equals("")){
+                    sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
                         "from movies, stars_in_movies as sim, stars, ratings " +
                         "where movies.title like ? and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
                         "and movies.id = ratings.movieId)" +
                         " as tmp ;";
+
+                    title="%";
+                }
 
                 PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
                 tmpStatement.setString(1, title);
@@ -111,13 +129,25 @@ public class MovieListServlet extends HttpServlet {
 
                 query = "select distinct movies.*, ratings.rating " +
                         "from movies, stars_in_movies as sim, stars, ratings " +
-                        "where movies.title like ? and movies.year like ? and movies.director like ? " +
+                        "where match (movies.title) against (? in boolean mode) " +
+                        "and movies.year like ? and movies.director like ? " +
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
                         "and movies.id = ratings.movieId " +
                         "order by " + orderBy + " " +
                         "limit " + numberOfList + " " +
                         "offset " + offset + ";";
 
+                if(title.equals("%")){
+                    query = "select distinct movies.*, ratings.rating " +
+                            "from movies, stars_in_movies as sim, stars, ratings " +
+                            "where movies.title like ? " +
+                            "and movies.year like ? and movies.director like ? " +
+                            "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                            "and movies.id = ratings.movieId " +
+                            "order by " + orderBy + " " +
+                            "limit " + numberOfList + " " +
+                            "offset " + offset + ";";
+                }
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
 

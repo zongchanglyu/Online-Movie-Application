@@ -1,0 +1,62 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!--My Own CSS-->
+    <link rel="stylesheet" href="test.css"/>
+
+    <title>Login to Fablix</title>
+</head>
+
+<body background="https://images.unsplash.com/photo-1587122402961-4f710d8ce3de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+      style="background-size: cover;
+    background-position: 50% 50%;
+    background-attachment: fixed;">
+<div class="container padding-top-lg">
+    <div class="row">
+        <div style="width: 30%; margin: 25px auto;">
+            <div id="login" class="login">
+                <h2 class="margin-bottom-lg">Login to Fablix</h2>
+                <!-- Set the method to POST to avoid showing the username/password in the URL
+                 The default action is disabled to allow your own implementation. -->
+                <form id="login_form" method="post" action="#">
+                    <label><b>Email</b></label>
+                    <label>
+                        <input name="email" placeholder="Enter Email" type="text">
+                    </label>
+                    <br>
+                    <label><b>Password</b></label>
+                    <label>
+                        <input name="password" placeholder="Enter Password" type="password">
+                    </label>
+                    <br>
+                    <div class="g-recaptcha" data-sitekey="6LfPGPMUAAAAAP6rJN-0TEeRf02m8pVCfZsBmEBJ"></div>
+                    <input class="btn btn-warning" type="submit" value="Login">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="login_error_message"></div>
+</div>
+
+
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="login.js"></script>
+<!-- include recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
+
+</body>
+</html>

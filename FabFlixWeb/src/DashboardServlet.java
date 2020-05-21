@@ -16,7 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-
 // Declaring a WebServlet called StarsServlet, which maps to url "/api/movies"
 @WebServlet(name = "DashboardServlet", urlPatterns = "/api/dashboard")
 public class DashboardServlet extends HttpServlet {
