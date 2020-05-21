@@ -44,13 +44,20 @@ public class AdvSearchServlet extends HttpServlet {
         starName = "%" + starName + "%";
 
         String title = request.getParameter("title");
-        String [] arrTitle = title.split("\\s+");
-        title = "";
-        for(String s: arrTitle){
-            title += "+"+s+"* ";
+        System.out.println("the title is: "+title);
+
+        if(!title.equals("")){
+            String [] arrTitle = title.split("\\s+");
+            System.out.println("size=: "+arrTitle.length);
+            System.out.println("array is: "+arrTitle.toString());
+            title = "";
+            for(String s: arrTitle){
+                title += "+"+s+"* ";
+            }
+            System.out.println("array is: "+arrTitle.toString());
         }
 
-
+        System.out.println(title==null);
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();

@@ -101,6 +101,16 @@ public class MovieListServlet extends HttpServlet {
                         "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
                         "and movies.id = ratings.movieId)" +
                         " as tmp ;";
+                if(title.equals("")){
+                    sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
+                        "from movies, stars_in_movies as sim, stars, ratings " +
+                        "where movies.title like ? and movies.year like ? and movies.director like ? " +
+                        "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                        "and movies.id = ratings.movieId)" +
+                        " as tmp ;";
+
+                    title="%";
+                }
 
                 PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
                 tmpStatement.setString(1, title);
@@ -127,6 +137,17 @@ public class MovieListServlet extends HttpServlet {
                         "limit " + numberOfList + " " +
                         "offset " + offset + ";";
 
+                if(title.equals("%")){
+                    query = "select distinct movies.*, ratings.rating " +
+                            "from movies, stars_in_movies as sim, stars, ratings " +
+                            "where movies.title like ? " +
+                            "and movies.year like ? and movies.director like ? " +
+                            "and movies.id = sim.movieId and sim.starId = stars.id and stars.name like ? " +
+                            "and movies.id = ratings.movieId " +
+                            "order by " + orderBy + " " +
+                            "limit " + numberOfList + " " +
+                            "offset " + offset + ";";
+                }
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
 
