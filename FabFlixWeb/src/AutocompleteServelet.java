@@ -99,6 +99,9 @@ public class AutocompleteServelet extends HttpServlet {
             }
 
             response.getWriter().write(jsonArray.toString());
+            rs.close();
+            statement.close();
+            dbcon.close();
             return;
         } catch (Exception e) {
             System.out.println(e);
