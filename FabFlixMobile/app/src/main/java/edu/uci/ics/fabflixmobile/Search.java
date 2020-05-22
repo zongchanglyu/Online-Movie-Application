@@ -69,6 +69,7 @@ public class Search extends ActionBarActivity {
                         Log.d("mobile-search.success", response);
                         Intent listPage = new Intent(Search.this, ListViewActivity.class);
                         listPage.putExtra("data", response);
+                        message.setText("");
                         startActivity(listPage);
                     }else{
                         Log.d("mobile-search.failed", response);
