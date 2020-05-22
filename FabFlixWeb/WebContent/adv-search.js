@@ -70,7 +70,8 @@ function handleLookup(query, doneCallback) {
     if(sessionStorage.getItem(query)!=null && sessionStorage.getItem(query).length!=0){
         var storagedData = JSON.parse(sessionStorage.getItem(query));
         doneCallback( { suggestions: storagedData } );
-        console.log("Using past query results successfully! Do not need to send data back to database!")
+        console.log("Using cached results successfully! ")
+        console.log("The used suggestion list of cached results are: "+JSON.stringify(storagedData))
         return;
     }
 
@@ -102,7 +103,7 @@ function handleLookup(query, doneCallback) {
  *
  */
 function handleLookupAjaxSuccess(data, query, doneCallback) {
-    console.log("lookup ajax successful")
+    // console.log("lookup ajax successful")
 
     // parse the string into JSON
     var jsonData = JSON.parse(data);
@@ -119,7 +120,8 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
     //     console.log("sessionStorage is successful and data is: "+sessionStorage.getItem(query));
     // }
     sessionStorage.setItem(query, JSON.stringify(jsonData));
-    console.log("sessionStorage is successful and data is: "+sessionStorage.getItem(query));
+    // console.log("SessionStorage is successful! ")
+    console.log("The used suggestion list of server response are: "+sessionStorage.getItem(query));
 
     // call the callback function provided by the autocomplete library
     // add "{suggestions: jsonData}" to satisfy the library response format according to
@@ -176,6 +178,22 @@ $('#autocomplete').autocomplete({
 function handleNormalSearch(query) {
     console.log("doing normal search with query: " + query);
     // TODO: you should do normal search here
+    // console.log("submit search form");
+    // const url = "api/adv-search";
+    // console.log("api/adv-search");
+    // console.log(url);
+    // /**
+    //  * When users click the submit button, the browser will not direct
+    //  * users to the url defined in HTML form. Instead, it will call this
+    //  * event handler when the event is triggered.
+    //  */
+    // searchEvent.preventDefault();
+    //
+    // $.ajax("api/adv-search", {
+    //     method: "GET",
+    //     data: advanceSearch.serialize(),
+    //     success: handleSearchResult
+    // });
 }
 
 // bind pressing enter key to a handler function
@@ -183,7 +201,8 @@ $('#autocomplete').keypress(function(event) {
     // keyCode 13 is the enter key
     if (event.keyCode == 13) {
         // pass the value of the input box to the handler function
-        handleNormalSearch($('#autocomplete').val())
+        console.log("get keypress 13!")
+        // handleNormalSearch($('#autocomplete').val())
     }
 })
 
