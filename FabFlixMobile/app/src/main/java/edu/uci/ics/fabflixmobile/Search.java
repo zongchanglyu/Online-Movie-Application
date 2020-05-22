@@ -39,7 +39,8 @@ public class Search extends ActionBarActivity {
          * To connect to your machine, you need to use the below IP address
          * **/
 //        url = "https://192.168.0.106:8443/fabflix/api/";
-        url = "https://71.69.162.72:47373/fabflix/api/";
+//        url = "https://71.69.162.72:47373/fabflix/api/";
+        url = "https://10.0.2.2:8443/fabflix/api/";
 
         //assign a listener to call a function to handle the user request when clicking a button
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +49,7 @@ public class Search extends ActionBarActivity {
                 search();
             }
         });
+
     }
 
     public void search() {
@@ -56,34 +58,29 @@ public class Search extends ActionBarActivity {
         // Use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         //request type is POST
-        final StringRequest searchRequest = new StringRequest(Request.Method.GET, url + "home", new Response.Listener<String>() {
+        final StringRequest searchRequest = new StringRequest(Request.Method.GET,
+                url + "mobile-search?title=" + movieTitle.getText().toString(),
+                new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //TODO should parse the json response to redirect to appropriate functions.
-                ArrayList<Movie> movies = new ArrayList<>();
                 try{
-                    JSONArray jsonArray = new JSONArray(response);
-                    if(jsonArray != null){
-                        Log.d("search.success", response);
-                        //initialize the activity(page)/destination
+                    if(response != null){
+                        Log.d("mobile-search.success", response);
                         Intent listPage = new Intent(Search.this, ListViewActivity.class);
-                        listPage.putExtra("message", response);
-                        //without starting the activity/page, nothing would happen
+                        listPage.putExtra("data", response);
                         startActivity(listPage);
-//                        //initialize the activity(page)/destination
-//                        Intent listPage = new Intent(Search.this, ListViewActivity.class);
-//                        //without starting the activity/page, nothing would happen
-//                        startActivity(listPage);
                     }else{
-                        Log.d("login.failed", response);
+                        Log.d("mobile-search.failed", response);
                         message.setText("Movie not found, please try again");
                     }
-                }catch(JSONException e){
-                    Log.e("MYAPP", "unexpected JSON exception", e);
+                }catch(Exception e){
+                    Log.e("Search", "unexpected JSON exception", e);
                 }
 //                Log.d("login.success", response);
 //                //initialize the activity(page)/destination
 //                Intent listPage = new Intent(Login.this, ListViewActivity.class);
+//                listPage.putExtra("message", response);
 //                //without starting the activity/page, nothing would happen
 //                startActivity(listPage);
             }
@@ -96,14 +93,13 @@ public class Search extends ActionBarActivity {
                     }
                 }) {
 //            @Override
-//            protected Map<String, String> getParams() {
-//                // Post request form data
-//                final Map<String, String> params = new HashMap<>();
-//                params.put("email", username.getText().toString());
-//                params.put("password", password.getText().toString());
-//
-//                return params;
-//            }
+            protected Map<String, String> getParams() {
+                // Post request form data
+                final Map<String, String> params = new HashMap<>();
+                params.put("title", movieTitle.getText().toString());
+
+                return params;
+            }
         };
 
         // !important: queue.add is where the login request is actually sent

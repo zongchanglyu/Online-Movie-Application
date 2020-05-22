@@ -1,7 +1,6 @@
 package edu.uci.ics.fabflixmobile;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,38 +24,33 @@ public class ListViewActivity extends Activity {
         setContentView(R.layout.listview);
 
         Bundle bundle = getIntent().getExtras();
+        String data = bundle.getString("data");
 
-        String contents = bundle.getString("message");
-
-        try {
-            JSONArray jsonArray = new JSONArray(contents);
+        try{
+            JSONArray jsonArray = new JSONArray(data);
             movies = new ArrayList<>();
-            if(jsonArray != null){
-                for(int i = 0; i < jsonArray.length(); i++){
-                    JSONObject tmp = jsonArray.getJSONObject(i);
-                    String id = tmp.getString("movie_id");
-                    String title = tmp.getString("movie_title");
-                    String year = tmp.getString("movie_year");
-                    String director = tmp.getString("director");
-                    JSONArray genres = tmp.getJSONArray("genres_name");
-                    Set<String> genresName = new HashSet<>();
-                    for(int j = 0; j < genres.length(); j++){
-                        genresName.add(genres.getString(j));
-                    }
-                    JSONArray stars = tmp.getJSONArray("stars_name");
-                    Set<String> starsName = new HashSet<>();
-                    for(int j = 0; j < stars.length(); j++){
-                        starsName.add(stars.getJSONObject(j).getString("star_name"));
-                    }
-                    float rating = (float) tmp.getDouble("rating");
 
-                    movies.add(new Movie(id, title, year, director, rating, genresName, starsName));
-                }
-            }else{
-                Log.d("login.failed", contents);
+            for(int i = 0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String id = jsonObject.getString("movie_id");
+                String title = jsonObject.getString("movie_title");
+                String year = jsonObject.getString("movie_year");
+                String director = jsonObject.getString("movie_director");
+                float rating = (float)jsonObject.getDouble("rating");;
+                JSONArray starsArray = jsonObject.getJSONArray("stars_name");
+                Set<String> stars = new HashSet<>();
+                for(int j = 0; j < starsArray.length(); j++)
+                    stars.add(starsArray.getJSONObject(j).getString("star_name"));
+                JSONArray genresArray = jsonObject.getJSONArray("genres_name");
+                Set<String> genres = new HashSet<>();
+                for(int j = 0; j < genresArray.length(); j++)
+                    genres.add(genresArray.getJSONObject(j).getString("genre_name"));
+
+                Movie movie = new Movie(id, title, year, director, rating, genres, stars);
+                movies.add(movie);
             }
-        }catch(JSONException e){
-            Log.e("MYAPP", "unexpected JSON exception", e);
+        }catch(Exception e){
+            Log.e("ListViewActivity", "unexpected JSON exception", e);
         }
 
         MovieListViewAdapter adapter = new MovieListViewAdapter(movies, this);
@@ -69,7 +62,7 @@ public class ListViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = movies.get(position);
-                String message = String.format("Clicked on position: %d, name: %s, %s", position, movie.getTitle(), movie.getYear());
+                String message = String.format("Clicked on position: %d, title: %s, %s", position, movie.getTitle(), movie.getYear());
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });

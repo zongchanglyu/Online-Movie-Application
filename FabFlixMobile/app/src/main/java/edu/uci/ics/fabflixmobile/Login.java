@@ -77,7 +77,7 @@ public class Login extends ActionBarActivity {
                         message.setText("Email or Password incorrect");
                     }
                 }catch(JSONException e){
-                    Log.e("MYAPP", "unexpected JSON exception", e);
+                    Log.e("Login", "unexpected JSON exception", e);
                 }
 //                Log.d("login.success", response);
 //                //initialize the activity(page)/destination
