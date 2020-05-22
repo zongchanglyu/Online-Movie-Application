@@ -65,12 +65,18 @@ advanceSearch.submit(handleSearchInfo);
  */
 function handleLookup(query, doneCallback) {
     console.log("autocomplete initiated")
-    console.log("sending AJAX request to backend Java Servlet")
 
     // TODO: if you want to check past query results first, you can do it here
+    if(sessionStorage.getItem(query)!=null && sessionStorage.getItem(query).length!=0){
+        var storagedData = JSON.parse(sessionStorage.getItem(query));
+        doneCallback( { suggestions: storagedData } );
+        console.log("Using past query results successfully! Do not need to send data back to database!")
+        return;
+    }
 
     // sending the HTTP GET request to the Java Servlet endpoint hero-suggestion
     // with the query data
+    console.log("sending AJAX request to backend Java Servlet")
     jQuery.ajax({
         "method": "GET",
         // generate the request url from the query.
@@ -100,9 +106,20 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 
     // parse the string into JSON
     var jsonData = JSON.parse(data);
-    console.log(jsonData)
+    console.log(jsonData);
+
+    // for(let i=0; i<jsonData.length;i++){
+    //     console.log("jsonData is: "+jsonData[i]["value"]);
+    // }
 
     // TODO: if you want to cache the result into a global variable you can do it here
+    // for(let i=0; i<jsonData.length;i++){
+    //     // console.log("jsonData is: "+jsonData[i]["value"]);
+    //     sessionStorage.setItem(query, JSON.stringify(jsonData[i]));
+    //     console.log("sessionStorage is successful and data is: "+sessionStorage.getItem(query));
+    // }
+    sessionStorage.setItem(query, JSON.stringify(jsonData));
+    console.log("sessionStorage is successful and data is: "+sessionStorage.getItem(query));
 
     // call the callback function provided by the autocomplete library
     // add "{suggestions: jsonData}" to satisfy the library response format according to
@@ -120,7 +137,10 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 function handleSelectSuggestion(suggestion) {
     // TODO: jump to the specific result page based on the selected suggestion
 
-    console.log("you select " + suggestion["value"] + " with ID " + suggestion["data"]["heroID"])
+    console.log("you select " + suggestion["value"] + " with ID " + suggestion["data"]["movieId"])
+
+    let movieId = suggestion["data"]["movieId"];
+    window.location.replace("single-movie.html?id="+movieId);
 }
 
 
@@ -146,6 +166,7 @@ $('#autocomplete').autocomplete({
     deferRequestBy: 300,
     // there are some other parameters that you might want to use to satisfy all the requirements
     // TODO: add other parameters, such as minimum characters
+    minChars: 3,
 });
 
 
