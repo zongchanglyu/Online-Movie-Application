@@ -51,8 +51,8 @@ public class SingleMoviePage extends Activity {
             subtitle = findViewById(R.id.subtitle);
 
             movieTitle.setText(tmpMovie.getTitle());
-            subtitle.setText("year: " + tmpMovie.getYear() + "\nrating: " + tmpMovie.getRating() + "\ndirector: " + tmpMovie.getDirector() +
-                    "\ngenre: " + tmpMovie.getGenresString() + "\nstars: " + tmpMovie.getStarsString());
+            subtitle.setText("year:\t" + tmpMovie.getYear() + "\nrating:\t" + tmpMovie.getRating() + "\ndirector:\t" + tmpMovie.getDirector() +
+                    "\n\ngenre:\t" + tmpMovie.getGenresString() + "\n\nstars:\t" + tmpMovie.getStarsString());
 
             Log.d("SingleMoviePage", data);
 

@@ -34,14 +34,21 @@ public class MobileSearch extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-        String title = "%" + request.getParameter("title") + "%";
+//        String title = "%" + request.getParameter("title") + "%";
+        String title = request.getParameter("title");
+        String [] arrTitle = title.split("\\s+");
+        title = "";
+        for(String s: arrTitle){
+            title += "+" + s + "* ";
+        }
 
         try{
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
             String query = "select distinct movies.*, ratings.rating from movies, ratings " +
-                    "where movies.title like ? and movies.id = ratings.movieId " +
+                    "where match (movies.title) against (? in boolean mode) " +
+                    "and movies.id = ratings.movieId " +
                     "order by rating desc, title asc " +
                     ";";
 
