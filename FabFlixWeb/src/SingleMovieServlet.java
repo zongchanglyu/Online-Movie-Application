@@ -80,6 +80,7 @@ public class SingleMovieServlet extends HttpServlet {
             ResultSet genresRS = genresStatement.executeQuery();
             ResultSet starsRS = starsStatement.executeQuery();
 
+            System.out.println("check 1");
             // First, get movie info
             movieRS.next();
             String movieId = movieRS.getString("id");
@@ -88,6 +89,7 @@ public class SingleMovieServlet extends HttpServlet {
             String movieDirector = movieRS.getString("director");
             float rating = movieRS.getFloat("rating");
 
+            System.out.println("check 2");
             // Second, iterate and put genres info into genresJsonArray
             JsonArray genresJsonArray = new JsonArray();
             while(genresRS.next()){
@@ -101,6 +103,7 @@ public class SingleMovieServlet extends HttpServlet {
                 genresJsonArray.add(genresJsonObject);
             }
 
+            System.out.println("check 3");
             // Third, iterate and put stars info into starsJsonArray
             JsonArray starsJsonArray = new JsonArray();
             while(starsRS.next()){
@@ -115,6 +118,7 @@ public class SingleMovieServlet extends HttpServlet {
 
                 starsJsonArray.add(starsJsonObject);
             }
+
 
             // page info from session
             HttpSession session = request.getSession();

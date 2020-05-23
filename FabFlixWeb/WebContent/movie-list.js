@@ -16,8 +16,12 @@
 function handleMoviesResult(resultData) {
     console.log("handleMoviesResult: populating movie table from resultData");
     console.log(resultData[0]);
-    $("#sortOrder").find("option[value='" + resultData[0]['orderBy'] + "']").attr("selected",true);
 
+    if(resultData[0]==null){
+        console.log("No result of this search!")
+        return;
+    }
+    $("#sortOrder").find("option[value='" + resultData[0]['orderBy'] + "']").attr("selected",true);
     $("#resultLimit").find("option[value='" + resultData[0]['numberOfList'] + "']").attr("selected",true);
 
     let currentPage = resultData[0]['page'];

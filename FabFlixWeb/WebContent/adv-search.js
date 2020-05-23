@@ -70,14 +70,15 @@ function handleLookup(query, doneCallback) {
     if(sessionStorage.getItem(query)!=null && sessionStorage.getItem(query).length!=0){
         var storagedData = JSON.parse(sessionStorage.getItem(query));
         doneCallback( { suggestions: storagedData } );
-        console.log("Using cached results successfully! ")
-        console.log("The used suggestion list of cached results are: "+JSON.stringify(storagedData))
+        console.log("Using Front-end cache results successfully! ")
+        console.log(storagedData);
+        console.log("The used suggestion list from Front-end cache: "+JSON.stringify(storagedData))
         return;
     }
 
     // sending the HTTP GET request to the Java Servlet endpoint hero-suggestion
     // with the query data
-    console.log("sending AJAX request to backend Java Servlet")
+    console.log("Sending AJAX request to backend Java Servlet! ")
     jQuery.ajax({
         "method": "GET",
         // generate the request url from the query.
@@ -121,7 +122,7 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
     // }
     sessionStorage.setItem(query, JSON.stringify(jsonData));
     // console.log("SessionStorage is successful! ")
-    console.log("The used suggestion list of server response are: "+sessionStorage.getItem(query));
+    console.log("The used suggestion list from Back-end server: "+sessionStorage.getItem(query));
 
     // call the callback function provided by the autocomplete library
     // add "{suggestions: jsonData}" to satisfy the library response format according to

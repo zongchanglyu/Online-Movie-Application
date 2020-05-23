@@ -54,7 +54,7 @@ public class AdvSearchServlet extends HttpServlet {
             for(String s: arrTitle){
                 title += "+"+s+"* ";
             }
-            System.out.println("array is: "+arrTitle.toString());
+            System.out.println("array is: "+title);
         }
 
 //        System.out.println(title==null);
