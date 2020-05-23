@@ -43,7 +43,7 @@ public class MobileSearch extends HttpServlet {
             String query = "select distinct movies.*, ratings.rating from movies, ratings " +
                     "where movies.title like ? and movies.id = ratings.movieId " +
                     "order by rating desc, title asc " +
-                    "limit 160;";
+                    ";";
 
             PreparedStatement statement = dbcon.prepareStatement(query);
             statement.setString(1, title);

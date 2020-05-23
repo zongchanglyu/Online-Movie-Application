@@ -53,4 +53,16 @@ public class Movie {
     public Set<String> getStars() {
         return stars;
     }
+
+    public String getGenresString(){
+        String s = genres.toString();
+        s = s.substring(1, s.length() - 1);
+        return s;
+    }
+
+    public String getStarsString(){
+        String s = stars.toString();
+        s = s.substring(1, s.length() - 1);
+        return s;
+    }
 }
