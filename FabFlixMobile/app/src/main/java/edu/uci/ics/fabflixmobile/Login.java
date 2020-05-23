@@ -69,9 +69,9 @@ public class Login extends ActionBarActivity {
                     if(jObject.getString("status").equals("success")){
                         Log.d("login.success", response);
                         //initialize the activity(page)/destination
-                        Intent listPage = new Intent(Login.this, Search.class);
+                        Intent searchPage = new Intent(Login.this, Search.class);
                         //without starting the activity/page, nothing would happen
-                        startActivity(listPage);
+                        startActivity(searchPage);
                     }else{
                         Log.d("login.failed", response);
                         message.setText("Email or Password incorrect");
