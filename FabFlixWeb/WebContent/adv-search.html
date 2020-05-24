@@ -13,6 +13,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -40,7 +42,7 @@
         <h2>Advanced Search</h2>
         <form id="advance_search_form" method="get" action="#">
             <label>
-                <input name="title" placeholder="movie title" type="text">
+                <input id="autocomplete" class="autocomplete-searchbox" name="title" placeholder="movie title" type="text">
             </label>
             <br>
             <label>
@@ -60,8 +62,16 @@
     </div>
 </div>
 
+<!--<div class="container">-->
+<!--    <input type="text" name="hero" id="autocompletes"-->
+<!--           class="autocomplete-searchbox form-control"-->
+<!--           placeholder="Search Super Heroes"/>-->
+<!--</div>-->
+
 <!-- Load jQuery and Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- include jquery autocomplete JS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 

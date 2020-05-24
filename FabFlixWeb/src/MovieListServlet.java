@@ -122,7 +122,9 @@ public class MovieListServlet extends HttpServlet {
                 if(tmpRS.next()){
                     numOfData = tmpRS.getString("count");
                     movieParameter.addProperty("numOfData", numOfData);
+                    System.out.println("the count is: "+numOfData);
                 }
+
                 tmpRS.close();
                 tmpStatement.close();
 

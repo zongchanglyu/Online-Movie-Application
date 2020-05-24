@@ -48,16 +48,16 @@ public class AdvSearchServlet extends HttpServlet {
 
         if(!title.equals("")){
             String [] arrTitle = title.split("\\s+");
-            System.out.println("size=: "+arrTitle.length);
-            System.out.println("array is: "+arrTitle.toString());
+//            System.out.println("size=: "+arrTitle.length);
+//            System.out.println("array is: "+arrTitle.toString());
             title = "";
             for(String s: arrTitle){
                 title += "+"+s+"* ";
             }
-            System.out.println("array is: "+arrTitle.toString());
+            System.out.println("array is: "+title);
         }
 
-        System.out.println(title==null);
+//        System.out.println(title==null);
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
