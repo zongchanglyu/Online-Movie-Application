@@ -59,6 +59,7 @@ public class LoginFilter implements Filter {
         allowedURIs.add("api/dashboard");
         allowedURIs.add("api/add-new-star");
         allowedURIs.add("api/add-new-movie");
+        allowedURIs.add("api/mobile-search");
     }
 
     public void destroy() {
