@@ -142,7 +142,9 @@ public class ListViewActivity extends Activity {
         String url;
 //        url = "https://192.168.0.106:8443/fabflix/api/";
 //        url = "https://new.soommate.com:47373/fabflix/api/";
-        url = "https://71.69.162.72:47373/fabflix/api/";
+//        url = "https://71.69.162.72:47373/fabflix/api/";
+        url = "https://52.53.150.120:8443/fabflix/api/";
+
         // Use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         //request type is POST

@@ -39,8 +39,9 @@ public class Search extends ActionBarActivity {
          * To connect to your machine, you need to use the below IP address
          * **/
 //        url = "https://192.168.0.106:8443/fabflix/api/";
-        url = "https://71.69.162.72:47373/fabflix/api/";
+//        url = "https://71.69.162.72:47373/fabflix/api/";
 //        url = "https://10.0.2.2:8443/fabflix/api/";
+        url = "https://52.53.150.120:8443/fabflix/api/";
 
         //assign a listener to call a function to handle the user request when clicking a button
         searchButton.setOnClickListener(new View.OnClickListener() {

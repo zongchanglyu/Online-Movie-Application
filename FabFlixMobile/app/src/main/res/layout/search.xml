@@ -29,6 +29,7 @@
     <EditText
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:singleLine="true"
             android:id = "@+id/movieTitle"
             android:hint = "Movie Title"
             android:focusable = "true"
