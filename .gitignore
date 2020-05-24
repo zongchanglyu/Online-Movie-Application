@@ -1,8 +1,10 @@
 .idea
+.gradle
 .DS_Store
 *.iml
 target/
 /moviedb
+/out
 
 FbaFlixWeb/.idea
 FbaFlixWeb/.DS_Store
