@@ -179,22 +179,22 @@ $('#autocomplete').autocomplete({
 function handleNormalSearch(query) {
     console.log("doing normal search with query: " + query);
     // TODO: you should do normal search here
-    // console.log("submit search form");
-    // const url = "api/adv-search";
-    // console.log("api/adv-search");
-    // console.log(url);
-    // /**
-    //  * When users click the submit button, the browser will not direct
-    //  * users to the url defined in HTML form. Instead, it will call this
-    //  * event handler when the event is triggered.
-    //  */
-    // searchEvent.preventDefault();
-    //
-    // $.ajax("api/adv-search", {
-    //     method: "GET",
-    //     data: advanceSearch.serialize(),
-    //     success: handleSearchResult
-    // });
+    console.log("submit search form");
+    const url = "api/adv-search";
+    console.log("api/adv-search");
+    console.log(url);
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    query.preventDefault();
+
+    $.ajax("api/adv-search", {
+        method: "GET",
+        data: advanceSearch.serialize(),
+        success: handleSearchResult
+    });
 }
 
 // bind pressing enter key to a handler function
@@ -203,7 +203,7 @@ $('#autocomplete').keypress(function(event) {
     if (event.keyCode == 13) {
         // pass the value of the input box to the handler function
         console.log("get keypress 13!")
-        // handleNormalSearch($('#autocomplete').val())
+        handleNormalSearch($('#autocomplete').val())
     }
 })
 
