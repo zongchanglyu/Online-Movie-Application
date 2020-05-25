@@ -34,26 +34,43 @@ public class MobileSearch extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-//        String title = "%" + request.getParameter("title") + "%";
-        String title = request.getParameter("title");
-        String [] arrTitle = title.split("\\s+");
-        title = "";
+        String insertTitle = request.getParameter("title");
+        String [] arrTitle = insertTitle.split("\\s+");
+        String titles = "";
         for(String s: arrTitle){
-            title += "+" + s + "* ";
+            titles += "+" + s + "* ";
         }
 
         try{
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-            String query = "select distinct movies.*, ratings.rating from movies, ratings " +
-                    "where match (movies.title) against (? in boolean mode) " +
-                    "and movies.id = ratings.movieId " +
-                    "order by rating desc, title asc " +
-                    ";";
+//            String query = "select distinct movies.*, ratings.rating from movies, ratings " +
+//                    "where match (movies.title) against (? in boolean mode) " +
+//                    "and movies.id = ratings.movieId " +
+//                    "order by rating desc, title asc " +
+//                    ";";
+
+            // fuzzy search
+            String query;
+
+            if(arrTitle.length <= 1){
+                query = "select distinct movies.*, ratings.rating from movies " +
+                        "join ratings " +
+                        "on movies.id = ratings.movieId " +
+                        "where match (title) against (? in boolean mode) or edrec (?, title, 2) " +
+                        "order by rating desc, title asc;";
+            }else{
+                query = "select distinct movies.*, ratings.rating from movies " +
+                        "join ratings " +
+                        "on movies.id = ratings.movieId " +
+                        "where match (title) against (? in boolean mode) or edth (?, title, 2) " +
+                        "order by rating desc, title asc;";
+            }
 
             PreparedStatement statement = dbcon.prepareStatement(query);
-            statement.setString(1, title);
+            statement.setString(1, titles);
+            statement.setString(2, insertTitle);
 
             // Perform the query
             ResultSet rs = statement.executeQuery();
