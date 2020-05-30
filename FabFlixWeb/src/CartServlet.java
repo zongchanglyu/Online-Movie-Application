@@ -3,6 +3,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +26,8 @@ public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+//    @Resource(name = "jdbc/moviedb")
+//    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -44,8 +46,12 @@ public class CartServlet extends HttpServlet {
                 out.write("Welcome! Your cart is empty, you can go shopping now!");
             }
             else {
+                Context initContext = new InitialContext();
+                Context envContext = (Context) initContext.lookup("java:/comp/env");
+                DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+
                 // Get a connection from dataSource
-                Connection dbcon = dataSource.getConnection();
+                Connection dbcon = ds.getConnection();
 
 
                 String query = "select movies.title from movies where movies.id = ?;";

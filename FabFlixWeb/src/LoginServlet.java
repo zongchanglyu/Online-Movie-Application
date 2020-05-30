@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         String ua = request.getHeader("User-Agent");
         System.out.println(ua);
 
-        if(ua.lastIndexOf("Android") < 0){
+        if(ua.lastIndexOf("Android") < 0 || ua.lastIndexOf("Macintosh") < 0){
             String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
             System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
 
