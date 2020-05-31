@@ -1,7 +1,9 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +22,8 @@ public class AutocompleteServelet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+//    @Resource(name = "jdbc/moviedb")
+//    private DataSource dataSource;
 
     /*
      * populate the Super hero hash map.
@@ -83,7 +85,15 @@ public class AutocompleteServelet extends HttpServlet {
             // this example only does a substring match
             // TODO: in project 4, you should do full text search with MySQL to find the matches on movies and stars
 
-            Connection dbcon = dataSource.getConnection();
+//            Connection dbcon = dataSource.getConnection();
+            Context initCtx = new InitialContext();
+
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+            // Look up our data source
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
+
+            Connection dbcon = ds.getConnection();
 
             String sqlQuery = "select id, title from movies where match (title) against (? in boolean mode) limit 10; ";
 

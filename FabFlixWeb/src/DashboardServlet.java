@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +24,8 @@ public class DashboardServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+//    @Resource(name = "jdbc/moviedb")
+//    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,13 +46,21 @@ public class DashboardServlet extends HttpServlet {
                 jsonObject.addProperty("empFullname", employee.getFullname());
             }
 
-            Connection database = dataSource.getConnection();
+//            Connection database = dataSource.getConnection();
+            Context initCtx = new InitialContext();
+
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+            // Look up our data source
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
+
+            Connection dbcon = ds.getConnection();
             JsonArray jsonArray = new JsonArray();
             String query = "select table_name, group_concat(concat(column_name, ':', column_type)) as attributes " +
                            "from information_schema.columns " +
                            "where table_schema = 'moviedb' and table_name != 'customers_backup' " +
                            "group by table_name;";
-            Statement statement = database.createStatement();
+            Statement statement = dbcon.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while(rs.next()){
                 String table_name = rs.getString("table_name");
@@ -66,7 +76,7 @@ public class DashboardServlet extends HttpServlet {
 
             rs.close();
             statement.close();
-            database.close();
+            dbcon.close();
 
             // write JSON string to output
             out.write(jsonObject.toString());

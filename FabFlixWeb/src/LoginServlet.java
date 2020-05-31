@@ -1,7 +1,9 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import javax.naming.Context;
 
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
+import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +27,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+//    @Resource(name = "jdbc/moviedb")
+//    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,7 +65,16 @@ public class LoginServlet extends HttpServlet {
 
         try {
             // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
+//            Connection dbcon = dataSource.getConnection();
+
+            Context initCtx = new InitialContext();
+
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+            // Look up our data source
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
+
+            Connection dbcon = ds.getConnection();
 
             String query = "select * from customers where email = ?;";
 
