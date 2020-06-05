@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,6 +41,10 @@ public class MovieListServlet extends HttpServlet {
 //        String query = "";
 
         try{
+
+            long startTimeTS = System.nanoTime();
+            long elapsedTimeTJ = 0;
+
             // Get a connection from dataSource
 //            Connection dbcon = dataSource.getConnection();
             Context initCtx = new InitialContext();
@@ -152,6 +155,8 @@ public class MovieListServlet extends HttpServlet {
                     title="%";
                 }
 
+                long startTimeTJ1 = System.nanoTime();
+
                 PreparedStatement tmpStatement = dbcon.prepareStatement(sumQuery);
                 tmpStatement.setString(1, title);
                 tmpStatement.setString(2, year);
@@ -159,6 +164,10 @@ public class MovieListServlet extends HttpServlet {
                 tmpStatement.setString(4, starName);
 
                 ResultSet tmpRS = tmpStatement.executeQuery();
+
+                long endTimeTJ1 = System.nanoTime();
+                long elapsedTimeTJ1 = endTimeTJ1 - startTimeTJ1;
+
                 if(tmpRS.next()){
                     numOfData = tmpRS.getString("count");
                     if(movieParameter != null) movieParameter.addProperty("numOfData", numOfData);
@@ -190,6 +199,9 @@ public class MovieListServlet extends HttpServlet {
                             "limit " + numberOfList + " " +
                             "offset " + offset + ";";
                 }
+
+                long startTimeTJ2 = System.nanoTime();
+
                 // Declare our statement
                 statement = dbcon.prepareStatement(query);
 
@@ -199,6 +211,11 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(2, year);
                 statement.setString(3, director);
                 statement.setString(4, starName);
+
+                long endTimeTJ2 = System.nanoTime();
+                long elapsedTimeTJ2 = endTimeTJ2 - startTimeTJ2;
+
+                elapsedTimeTJ = elapsedTimeTJ1 + elapsedTimeTJ2;
 
             }else if("browse-by-genre".equals(status)){
                 String sumQuery = "select count(*) as count from (select movies.*, ratings.rating " +
@@ -290,8 +307,9 @@ public class MovieListServlet extends HttpServlet {
 
             }
 
-            // Perform the query
+//             Perform the query
             rs = statement.executeQuery();
+
 
             while (rs.next()) {
                 String movie_id = rs.getString("id");
@@ -368,6 +386,38 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
 
             // write JSON string to output
             out.write(jsonArray.toString());
+
+            if("adv-search".equals(status)){
+                long endTimeTS = System.nanoTime();
+                long elapsedTimeTS = endTimeTS - startTimeTS;
+                String contextPath = request.getServletContext().getRealPath("/");
+
+                String xmlFilePath=contextPath+"Time_Records";
+
+                System.out.println("file path is: "+xmlFilePath);
+                File myfile = new File(xmlFilePath);
+                System.out.println("Save data in file: "+myfile.getName());
+
+                try(FileWriter fw = new FileWriter(xmlFilePath, true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    Writer pOut = bw)
+                {
+
+                    String stringTS = Long.toString(elapsedTimeTS);
+                    String stringTJ = Long.toString(elapsedTimeTJ);
+
+                    System.out.println("TS are: "+stringTS);
+                    System.out.println("TJ are: "+stringTJ);
+
+                    pOut.write(stringTS+","+stringTJ + System.lineSeparator());
+//                    pOut.write("TS are: "+stringTS+", "+"TJ are: "+stringTJ + System.lineSeparator());
+                } catch (IOException e) {
+                    System.out.println("writing file failed!!!");
+                }
+            }
+
+
+
             // set response status to 200 (OK)
             response.setStatus(200);
 
