@@ -156,7 +156,9 @@ function handleSelectSuggestion(suggestion) {
  *   https://www.devbridge.com/sourcery/components/jquery-autocomplete/
  *
  */
+
 // $('#autocomplete') is to find element by the ID "autocomplete"
+/*
 $('#autocomplete').autocomplete({
     // documentation of the lookup function can be found under the "Custom lookup function" section
     lookup: function (query, doneCallback) {
@@ -171,7 +173,7 @@ $('#autocomplete').autocomplete({
     // TODO: add other parameters, such as minimum characters
     minChars: 3,
 });
-
+*/
 
 /*
  * do normal full text search if no suggestion is selected
@@ -197,6 +199,8 @@ function handleNormalSearch(query) {
     });
 }
 
+/*
+
 // bind pressing enter key to a handler function
 $('#autocomplete').keypress(function(event) {
     // keyCode 13 is the enter key
@@ -206,6 +210,8 @@ $('#autocomplete').keypress(function(event) {
         handleNormalSearch($('#autocomplete').val())
     }
 })
+
+*/
 
 // TODO: if you have a "search" button, you may want to bind the onClick event as well of that button
 

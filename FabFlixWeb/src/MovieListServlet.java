@@ -55,33 +55,64 @@ public class MovieListServlet extends HttpServlet {
             // Get a instance of current session on the request
             HttpSession session = request.getSession();
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
+            String status = "adv-search";
+            String title, year, director, starName;
+            String genreId = "1";
+            String firstLater = "";
+            String orderBy = "rating desc, title asc";
+            String numberOfList = "10";
+            String page = "0";
+            String numOfData = "0";
+            String offset = "0";
 
-            String status = movieParameter.get("status").getAsString();
-            JsonElement titleElement = movieParameter.get("title");
-            String title = titleElement == null ? null : titleElement.getAsString();
-            JsonElement yearElement = movieParameter.get("year");
-            String year = yearElement == null ? null : yearElement.getAsString();
-            JsonElement directorElement = movieParameter.get("director");
-            String director = directorElement == null ? null : directorElement.getAsString();
-            JsonElement starNameElement = movieParameter.get("starName");
-            String starName = starNameElement == null ? null : starNameElement.getAsString();
+            if(movieParameter != null){
+                JsonElement statusElement = movieParameter.get("status");
+                status = statusElement == null ? null : statusElement.getAsString();
+                JsonElement titleElement = movieParameter.get("title");
+                title = titleElement == null ? null : titleElement.getAsString();
+                JsonElement yearElement = movieParameter.get("year");
+                year = yearElement == null ? null : yearElement.getAsString();
+                JsonElement directorElement = movieParameter.get("director");
+                director = directorElement == null ? null : directorElement.getAsString();
+                JsonElement starNameElement = movieParameter.get("starName");
+                starName = starNameElement == null ? null : starNameElement.getAsString();
 //            JsonElement genreElement = movieParameter.get("genre");
-//            String genre = genreElement == null ? null : genreElement.getAsString();
-            JsonElement genreIdElement = movieParameter.get("genreId");
-            String genreId = genreIdElement == null ? null : genreIdElement.getAsString();
-            JsonElement firstLaterElement = movieParameter.get("firstLater");
-            String firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
-            JsonElement orderByElement = movieParameter.get("orderBy");
-            String orderBy = orderByElement == null ? "rating desc, title asc" : orderByElement.getAsString();
-            JsonElement numberOfListElement = movieParameter.get("numberOfList");
-            String numberOfList = numberOfListElement == null ? "10" : numberOfListElement.getAsString();
-            JsonElement pageElement = movieParameter.get("page");
-            String page = pageElement == null ? "0" : pageElement.getAsString();
-            JsonElement numOfDataElement = movieParameter.get("numOfData");
-            String numOfData = numOfDataElement == null ? "0" : numOfDataElement.getAsString();
+//            genre = genreElement == null ? null : genreElement.getAsString();
+                JsonElement genreIdElement = movieParameter.get("genreId");
+                genreId = genreIdElement == null ? null : genreIdElement.getAsString();
+                JsonElement firstLaterElement = movieParameter.get("firstLater");
+                firstLater = firstLaterElement == null ? null : firstLaterElement.getAsString();
+                JsonElement orderByElement = movieParameter.get("orderBy");
+                orderBy = orderByElement == null ? "rating desc, title asc" : orderByElement.getAsString();
+                JsonElement numberOfListElement = movieParameter.get("numberOfList");
+                numberOfList = numberOfListElement == null ? "10" : numberOfListElement.getAsString();
+                JsonElement pageElement = movieParameter.get("page");
+                page = pageElement == null ? "0" : pageElement.getAsString();
+                JsonElement numOfDataElement = movieParameter.get("numOfData");
+                numOfData = numOfDataElement == null ? "0" : numOfDataElement.getAsString();
 
-            int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
-            String offset = String.valueOf(offsetInt);
+                int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
+                offset = String.valueOf(offsetInt);
+            }else{
+                status = "adv-search";
+                System.out.println(request.getParameter("title"));
+                title = request.getParameter("title") != null ? request.getParameter("title") : "";
+                if(!title.equals("")){
+                    String [] arrTitle = title.split("\\s+");
+                    title = "";
+                    for(String s: arrTitle){
+                        title += "+"+s+"* ";
+                    }
+                }
+                year = "%";
+                director = "%";
+                starName = "%";
+            }
+
+
+
+            // Retrieve parameters from url request.
+
 
             ResultSet rs;
             JsonArray jsonArray = new JsonArray();
@@ -130,7 +161,7 @@ public class MovieListServlet extends HttpServlet {
                 ResultSet tmpRS = tmpStatement.executeQuery();
                 if(tmpRS.next()){
                     numOfData = tmpRS.getString("count");
-                    movieParameter.addProperty("numOfData", numOfData);
+                    if(movieParameter != null) movieParameter.addProperty("numOfData", numOfData);
                     System.out.println("the count is: "+numOfData);
                 }
 
