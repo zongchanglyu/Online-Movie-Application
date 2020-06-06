@@ -3,7 +3,7 @@
     
     - #### Names: Haoming Gao, Zongchang Lyu
     
-    - #### Project 5 Video Demo Link: 
+    - #### Project 5 Video Demo Link: https://youtu.be/IhSOYA-Fhs4
 
     - #### Instruction of deployment: 
       The method that we deploy our application with tomcat is the same as the first method which professor told in lecture. Our application generate a .war file, after we login 'manager app' at tomcat main page, we add this .war file and deploy it. The detail can also be seen in the demo video above.
