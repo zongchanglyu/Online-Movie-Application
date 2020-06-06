@@ -25,8 +25,8 @@ public class MovieListServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
-//    @Resource(name = "jdbc/moviedb")
-//    private DataSource dataSource;
+    @Resource(name = "jdbc/moviedb")
+    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -43,15 +43,15 @@ public class MovieListServlet extends HttpServlet {
 
         try{
             // Get a connection from dataSource
-//            Connection dbcon = dataSource.getConnection();
-            Context initCtx = new InitialContext();
+            Connection dbcon = dataSource.getConnection();
+//            Context initCtx = new InitialContext();
+//
+//            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+//
+//            // Look up our data source
+//            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
 
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-
-            // Look up our data source
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
-
-            Connection dbcon = ds.getConnection();
+//            Connection dbcon = ds.getConnection();
             // Get a instance of current session on the request
             HttpSession session = request.getSession();
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
