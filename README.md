@@ -77,13 +77,13 @@
 
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](./jMeter-test/scaled-case1.png)   | 209                         | 13.2693                                  | 6.4425                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 210                         | 103.9614                                  | 46.7099                        | ??           |
-| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | 314                         | 103.5723                                  | 44.3888                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 207                         | 283.8234                                  | 225.7281                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](./jMeter-test/single-case1.png)   | 209                         | 13.2693                                  | 6.4425                        | ??           |
+| Case 2: HTTP/10 threads                        | ![](./jMeter-test/single-case2.png)   | 210                         | 103.9614                                  | 46.7099                        | ??           |
+| Case 3: HTTPS/10 threads                       | ![](./jMeter-test/single-case3.png)   | 314                         | 103.5723                                  | 44.3888                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](./jMeter-test/single-case4.png)   | 207                         | 283.8234                                  | 225.7281                        | ??           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 113                         | 16.3268                                  | 7.2736                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 153                         | 48.9252                                  | 21.2482                        | ??           |
-| Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 152                         | 126.5538                                  | 98.7846                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](./jMeter-test/scaled-case1.png)   | 113                         | 16.3268                                  | 7.2736                        | ??           |
+| Case 2: HTTP/10 threads                        | ![](./jMeter-test/scaled-case1.png)   | 153                         | 48.9252                                  | 21.2482                        | ??           |
+| Case 3: HTTP/10 threads/No connection pooling  | ![](./jMeter-test/scaled-case1.png)   | 152                         | 126.5538                                  | 98.7846                        | ??           |
