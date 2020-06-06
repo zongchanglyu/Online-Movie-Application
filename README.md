@@ -77,7 +77,7 @@
 
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](jMeter/Time_Records_scaled-case1-1)   | 209                         | 13.2693                                  | 6.4425                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-114/blob/master/jMeter-test/Time_Records_scaled-case1-1)   | 209                         | 13.2693                                  | 6.4425                        | ??           |
 | Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 210                         | 103.9614                                  | 46.7099                        | ??           |
 | Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | 314                         | 103.5723                                  | 44.3888                        | ??           |
 | Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 207                         | 283.8234                                  | 225.7281                        | ??           |
