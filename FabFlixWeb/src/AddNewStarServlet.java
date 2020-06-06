@@ -1,7 +1,7 @@
 import com.google.gson.JsonObject;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-//import javax.annotation.Resource;
+import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +20,8 @@ public class AddNewStarServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     // Create a dataSource which registered in web.xml
-//    @Resource(name = "jdbc/moviedb")
-//    private DataSource dataSource;
+    @Resource(name = "jdbc/master")
+    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -36,15 +36,8 @@ public class AddNewStarServlet extends HttpServlet {
 
         try {
             // Get a connection from dataSource
-//            Connection dbcon = dataSource.getConnection();
-            Context initCtx = new InitialContext();
+            Connection dbcon = dataSource.getConnection();
 
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-
-            // Look up our data source
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
-
-            Connection dbcon = ds.getConnection();
             String query = "select max(id) as starMaxId from stars;";
             PreparedStatement statement = dbcon.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
