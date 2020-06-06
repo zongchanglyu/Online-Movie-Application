@@ -58,7 +58,7 @@ public class MovieListServlet extends HttpServlet {
             // Get a instance of current session on the request
             HttpSession session = request.getSession();
             JsonObject movieParameter = (JsonObject) session.getAttribute("movieParameter");
-            String status = "adv-search";
+            String status = null;
             String title, year, director, starName;
             String genreId = "1";
             String firstLater = "";
@@ -97,8 +97,6 @@ public class MovieListServlet extends HttpServlet {
                 int offsetInt = (Integer.parseInt(page) * Integer.parseInt(numberOfList));
                 offset = String.valueOf(offsetInt);
             }else{
-                status = "adv-search";
-                System.out.println(request.getParameter("title"));
                 title = request.getParameter("title") != null ? request.getParameter("title") : "";
                 if(!title.equals("")){
                     String [] arrTitle = title.split("\\s+");
@@ -119,7 +117,6 @@ public class MovieListServlet extends HttpServlet {
 
             ResultSet rs;
             JsonArray jsonArray = new JsonArray();
-            System.out.println(status);
             String query = "";
             PreparedStatement statement = null;
 
@@ -129,7 +126,7 @@ public class MovieListServlet extends HttpServlet {
 //                case "browse-by-title" : rs = executeBrowseByTitle(movieParameter); break;
 //            }
 
-            if("adv-search".equals(status)){
+            if(status == null || "adv-search".equals(status)){
 //                String sumQuery = "select count(*) as count from (select distinct movies.*, ratings.rating " +
 //                        "from movies, stars_in_movies as sim, stars, ratings " +
 //                        "where movies.title like ? and movies.year like ? and movies.director like ? " +
@@ -171,7 +168,6 @@ public class MovieListServlet extends HttpServlet {
                 if(tmpRS.next()){
                     numOfData = tmpRS.getString("count");
                     if(movieParameter != null) movieParameter.addProperty("numOfData", numOfData);
-                    System.out.println("the count is: "+numOfData);
                 }
 
                 tmpRS.close();
@@ -387,33 +383,26 @@ where movies.id = sim.movieId and sim.starId = tmp.id group by sim.starId order 
             // write JSON string to output
             out.write(jsonArray.toString());
 
-            if("adv-search".equals(status)){
-                long endTimeTS = System.nanoTime();
-                long elapsedTimeTS = endTimeTS - startTimeTS;
-                String contextPath = request.getServletContext().getRealPath("/");
+            long endTimeTS = System.nanoTime();
+            long elapsedTimeTS = endTimeTS - startTimeTS;
+            String contextPath = request.getServletContext().getRealPath("/");
 
-                String xmlFilePath=contextPath+"Time_Records";
+            String xmlFilePath=contextPath+"Time_Records";
 
-                System.out.println("file path is: "+xmlFilePath);
-                File myfile = new File(xmlFilePath);
-                System.out.println("Save data in file: "+myfile.getName());
+            File myfile = new File(xmlFilePath);
 
-                try(FileWriter fw = new FileWriter(xmlFilePath, true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    Writer pOut = bw)
-                {
+            try(FileWriter fw = new FileWriter(xmlFilePath, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                Writer pOut = bw)
+            {
 
-                    String stringTS = Long.toString(elapsedTimeTS);
-                    String stringTJ = Long.toString(elapsedTimeTJ);
+                String stringTS = Long.toString(elapsedTimeTS);
+                String stringTJ = Long.toString(elapsedTimeTJ);
 
-                    System.out.println("TS are: "+stringTS);
-                    System.out.println("TJ are: "+stringTJ);
-
-                    pOut.write(stringTS+","+stringTJ + System.lineSeparator());
+                pOut.write(stringTS+","+stringTJ + System.lineSeparator());
 //                    pOut.write("TS are: "+stringTS+", "+"TJ are: "+stringTJ + System.lineSeparator());
-                } catch (IOException e) {
-                    System.out.println("writing file failed!!!");
-                }
+            } catch (IOException e) {
+                System.out.println("writing file failed!!!");
             }
 
 
