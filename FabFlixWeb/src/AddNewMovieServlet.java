@@ -17,7 +17,8 @@ import java.sql.ResultSet;
 
 @WebServlet(name = "AddNewMovie", urlPatterns = "/api/add-new-movie")
 public class AddNewMovieServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 6L;
 
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/master")
